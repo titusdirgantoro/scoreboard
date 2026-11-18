@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Upgrade ke Pass Event — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.up-btn{cursor:pointer}
+.up-btn:disabled{opacity:.45;cursor:not-allowed}
+.up-opt{cursor:pointer;transition:transform .55s cubic-bezier(.3,1.5,.4,1),border-color .25s,background-color .25s}
+.up-opt:hover{transform:perspective(800px) translateZ(14px) rotateX(5deg)}
+.up-opt.is-on{transform:perspective(800px) translateZ(30px) rotateX(7deg);border-color:#FF7A2E!important;background:#1A1410!important}
+.up-tab.is-on{background:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.up-wrap{perspective:1600px}
+.up-in-a{animation:upInA .8s cubic-bezier(.25,1.2,.35,1) both}.up-in-b{animation:upInB .8s cubic-bezier(.25,1.2,.35,1) both}
+@keyframes upInA{from{transform:rotateX(-38deg) translateY(40px) translateZ(-160px);opacity:0}to{transform:none;opacity:1}}
+@keyframes upInB{from{transform:rotateX(-38deg) translateY(40px) translateZ(-160px);opacity:0}to{transform:none;opacity:1}}
+.up-slot{transition:transform .5s cubic-bezier(.3,1.6,.4,1),background-color .3s}
+.up-extra{animation:upPulse 1.4s ease-in-out infinite}
+@keyframes upPulse{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-6deg)}}
+.up-ticket{animation:upTicket 1.2s cubic-bezier(.25,1.25,.35,1) both;transform-style:preserve-3d}
+@keyframes upTicket{0%{transform:perspective(1000px) rotateY(-210deg) rotateX(20deg) scale(.6);opacity:0}100%{transform:none;opacity:1}}
+.up-tick{opacity:0;animation:upTick .55s cubic-bezier(.3,1.5,.4,1) both;animation-delay:calc(300ms + var(--i) * 120ms)}
+@keyframes upTick{from{transform:perspective(500px) rotateX(-80deg) translateY(-8px);opacity:0}to{transform:none;opacity:1}}
+.up-dots span{display:inline-block;animation:upDot 1s ease-in-out infinite}
+.up-dots span:nth-child(2){animation-delay:.15s}.up-dots span:nth-child(3){animation-delay:.3s}
+@keyframes upDot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-6px);opacity:1}}
+.up-row-a{animation:upRowA .8s cubic-bezier(.3,1.4,.4,1)}.up-row-b{animation:upRowB .8s cubic-bezier(.3,1.4,.4,1)}
+@keyframes upRowA{from{transform:perspective(700px) rotateX(-90deg)}to{transform:none}}
+@keyframes upRowB{from{transform:perspective(700px) rotateX(-90deg)}to{transform:none}}
+.up-toast{opacity:0;pointer-events:none}
+.up-toast-a{animation:upToastA 2.6s ease both}.up-toast-b{animation:upToastB 2.6s ease both}
+@keyframes upToastA{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes upToastB{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.up-tick{opacity:1}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC;min-height:1080px;overflow:hidden">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1320px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC"><svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg><span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span></a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;color:#C9CDD6">{{evName}} · <strong style="color:#F2F1EC;font-weight:600">Panel penyelenggara</strong></span>
+</div>
+<span class="sb-mono" style="padding:6px 12px;border-radius:999px;border:1px solid {{planBd}};color:{{planC}};font-size:12px;font-weight:700">{{planLabel}}</span>
+</div>
+</header>
+
+<main style="max-width:1320px;margin:0 auto;padding:28px 24px 60px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;padding:16px 18px;border-radius:16px;background:{{banBg}};border:1px solid {{banBd}}">
+<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:16px;font-weight:800">{{banTitle}}</span><span style="font-size:14px;color:#C9CDD6">{{banSub}}</span></span>
+<sc-if value="{{showReopen}}" hint-placeholder-val="{{ false }}"><button class="up-btn" data-fx="y" onClick="{{reopen}}" style="min-height:46px;padding:0 18px;border-radius:12px;border:0;background:#FF7A2E;color:#140B05;font-size:15px;font-weight:800">Aktifkan Pass Event</button></sc-if>
+<sc-if value="{{isPaid}}" hint-placeholder-val="{{ false }}"><a href="Admin.dc.html" style="display:inline-flex;align-items:center;min-height:46px;padding:0 18px;border-radius:12px;border:1px solid #343B4A;color:#F2F1EC;font-size:15px;font-weight:700;text-decoration:none">Buka Panel lengkap</a></sc-if>
+</div>
+<h1 class="sb-display" style="margin:8px 0 0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Pendaftaran tim</h1>
+<div role="list" style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{teams}}" as="t" hint-placeholder-count="9">
+<div role="listitem" class="{{t.anim}}" style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:#12151C;border:1px solid {{t.bd}}">
+<span class="sb-display" style="width:36px;height:36px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:{{t.c}};color:#0B0D12;font-size:15px;font-weight:900">{{t.ini}}</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:700">{{t.name}}</span><span style="font-size:12px;color:#A3A9B6">{{t.sub}}</span></span>
+<span class="sb-mono" style="padding:5px 10px;border-radius:999px;border:1px solid {{t.stBd}};color:{{t.stC}};font-size:11px;font-weight:700">{{t.st}}</span>
+</div>
+</sc-for>
+</div>
+</main>
+
+<sc-if value="{{modal}}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;inset:0;background:rgba(5,6,9,.74);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;justify-content:center;align-items:flex-start;padding:60px 20px;z-index:20">
+<div class="up-wrap" style="width:100%;max-width:860px">
+<section role="dialog" aria-modal="true" aria-labelledby="up-title" class="up-in-{{stepK}}" style="display:flex;flex-direction:column;gap:20px;padding:28px;border-radius:26px;background:#0F1218;border:1px solid #2A303D;box-shadow:0 60px 120px -40px rgba(0,0,0,.8)">
+
+<sc-if value="{{isPilih}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+<div style="display:flex;flex-direction:column;gap:10px;max-width:600px">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#F2C230">PAKET GRATIS · BATAS TERCAPAI</span>
+<h2 id="up-title" class="sb-display" style="margin:0;font-size:52px;line-height:.88;font-weight:900;text-transform:uppercase">{{trig.title}}</h2>
+<p style="margin:0;font-size:15px;line-height:1.6;color:#A3A9B6">{{trig.desc}}</p>
+</div>
+<button class="up-btn" onClick="{{later}}" aria-label="Tutup" style="flex:none;width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div role="img" aria-label="{{trig.meterAria}}" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:14px;border-radius:16px;background:#12151C;border:1px solid #232834">
+<span class="sb-mono" style="font-size:11px;color:#A3A9B6;margin-right:6px">{{trig.meterLabel}}</span>
+<sc-for list="{{slots}}" as="m" hint-placeholder-count="9"><span class="up-slot {{m.cls}}" style="width:{{m.w}}px;height:34px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:{{m.bg}};border:2px {{m.style}} {{m.bd}};color:{{m.fg}};font-size:11px;font-weight:800">{{m.t}}</span></sc-for>
+</div>
+<div role="radiogroup" aria-label="Pilih paket" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:12px">
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+<button class="up-opt {{o.cls}}" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:16px;border-radius:16px;border:1px solid #2A303D;background:#12151C;color:#F2F1EC;text-align:left;min-height:150px">
+<span style="display:flex;justify-content:space-between;width:100%;gap:6px"><span class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:{{o.ink}}">{{o.kicker}}</span><sc-if value="{{o.rec}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="padding:2px 7px;border-radius:6px;background:#F2C230;color:#14161C;font-size:9px;font-weight:700">PAS</span></sc-if></span>
+<span class="sb-display" style="font-size:26px;line-height:.95;font-weight:900;text-transform:uppercase">{{o.name}}</span>
+<span class="sb-display" style="font-size:30px;line-height:1;font-weight:900;color:#FFB089">{{o.price}}</span>
+<span style="font-size:12px;line-height:1.4;color:#A3A9B6">{{o.note}}</span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:13px;font-weight:700;color:#C9CDD6">Langsung terbuka setelah bayar</span>
+<div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{unlocks}}" as="u" hint-placeholder-count="6"><span style="display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border-radius:999px;background:#151922;border:1px solid #2A303D;font-size:13px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7EE2A8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>{{u.t}}</span></sc-for></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;padding-top:6px;border-top:1px solid #1E222C">
+<a href="Harga.dc.html" style="font-size:14px;font-weight:600">Bandingkan semua paket</a>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="up-btn" onClick="{{later}}" style="min-height:52px;padding:0 18px;border-radius:14px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:15px;font-weight:700">Nanti saja</button>
+<button class="up-btn" data-fx="y" onClick="{{toPay}}" style="min-height:52px;padding:0 22px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:800">Lanjut bayar {{sel.priceTxt}}</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isBayar}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+<h2 id="up-title" class="sb-display" style="margin:0;font-size:44px;line-height:.9;font-weight:900;text-transform:uppercase">Bayar {{sel.priceTxt}}</h2>
+<span class="sb-mono" role="timer" style="padding:6px 12px;border-radius:999px;background:#151922;border:1px solid #2A303D;font-size:13px;color:#F2D37A">Bayar dalam {{timer}}</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+<div style="flex:3 1 380px;min-width:0;display:flex;flex-direction:column;gap:14px">
+<div role="tablist" aria-label="Metode bayar" style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-for list="{{methods}}" as="o" hint-placeholder-count="3"><button class="up-btn up-tab {{o.cls}}" role="tab" aria-selected="{{o.on}}" onClick="{{o.pick}}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:700">{{o.label}}</button></sc-for>
+</div>
+<sc-if value="{{mQris}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:16px;border-radius:18px;background:#F2F1EC;color:#14161C">
+<svg role="img" aria-label="Kode QRIS pembayaran" viewBox="0 0 29 29" width="188" height="188" style="flex:none;background:#FFFFFF;border-radius:10px;padding:8px" shape-rendering="crispEdges"><path d="{{qr}}" fill="#14161C"></path></svg>
+<div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:8px">
+<span class="sb-display" style="font-size:24px;font-weight:900;text-transform:uppercase">QRIS</span>
+<span style="font-size:14px;line-height:1.5;color:#3A3F4B">Scan pakai aplikasi bank atau e-wallet apa pun. Nama penerima: scoreboard.tiusapp.com.</span>
+<span class="sb-mono" style="font-size:22px;font-weight:700">{{sel.priceTxt}}</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{mVa}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:18px;background:#12151C;border:1px solid #2A303D">
+<div role="group" aria-label="Bank" style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{banks}}" as="b" hint-placeholder-count="4"><button class="up-btn up-tab {{b.cls}}" onClick="{{b.pick}}" aria-pressed="{{b.on}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:700">{{b.label}}</button></sc-for></div>
+<span style="font-size:13px;color:#A3A9B6">Nomor virtual account {{bank}}</span>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="sb-mono" style="font-size:26px;font-weight:700;letter-spacing:.06em">{{vaNo}}</span><button class="up-btn" onClick="{{copyVa}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Salin</button></div>
+<span style="font-size:13px;line-height:1.5;color:#A3A9B6">Transfer tepat {{sel.priceTxt}} lewat m-banking atau ATM. Terverifikasi otomatis dalam 1–2 menit.</span>
+</div>
+</sc-if>
+<sc-if value="{{mEw}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<sc-for list="{{wallets}}" as="w" hint-placeholder-count="4"><button class="up-btn" onClick="{{w.pick}}" style="min-height:64px;border-radius:14px;border:1px solid #2A303D;background:#12151C;color:#F2F1EC;font-size:16px;font-weight:800">{{w.label}}</button></sc-for>
+</div>
+</sc-if>
+</div>
+<div style="flex:2 1 260px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;background:#12151C;border:1px solid #2A303D">
+<span class="sb-mono" style="font-size:11px;letter-spacing:.14em;color:#A3A9B6">RINGKASAN</span>
+<span style="font-size:16px;font-weight:800">{{sel.name}}</span>
+<span style="font-size:13px;color:#A3A9B6">{{sel.scope}}</span>
+<div style="display:flex;justify-content:space-between;font-size:14px;padding-top:8px;border-top:1px solid #232834"><span>Harga</span><span class="sb-mono">{{sel.priceTxt}}</span></div>
+<div style="display:flex;justify-content:space-between;font-size:14px"><span>Biaya layanan</span><span class="sb-mono">Rp0</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;border-top:1px solid #232834"><span style="font-size:15px;font-weight:800">Total</span><span class="sb-display" style="font-size:32px;font-weight:900;color:#FFB089">{{sel.priceTxt}}</span></div>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding-top:6px;border-top:1px solid #1E222C">
+<button class="up-btn" onClick="{{backPilih}}" style="min-height:48px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Ganti paket</button>
+<button class="up-btn" data-fx="g" onClick="{{paid}}" style="min-height:52px;padding:0 22px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:800">Saya sudah bayar</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isCek}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:50px 0;text-align:center">
+<span class="sb-display up-dots" style="font-size:64px;line-height:1;font-weight:900;color:#FF7A2E"><span>•</span><span>•</span><span>•</span></span>
+<h2 id="up-title" class="sb-display" style="margin:0;font-size:40px;font-weight:900;text-transform:uppercase">Mengecek pembayaran</h2>
+<span style="font-size:14px;color:#A3A9B6">Biasanya selesai dalam beberapa detik.</span>
+</div>
+</sc-if>
+
+<sc-if value="{{isAktif}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div class="up-ticket" style="flex:1 1 300px;min-width:0;position:relative;display:flex;flex-direction:column;gap:10px;padding:24px;border-radius:22px;background:#F2F1EC;color:#14161C;box-shadow:0 40px 80px -30px rgba(255,122,46,.55)">
+<span aria-hidden="true" style="position:absolute;left:-12px;top:50%;width:24px;height:24px;border-radius:50%;background:#0F1218"></span>
+<span aria-hidden="true" style="position:absolute;right:-12px;top:50%;width:24px;height:24px;border-radius:50%;background:#0F1218"></span>
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#B8501A">PEMBAYARAN BERHASIL</span>
+<h2 id="up-title" class="sb-display" style="margin:0;font-size:46px;line-height:.88;font-weight:900;text-transform:uppercase">{{sel.name}}</h2>
+<span style="font-size:15px;font-weight:700">{{evName}}</span>
+<span aria-hidden="true" style="height:0;border-top:2px dashed #C9C5BA;margin:6px 0"></span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px"><span style="display:flex;flex-direction:column;gap:2px"><span class="sb-mono" style="font-size:10px;color:#5A5F6B">AKTIF SAMPAI</span><strong>{{validUntil}}</strong></span><span style="display:flex;flex-direction:column;gap:2px"><span class="sb-mono" style="font-size:10px;color:#5A5F6B">NO. KUITANSI</span><strong class="sb-mono">INV-2611-0042</strong></span></div>
+</div>
+<div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:12px">
+<span style="font-size:15px;font-weight:800">Sudah terbuka untuk event ini</span>
+<ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{unlocks}}" as="u" hint-placeholder-count="6"><li class="up-tick" style="--i:{{u.i}};display:flex;align-items:center;gap:10px;font-size:14px"><span style="width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#7EE2A8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B0D12" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>{{u.t}}</li></sc-for>
+</ul>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+<sc-if value="{{trig.isTeam}}" hint-placeholder-val="{{ true }}"><button class="up-btn" data-fx="y" onClick="{{acceptNaga}}" style="min-height:52px;padding:0 20px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:800">Terima Tim Naga</button></sc-if>
+<sc-if value="{{trig.notTeam}}" hint-placeholder-val="{{ false }}"><a href="{{trig.href}}" style="display:inline-flex;align-items:center;min-height:52px;padding:0 20px;border-radius:14px;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:800;text-decoration:none">{{trig.cta}}</a></sc-if>
+<button class="up-btn" onClick="{{receipt}}" style="min-height:52px;padding:0 18px;border-radius:14px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:15px;font-weight:700">Unduh kuitansi</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+</section>
+</div>
+</div>
+</sc-if>
+<div style="position:absolute;left:0;right:0;bottom:28px;display:flex;justify-content:center;pointer-events:none;z-index:60">
+<div role="status" aria-live="polite" class="up-toast up-toast-{{toastK}}" style="max-width:520px;padding:14px 20px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:15px;font-weight:700;box-shadow:0 20px 50px rgba(0,0,0,.5)">{{toast}}</div>
+</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"pemicu":{"editor":"enum","options":["tim-ke-9","lapangan-ke-2","sertifikat","watermark"],"default":"tim-ke-9","section":"Keadaan"},"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      theme: this.readTheme(), modal: true, step: 'pilih', stepK: 'a', opt: 'p16', method: 'qris', bank: 'BCA',
+      secs: 899, paid: false, nagaIn: false, rowK: 'n', toast: '', toastK: 'n'
+    };
+  }
+  readTheme() {
+    try { const t = JSON.parse(window.localStorage.getItem('sbEventTheme') || 'null'); return t && t.primary ? t : null; } catch (e) { return null; }
+  }
+  componentWillUnmount() { clearInterval(this.iv); clearTimeout(this.t1); }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  rp(n) { return 'Rp' + n.toLocaleString('id-ID'); }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  go(step, o) { this.setState(Object.assign({ step: step, stepK: this.tg(this.state.stepK) }, o || {})); }
+  toPay() {
+    this.go('bayar', { secs: 899 });
+    clearInterval(this.iv);
+    this.iv = setInterval(() => this.setState({ secs: Math.max(0, this.state.secs - 1) }), 1000);
+  }
+  paid() {
+    clearInterval(this.iv);
+    this.go('cek');
+    this.t1 = setTimeout(() => { this.go('aktif', { paid: true }); setTimeout(() => this.celebrate('y'), 250); }, 1700);
+  }
+  qrPath() {
+    if (this._qr) return this._qr;
+    const N = 29; const cells = [];
+    const finder = (x0, y0) => { for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++) { const edge = x === 0 || y === 0 || x === 6 || y === 6; const core = x >= 2 && x <= 4 && y >= 2 && y <= 4; if (edge || core) cells.push([x0 + x, y0 + y]); } };
+    finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+    const inFinder = (x, y) => (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+    let seed = 20261111;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      if (inFinder(x, y)) continue;
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      if (x === 6 || y === 6) { if ((x + y) % 2 === 0) cells.push([x, y]); continue; }
+      if (seed % 100 < 47) cells.push([x, y]);
+    }
+    this._qr = cells.map((c) => 'M' + c[0] + ' ' + c[1] + 'h1v1h-1z').join('');
+    return this._qr;
+  }
+  trigDef() {
+    const T = {
+      'tim-ke-9': { title: 'Tim ke-9 mau mendaftar', desc: 'Event gratis menampung 8 tim. Tim Naga sudah mengisi formulir dan sedang menunggu. Aktifkan Pass Event supaya pendaftaran tetap terbuka.', meterLabel: 'TIM', kind: 'team', cta: '', href: '' },
+      'lapangan-ke-2': { title: 'Tambah lapangan kedua', desc: 'Event gratis memakai 1 lapangan. Dengan Pass Event, lapangan dan wasit bisa sebanyak yang kamu perlukan, dan jadwal disusun otomatis.', meterLabel: 'LAPANGAN', kind: 'court', cta: 'Atur jadwal 2 lapangan', href: 'Jadwal.dc.html' },
+      'sertifikat': { title: 'Terbitkan e-sertifikat juara', desc: 'Final sudah selesai. E-sertifikat termasuk Pass Event: juara 1–3, MVP, top skor, nomor unik, dan link cek keaslian.', meterLabel: 'SERTIFIKAT', kind: 'cert', cta: 'Terbitkan sertifikat', href: 'Sertifikat.dc.html' },
+      'watermark': { title: 'Hapus watermark', desc: 'Story dan papan TV di paket Gratis memakai tanda "Dibuat dengan scoreboard". Pass Event menghapusnya untuk event ini.', meterLabel: 'WATERMARK', kind: 'wm', cta: 'Buka Kartu Hasil', href: 'KartuHasil.dc.html' }
+    };
+    return T[this.props.pemicu] || T['tim-ke-9'];
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const th = s.theme;
+    const evName = th && th.name ? th.name : 'Piala Jumat Malam 2026';
+    const tr = this.trigDef();
+    const O = [
+      { id: 'p16', kicker: 'PASS EVENT', name: '≤16 tim', price: 49000, note: 'Pas untuk 9–16 tim', rec: tr.kind === 'team' },
+      { id: 'p32', kicker: 'PASS EVENT', name: '≤32 tim', price: 99000, note: 'Ruang untuk tumbuh sampai 32 tim' },
+      { id: 'p64', kicker: 'PASS EVENT', name: '≤64 tim', price: 199000, note: 'Turnamen besar sampai 64 tim' },
+      { id: 'pro', kicker: 'PRO · BULANAN', name: 'Pro', price: 299000, note: 'Event tanpa batas tiap bulan, hemat mulai 3 event' }
+    ];
+    const sel0 = O.find((o) => o.id === s.opt) || O[0];
+    const sel = {
+      name: sel0.id === 'pro' ? 'Pro · 1 bulan' : 'Pass Event · ' + sel0.name, priceTxt: this.rp(sel0.price),
+      scope: sel0.id === 'pro' ? 'Semua event kamu selama 30 hari, sampai 64 tim per event' : 'Untuk ' + evName + ' · aktif sampai 30 hari setelah event selesai'
+    };
+    const T = [['Tim Rajawali', '#FF7A2E'], ['Tim Elang', '#4D7CFF'], ['Tim Garuda', '#F2C230'], ['Tim Banteng', '#2FBF8F'], ['Tim Kancil', '#FF6B8B'], ['Tim Merapi', '#3CC6E8'], ['Tim Kenanga', '#C084FC'], ['Tim Bayangan', '#B8C24A']];
+    const teams = T.map((t, i) => ({ name: t[0], c: t[1], ini: t[0].split(' ')[1][0], sub: 'Daftar ' + (2 + i) + ' Nov · 10 pemain · lunas', st: 'DITERIMA', stC: '#7EE2A8', stBd: 'rgba(126,226,168,.45)', bd: '#232834', anim: '' }));
+    teams.push({
+      name: 'Tim Naga', c: '#E5333B', ini: 'N', sub: 'Daftar 11 Nov · 9 pemain · ' + (s.nagaIn ? 'lunas' : 'belum bayar'),
+      st: s.nagaIn ? 'DITERIMA' : (s.paid ? 'MENUNGGU PERSETUJUAN' : 'MELEBIHI BATAS GRATIS'),
+      stC: s.nagaIn ? '#7EE2A8' : (s.paid ? '#F2D37A' : '#FF9C9C'), stBd: s.nagaIn ? 'rgba(126,226,168,.45)' : (s.paid ? 'rgba(242,194,48,.5)' : 'rgba(255,140,140,.5)'),
+      bd: s.nagaIn ? '#232834' : (s.paid ? 'rgba(242,194,48,.45)' : 'rgba(255,140,140,.45)'), anim: s.rowK === 'n' ? '' : 'up-row-' + s.rowK
+    });
+    let slots = [];
+    if (tr.kind === 'team') {
+      slots = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ t: n, w: 34, bg: '#FF7A2E', bd: '#FF7A2E', style: 'solid', fg: '#140B05', cls: '' }));
+      slots.push({ t: '+1', w: 44, bg: 'transparent', bd: '#FF9C9C', style: 'dashed', fg: '#FF9C9C', cls: 'up-extra' });
+    } else if (tr.kind === 'court') {
+      slots = [{ t: 'Lapangan 1', w: 110, bg: '#4D7CFF', bd: '#4D7CFF', style: 'solid', fg: '#0B0D12', cls: '' }, { t: 'Lapangan 2', w: 110, bg: 'transparent', bd: '#9DB6FF', style: 'dashed', fg: '#9DB6FF', cls: 'up-extra' }];
+    } else if (tr.kind === 'cert') {
+      slots = ['Juara I', 'Juara II', 'Juara III', 'MVP'].map((t) => ({ t: t, w: 84, bg: 'transparent', bd: '#F2C230', style: 'dashed', fg: '#F2D37A', cls: '' }));
+    } else {
+      slots = [{ t: 'Dibuat dengan scoreboard', w: 210, bg: 'transparent', bd: '#C9CDD6', style: 'dashed', fg: '#C9CDD6', cls: 'up-extra' }];
+    }
+    const U = ['Tim sampai ' + (sel0.id === 'pro' ? '64 per event' : sel0.name.replace('≤', '')), 'Lapangan & wasit tanpa batas', 'Jadwal otomatis', 'Pendaftaran online', 'Kartu pemain', 'E-sertifikat', 'Story tanpa watermark'];
+    const mm = Math.floor(s.secs / 60); const ss = s.secs % 60;
+    const BANKS = { BCA: '3901', BRI: '1281', Mandiri: '8908', BNI: '8241' };
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      evName: evName,
+      planLabel: s.paid ? (s.opt === 'pro' ? 'PRO AKTIF' : 'PASS EVENT AKTIF') : 'PAKET GRATIS', planC: s.paid ? '#7EE2A8' : '#C9CDD6', planBd: s.paid ? 'rgba(126,226,168,.45)' : '#343B4A',
+      banTitle: s.paid ? (sel.name + ' aktif') : (tr.kind === 'team' ? '8 dari 8 tim · batas paket Gratis' : 'Paket Gratis · ' + tr.title.toLowerCase()),
+      banSub: s.paid ? (s.nagaIn ? 'Tim Naga sudah masuk. Pendaftaran tetap dibuka sampai ' + (s.opt === 'p16' ? '16' : (s.opt === 'p32' ? '32' : '64')) + ' tim.' : 'Semua fitur event sudah terbuka.') : (tr.kind === 'team' ? 'Tim Naga menunggu. Aktifkan Pass Event untuk menerimanya.' : tr.desc),
+      banBg: s.paid ? 'rgba(126,226,168,.08)' : 'rgba(242,194,48,.08)', banBd: s.paid ? 'rgba(126,226,168,.35)' : 'rgba(242,194,48,.35)',
+      showReopen: !s.modal && !s.paid, isPaid: s.paid, reopen: () => this.setState({ modal: true, step: 'pilih', stepK: this.tg(this.state.stepK) }),
+      teams: teams, modal: s.modal, stepK: s.stepK,
+      isPilih: s.step === 'pilih', isBayar: s.step === 'bayar', isCek: s.step === 'cek', isAktif: s.step === 'aktif',
+      trig: { title: tr.title, desc: tr.desc, meterLabel: tr.meterLabel, meterAria: tr.kind === 'team' ? '8 dari 8 slot tim terisi, 1 tim menunggu' : tr.title, isTeam: tr.kind === 'team', notTeam: tr.kind !== 'team', cta: tr.cta, href: tr.href },
+      slots: slots,
+      opts: O.map((o) => ({ kicker: o.kicker, name: o.name, price: this.rp(o.price), note: o.note, rec: !!o.rec, ink: o.id === 'pro' ? '#D7B0FD' : '#FFB089', on: s.opt === o.id, cls: s.opt === o.id ? 'is-on' : '', pick: () => this.setState({ opt: o.id }) })),
+      unlocks: U.map((t, i) => ({ t: t, i: i })),
+      sel: sel,
+      later: () => { clearInterval(this.iv); this.setState({ modal: false }); },
+      toPay: () => this.toPay(), backPilih: () => { clearInterval(this.iv); this.go('pilih'); }, paid: () => this.paid(),
+      timer: mm + ':' + String(ss).padStart(2, '0'),
+      methods: [['qris', 'QRIS'], ['va', 'Virtual account'], ['ew', 'E-wallet']].map((o) => ({ label: o[1], on: s.method === o[0], cls: s.method === o[0] ? 'is-on' : '', pick: () => this.setState({ method: o[0] }) })),
+      mQris: s.method === 'qris', mVa: s.method === 'va', mEw: s.method === 'ew', qr: this.qrPath(),
+      banks: Object.keys(BANKS).map((b) => ({ label: b, on: s.bank === b, cls: s.bank === b ? 'is-on' : '', pick: () => this.setState({ bank: b }) })),
+      bank: s.bank, vaNo: BANKS[s.bank] + ' 0812 2611 0042',
+      copyVa: () => { const v = BANKS[this.state.bank] + '081226110042'; try { navigator.clipboard.writeText(v).then(() => this.toastMsg('Nomor virtual account disalin'), () => this.toastMsg('Salin manual: ' + v)); } catch (e) { this.toastMsg('Salin manual: ' + v); } },
+      wallets: ['GoPay', 'OVO', 'DANA', 'ShopeePay'].map((w) => ({ label: w, pick: () => this.toastMsg('Membuka ' + w + ' untuk membayar ' + sel.priceTxt) })),
+      validUntil: s.opt === 'pro' ? '11 Desember 2026' : '5 Januari 2027',
+      acceptNaga: () => { this.setState({ modal: false, nagaIn: true, rowK: this.tg(this.state.rowK) }); this.toastMsg('Tim Naga diterima · 9 dari ' + (this.state.opt === 'p16' ? '16' : (this.state.opt === 'p32' ? '32' : '64')) + ' tim'); setTimeout(() => this.celebrate('a'), 200); },
+      receipt: () => this.toastMsg('Tersimpan: kuitansi-INV-2611-0042.pdf'),
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>

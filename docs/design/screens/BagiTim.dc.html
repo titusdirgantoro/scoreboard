@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Bagi Tim — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.bt-btn{cursor:pointer;transition:transform .2s cubic-bezier(.2,.8,.2,1),background-color .2s,border-color .2s,color .2s,box-shadow .2s}
+.bt-btn:hover{transform:translateY(-1px)}
+.bt-btn:active{transform:translateY(1px) scale(.97)}
+.bt-primary:hover{box-shadow:0 14px 32px -12px rgba(255,122,46,.85)!important}
+.bt-ghost:hover{border-color:#5A6275!important}
+.bt-chip:hover{border-color:#5A6275!important}
+.bt-chip.is-on{background-color:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.bt-seg:hover{color:#F2F1EC!important}
+.bt-seg.is-on{background-color:#FF7A2E!important;color:#140B05!important}
+.bt-arena{transition:height .6s cubic-bezier(.2,.8,.2,1)}
+.bt-slot{position:absolute;padding:6px;perspective:900px;transition:left .85s cubic-bezier(.2,.8,.2,1),top .85s cubic-bezier(.2,.8,.2,1)}
+.bt-card{position:relative;height:64px;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.3,1.25,.4,1)}
+.bt-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;border:1px solid #2A303D;transition:border-color .4s,background-color .4s}
+.bt-back{transform:rotateY(180deg)}
+.is-shuffling .bt-slot{animation:btShake .42s ease-in-out infinite}
+.is-shuffling .bt-slot:nth-child(2n){animation-duration:.5s;animation-direction:reverse}
+.is-shuffling .bt-slot:nth-child(3n){animation-duration:.36s}
+@keyframes btShake{0%,100%{transform:translate3d(0,0,0) rotate(0deg)}30%{transform:translate3d(-14px,-10px,0) rotate(-5deg)}70%{transform:translate3d(14px,6px,0) rotate(5deg)}}
+.is-shuffling .bt-dice{animation:btRoll .6s linear infinite}
+@keyframes btRoll{to{transform:rotate(360deg)}}
+.bt-teamHead{animation:btHeadIn .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes btHeadIn{from{opacity:0;transform:perspective(600px) rotateX(-70deg) translateY(-10px)}to{opacity:1;transform:none}}
+.bt-bar{transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.bt-x{opacity:.5;transition:opacity .2s,background-color .2s}
+.bt-x:hover,.bt-x:focus-visible{opacity:1;background-color:#2A303D!important}
+.bt-knob{transition:transform .3s cubic-bezier(.3,1.4,.4,1),background-color .3s}
+.bt-toast{opacity:0;pointer-events:none}
+.bt-toast-a{animation:btToastA 2.8s ease both}
+.bt-toast-b{animation:btToastB 2.8s ease both}
+@keyframes btToastA{0%{opacity:0;transform:translateY(16px)}12%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(8px)}}
+@keyframes btToastB{0%{opacity:0;transform:translateY(16px)}12%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(8px)}}
+.bt-input::placeholder{color:#7C8394}
+.bt-card{animation:btCardIn .8s cubic-bezier(.3,1.3,.4,1) backwards}
+@keyframes btCardIn{from{opacity:0;transform:rotateY(-110deg) translateZ(-160px) translateY(-30px)}to{opacity:1;transform:rotateY(0deg)}}
+.bt-kn-true{animation:btKnA .55s cubic-bezier(.3,1.4,.4,1)}
+.bt-kn-false{animation:btKnB .55s cubic-bezier(.3,1.4,.4,1)}
+@keyframes btKnA{from{transform:perspective(200px) rotateY(-180deg) scale(.7)}to{transform:none}}
+@keyframes btKnB{from{transform:perspective(200px) rotateY(180deg) scale(.7)}to{transform:none}}
+.bt-rk-a{display:inline-block;animation:btRkA .5s cubic-bezier(.3,1.5,.4,1)}
+.bt-rk-b{display:inline-block;animation:btRkB .5s cubic-bezier(.3,1.5,.4,1)}
+@keyframes btRkA{from{transform:perspective(200px) rotateX(-120deg) scale(1.4);opacity:.2}to{transform:none;opacity:1}}
+@keyframes btRkB{from{transform:perspective(200px) rotateX(-120deg) scale(1.4);opacity:.2}to{transform:none;opacity:1}}
+.bt-sw-a{animation:btSwA .75s cubic-bezier(.2,.9,.25,1.15)}
+.bt-sw-b{animation:btSwB .75s cubic-bezier(.2,.9,.25,1.15)}
+@keyframes btSwA{from{transform:perspective(1200px) rotateX(-30deg) translateY(30px);opacity:.2}to{transform:none;opacity:1}}
+@keyframes btSwB{from{transform:perspective(1200px) rotateX(-30deg) translateY(30px);opacity:.2}to{transform:none;opacity:1}}
+.bt-still *{animation:none!important}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press {{rootCls}}" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1320px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;color:#C9CDD6">Pertandingan baru · <strong style="color:#F2F1EC;font-weight:600">{{sportName}} Jumat Malam</strong></span>
+</div>
+<ol aria-label="Langkah" style="display:flex;gap:6px;list-style:none;margin:0;padding:0;flex-wrap:wrap">
+<li class="sb-mono" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:12px;letter-spacing:.08em;color:#A3A9B6"><span style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1C212B;color:#F2F1EC"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>PEMAIN</li>
+<li class="sb-mono" aria-current="step" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:12px;letter-spacing:.08em;color:#F2F1EC;background:#1A1410;border:1px solid rgba(255,122,46,.5)"><span style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#FF7A2E;color:#140B05;font-weight:700">2</span>BAGI TIM</li>
+<li class="sb-mono" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:12px;letter-spacing:.08em;color:#A3A9B6"><span style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #3A4150;color:#C9CDD6">3</span>PAPAN SKOR</li>
+</ol>
+</div>
+</header>
+
+<main style="max-width:1320px;margin:0 auto;padding:24px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<aside aria-label="Pengaturan" style="flex:1 1 320px;max-width:100%;display:flex;flex-direction:column;gap:16px">
+
+<div style="padding:20px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">OLAHRAGA</span>
+<div role="group" aria-label="Pilih olahraga" style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{sportOpts}}" as="o" hint-placeholder-count="6">
+<button class="bt-btn bt-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="padding:20px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">{{countTitle}}</span>
+<sc-if value="{{notPair}}" hint-placeholder-val="{{ true }}">
+<div role="group" aria-label="Jumlah tim" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:14px;background:#181C25;border:1px solid #2A303D">
+<sc-for list="{{teamOpts}}" as="o" hint-placeholder-count="3">
+<button class="bt-btn bt-seg {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;border:0;border-radius:10px;background:transparent;color:#A3A9B6;font-size:15px;font-weight:700">{{o.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{isPair}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#181C25;border:1px solid #2A303D">
+<span class="sb-display" style="font-size:36px;line-height:1;font-weight:900;color:#FF9A5C">{{T}}</span>
+<span style="font-size:14px;line-height:1.4;color:#C9CDD6">pasangan ganda, dibentuk otomatis dari daftar pemain</span>
+</div>
+</sc-if>
+<span style="font-size:14px;line-height:1.5;color:#A3A9B6">{{idealLine}}</span>
+</div>
+
+<div style="padding:20px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">METODE</span>
+<div role="group" aria-label="Metode bagi tim" style="display:grid;grid-template-columns:repeat({{methodCols}},minmax(0,1fr));gap:4px;padding:4px;border-radius:14px;background:#181C25;border:1px solid #2A303D">
+<sc-for list="{{methodOpts}}" as="o" hint-placeholder-count="3">
+<button class="bt-btn bt-seg {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;border:0;border-radius:10px;background:transparent;color:#A3A9B6;font-size:14px;font-weight:700">{{o.label}}</button>
+</sc-for>
+</div>
+<span style="font-size:14px;line-height:1.55;color:#C9CDD6">{{methodDesc}}</span>
+<sc-if value="{{showKiper}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #232834">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600">Pisahkan kiper</span><span style="font-size:13px;color:#A3A9B6">Satu kiper per tim</span></span>
+<button class="bt-btn" role="switch" aria-checked="{{kiper}}" aria-label="Pisahkan kiper" onClick="{{toggleKiper}}" style="width:56px;height:32px;padding:3px;border-radius:999px;border:1px solid #343B4A;background:{{switchBg}};display:flex;align-items:center">
+<span class="bt-knob" style="display:block;width:24px;height:24px;transform:translateX({{knobX}}px)"><span class="bt-kn-{{kiper}}" style="display:block;width:24px;height:24px;border-radius:50%;background:#F2F1EC"></span></span>
+</button>
+</div>
+</sc-if>
+</div>
+
+<div style="padding:20px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:12px">
+<label for="bt-nama" class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">TAMBAH PEMAIN</label>
+<input id="bt-nama" class="bt-input" value="{{newName}}" onChange="{{onName}}" onKeyDown="{{onKey}}" placeholder="Nama, mis. Yusuf" autocomplete="off" style="min-height:48px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:#0B0D12;color:#F2F1EC;font-size:15px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+<span style="font-size:14px;color:#C9CDD6">Rating skill</span>
+<div style="display:flex;align-items:center;gap:6px">
+<button class="bt-btn bt-ghost" onClick="{{rDown}}" aria-label="Kurangi rating" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px;font-weight:600">−</button>
+<span class="sb-display" aria-live="polite" style="width:40px;text-align:center;font-size:30px;font-weight:900"><span class="bt-rk-{{rk}}">{{newR}}</span></span>
+<button class="bt-btn bt-ghost" onClick="{{rUp}}" aria-label="Tambah rating" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px;font-weight:600">+</button>
+</div>
+</div>
+<button class="bt-btn bt-ghost" onClick="{{addPlayer}}" style="min-height:48px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:15px;font-weight:600">Tambah ke daftar</button>
+<button class="bt-btn bt-ghost" style="min-height:48px;border-radius:12px;border:1px dashed #3A4150;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="12" height="14" rx="2"></rect><path d="M16 21H6a2 2 0 0 1-2-2V7"></path></svg>Tempel daftar dari grup WhatsApp</button>
+</div>
+</aside>
+
+<section aria-label="Arena bagi tim" style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px;padding:24px;border-radius:24px;border:1px solid #232834;background:#0F1218">
+<div style="display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:10px 14px;border-radius:14px;background:#12151C;border:1px solid #232834;font-size:13px;color:#C9CDD6">
+<span style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:{{srcDot}}"></span>{{srcLine}}</span>
+<span style="display:flex;gap:12px;margin-left:auto"><a href="Absen.dc.html" style="font-weight:700;text-decoration:none">Absen main bareng →</a><a href="Rating.dc.html" style="font-weight:700;text-decoration:none">Rating pemain →</a></span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end">
+<div style="display:flex;flex-direction:column;gap:8px">
+<p class="sb-mono" style="margin:0;font-size:12px;font-weight:700;letter-spacing:.14em;color:#FFB089;text-transform:uppercase">{{sportName}} · {{nPlayers}} pemain · {{T}} {{unitLabel}} · {{methodName}}</p>
+<h1 class="sb-display" aria-live="polite" style="margin:0;font-size:56px;line-height:.9;font-weight:900;text-transform:uppercase">{{headline}}</h1>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="bt-btn bt-ghost" onClick="{{reset}}" style="min-height:52px;padding:0 18px;border-radius:14px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:15px;font-weight:600">Ulang</button>
+<button class="bt-btn bt-primary {{shufCls}}" onClick="{{shuffle}}" style="min-height:52px;padding:0 24px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px"><svg class="bt-dice" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4"></rect><path d="M8.5 8.5h.01M15.5 8.5h.01M12 12h.01M8.5 15.5h.01M15.5 15.5h.01"></path></svg>{{shuffleLabel}}</button>
+</div>
+</div>
+
+<sc-if value="{{showHeads}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat({{T}},minmax(0,1fr))">
+<sc-for list="{{teamsView}}" as="tm" hint-placeholder-count="2">
+<div class="bt-teamHead" style="padding:0 6px;animation-delay:{{tm.delay}}ms">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-radius:14px;background:{{tm.tint}}">
+<span style="display:flex;align-items:center;gap:10px;min-width:0">
+<span class="sb-display" style="flex:none;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:{{tm.color}};color:#0B0D12;font-size:20px;font-weight:900">{{tm.letter}}</span>
+<span class="sb-display" style="font-size:26px;font-weight:800;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{tm.name}}</span>
+</span>
+<span class="sb-mono" style="flex:none;font-size:12px;color:{{tm.text}};text-align:right">Σ {{tm.total}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<div class="bt-arena {{arenaCls}} bt-sw-{{swapK}}" style="position:relative;height:{{arenaH}}px;margin:0 -6px">
+<sc-for list="{{pairLabels}}" as="pl" hint-placeholder-count="2">
+<div class="bt-teamHead" style="position:absolute;left:{{pl.l}}%;top:{{pl.t}}px;width:{{pl.w}}%;padding:0 6px;animation-delay:{{pl.delay}}ms">
+<div style="height:30px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px;border-radius:9px;background:{{pl.tint}}">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.1em;color:{{pl.text}}">{{pl.name}}</span>
+<span class="sb-mono" style="font-size:11px;color:{{pl.text}}">Σ {{pl.total}}</span>
+</div>
+</div>
+</sc-for>
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="12">
+<div class="bt-slot" style="left:{{c.l}}%;top:{{c.t}}px;width:{{c.w}}%;z-index:{{c.z}};transition-delay:{{c.d}}ms">
+<div class="bt-card" style="transform:{{c.tf}};transition-delay:{{c.d}}ms;animation-delay:{{c.d}}ms">
+<div class="bt-face" style="display:flex;align-items:center;gap:10px;padding:0 10px 0 12px;border-color:{{c.border}};background-color:{{c.bg}}">
+<span class="sb-mono" style="flex:none;font-size:10px;font-weight:700;letter-spacing:.08em;color:#A3A9B6;padding:4px 6px;border-radius:6px;background:#0B0D12">{{c.pos}}</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px">
+<span style="font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{c.name}}</span>
+<span aria-label="Rating {{c.r}} dari 5" style="display:flex;gap:3px">
+<sc-for list="{{c.dots}}" as="dt" hint-placeholder-count="5"><span style="width:12px;height:4px;border-radius:2px;background:{{dt.c}}"></span></sc-for>
+</span>
+</span>
+<sc-if value="{{c.canRemove}}" hint-placeholder-val="{{ true }}">
+<button class="bt-x" onClick="{{c.remove}}" aria-label="{{c.removeLabel}}" style="flex:none;width:32px;height:32px;border-radius:8px;border:0;background:transparent;color:#C9CDD6;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</sc-if>
+</div>
+<div class="bt-face bt-back" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;gap:6px;background:repeating-linear-gradient(135deg,#141821 0 10px,#11141B 10px 20px);border-color:#343B4A">
+<span style="width:14px;height:26px;border-radius:4px;background:#FF7A2E"></span>
+<span style="width:14px;height:26px;border-radius:4px;background:#4D7CFF"></span>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+
+<sc-if value="{{isTeams}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px;padding:20px;border-radius:18px;background:#0B0D12;border:1px solid #232834">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+<span style="display:flex;flex-direction:column;gap:4px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">NERACA TIM</span>
+<span style="font-size:17px;font-weight:600">Selisih total rating <span class="sb-display" style="font-size:26px;font-weight:900;color:{{diffColor}}">{{diff}}</span> — {{diffLabel}}</span>
+</span>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="bt-btn bt-ghost" onClick="{{share}}" style="min-height:46px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:14px;font-weight:600">Salin untuk grup</button>
+<a class="bt-btn bt-ghost" href="Mobile-Tim.dc.html" style="display:inline-flex;align-items:center;min-height:46px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:14px;font-weight:600;text-decoration:none">Lihat di HP</a>
+<a class="bt-btn bt-primary" href="Scoreboard.dc.html" style="display:inline-flex;align-items:center;min-height:46px;padding:0 18px;border-radius:12px;background:#FF7A2E;color:#140B05;font-size:14px;font-weight:700;text-decoration:none">Mulai papan skor</a>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{teamsView}}" as="tm" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 64px;align-items:center;gap:12px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;color:{{tm.text}};text-transform:uppercase">{{tm.name}}</span>
+<span style="height:10px;border-radius:999px;background:#1C212B;overflow:hidden"><span class="bt-bar" style="display:block;height:100%;width:{{tm.bar}}%;border-radius:999px;background:{{tm.color}}"></span></span>
+<span class="sb-mono" style="font-size:12px;color:#C9CDD6;text-align:right">rata {{tm.avg}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isPool}}" hint-placeholder-val="{{ true }}">
+<p style="margin:0;font-size:14px;color:#A3A9B6">Ketuk <strong style="color:#F2F1EC">Kocok Tim</strong> — kartu dibalik, dikocok, lalu dibagikan ke tiap tim. Ganti jumlah tim atau metode kapan saja.</p>
+</sc-if>
+</section>
+</main>
+<div class="bt-toast bt-toast-{{toastK}}" role="status" style="position:fixed;left:50%;bottom:28px;margin-left:-180px;width:360px;padding:14px 18px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:14px;font-weight:600;text-align:center;box-shadow:0 20px 50px -10px rgba(0,0,0,.6)">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"animasi":{"editor":"boolean","default":true},"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      players: [
+        { id: 1, name: 'Andi', pos: 'KIP', r: 4 },
+        { id: 2, name: 'Budi', pos: 'KIP', r: 3 },
+        { id: 3, name: 'Rizky', pos: 'PEN', r: 5 },
+        { id: 4, name: 'Fajar', pos: 'GEL', r: 4 },
+        { id: 5, name: 'Dimas', pos: 'BEK', r: 3 },
+        { id: 6, name: 'Yoga', pos: 'PEN', r: 4 },
+        { id: 7, name: 'Bagas', pos: 'GEL', r: 2 },
+        { id: 8, name: 'Ilham', pos: 'BEK', r: 4 },
+        { id: 9, name: 'Reza', pos: 'GEL', r: 3 },
+        { id: 10, name: 'Tegar', pos: 'PEN', r: 2 },
+        { id: 11, name: 'Galih', pos: 'BEK', r: 3 },
+        { id: 12, name: 'Wahyu', pos: 'GEL', r: 5 }
+      ],
+      nextId: 13,
+      phase: 'pool',
+      teams: {},
+      jit: {},
+      T: 2,
+      method: 'seimbang',
+      sport: 'futsal',
+      kiper: true,
+      newName: '',
+      newR: 3,
+      toast: '',
+      toastK: 'n',
+      rk: 'n',
+      swapK: 'n',
+      fromRsvp: '', ratedCount: 0
+    };
+    let rsvp = null; let ratings = null;
+    try { rsvp = JSON.parse(window.localStorage.getItem('sbRsvp') || 'null'); } catch (e) { }
+    try { ratings = JSON.parse(window.localStorage.getItem('sbRatings') || 'null'); } catch (e) { }
+    const rOf = (p) => (ratings && ratings[p.name] ? ratings[p.name].r : p.r);
+    if (rsvp && rsvp.players && rsvp.players.length >= 2) {
+      this.state.players = rsvp.players.slice(0, 20).map((p, i) => ({ id: i + 1, name: p.name, pos: p.pos || 'PMN', r: rOf({ name: p.name, r: p.r || 3 }) }));
+      this.state.nextId = this.state.players.length + 1;
+      this.state.fromRsvp = rsvp.title || 'main bareng';
+    } else if (ratings) {
+      this.state.players = this.state.players.map((p) => Object.assign({}, p, { r: rOf(p) }));
+    }
+    if (ratings) this.state.ratedCount = this.state.players.filter((p) => ratings[p.name]).length;
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  componentWillUnmount() {
+    clearTimeout(this.t1);
+  }
+  teamMeta() {
+    return [
+      { name: 'Bara', letter: 'A', color: '#FF7A2E', tint: 'rgba(255,122,46,.12)', text: '#FFB089' },
+      { name: 'Samudra', letter: 'B', color: '#4D7CFF', tint: 'rgba(77,124,255,.14)', text: '#9DB6FF' },
+      { name: 'Kunyit', letter: 'C', color: '#F2C230', tint: 'rgba(242,194,48,.12)', text: '#F6D56E' },
+      { name: 'Anggrek', letter: 'D', color: '#C084FC', tint: 'rgba(192,132,252,.14)', text: '#D7B0FD' }
+    ];
+  }
+  sportList() {
+    return [
+      { id: 'futsal', label: 'Futsal', size: 5, bola: true },
+      { id: 'mini', label: 'Mini Soccer', size: 7, bola: true },
+      { id: 'bola', label: 'Sepak Bola', size: 11, bola: true },
+      { id: 'voli', label: 'Bola Voli', size: 6, bola: false },
+      { id: 'basket', label: 'Basket', size: 5, bola: false },
+      { id: 'esport', label: 'E-sports', size: 5, bola: false },
+      { id: 'badminton', label: 'Bulu Tangkis', size: 2, bola: false, pair: true },
+      { id: 'tenis', label: 'Tenis', size: 2, bola: false, pair: true },
+      { id: 'padel', label: 'Padel', size: 2, bola: false, pair: true },
+      { id: 'tt', label: 'Tenis Meja', size: 2, bola: false, pair: true }
+    ];
+  }
+  methodList() {
+    if (this.curSport().pair) {
+      return [
+        { id: 'acak', label: 'Acak', name: 'Pasangan Acak', desc: 'Pasangan ganda diacak — cocok untuk main santai dan saling kenal.' },
+        { id: 'seimbang', label: 'Seimbang', name: 'Pasangan Seimbang', desc: 'Rating tertinggi dipasangkan dengan rating terendah, jadi total tiap pasangan hampir sama.' }
+      ];
+    }
+    return [
+      { id: 'acak', label: 'Acak', name: 'Acak Kilat', desc: 'Semua nama dikocok lalu dibagi rata. Cepat, cocok untuk main santai.' },
+      { id: 'seimbang', label: 'Seimbang', name: 'Seimbang Skill', desc: 'Pemain berating tinggi disebar dulu, lalu tiap pemain masuk ke tim dengan total rating terendah.' },
+      { id: 'snake', label: 'Draft', name: 'Snake Draft', desc: 'Urutan pilih 1-2-2-1 seperti kapten memilih bergantian, dari rating tertinggi.' }
+    ];
+  }
+  curSport() {
+    const l = this.sportList();
+    return l.find((x) => x.id === this.state.sport) || l[0];
+  }
+  assign() {
+    const st = this.state;
+    const T = st.T;
+    const ps = st.players.slice();
+    const shuffle = (arr) => {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+      }
+      return arr;
+    };
+    if (this.curSport().pair) {
+      let order;
+      if (st.method === 'acak') order = shuffle(ps);
+      else {
+        const s = shuffle(ps).sort((a, b) => b.r - a.r);
+        order = [];
+        let i = 0;
+        let j = s.length - 1;
+        while (i < j) { order.push(s[i], s[j]); i++; j--; }
+        if (i === j) order.push(s[i]);
+      }
+      const outP = {};
+      order.forEach((p, idx) => { outP[p.id] = { k: Math.floor(idx / 2), j: idx % 2 }; });
+      return outP;
+    }
+    const buckets = [];
+    for (let k = 0; k < T; k++) buckets.push([]);
+    const total = (b) => b.reduce((a, p) => a + p.r, 0);
+    const cap = Math.ceil(ps.length / T);
+    const fewest = () => {
+      let best = 0;
+      for (let k = 1; k < T; k++) if (buckets[k].length < buckets[best].length) best = k;
+      return best;
+    };
+    let rest = ps;
+    if (st.kiper && this.curSport().bola) {
+      const gks = shuffle(ps.filter((p) => p.pos === 'KIP'));
+      rest = ps.filter((p) => p.pos !== 'KIP');
+      gks.forEach((p) => buckets[fewest()].push(p));
+    }
+    if (st.method === 'acak') {
+      shuffle(rest).forEach((p) => buckets[fewest()].push(p));
+    } else if (st.method === 'seimbang') {
+      shuffle(rest).sort((a, b) => b.r - a.r).forEach((p) => {
+        let best = -1;
+        for (let k = 0; k < T; k++) {
+          if (buckets[k].length >= cap) continue;
+          if (best < 0) { best = k; continue; }
+          const tk = total(buckets[k]);
+          const tb = total(buckets[best]);
+          if (tk < tb || (tk === tb && buckets[k].length < buckets[best].length)) best = k;
+        }
+        buckets[best < 0 ? fewest() : best].push(p);
+      });
+    } else {
+      let k = 0;
+      let dir = 1;
+      const move = () => {
+        k += dir;
+        if (k >= T) { k = T - 1; dir = -1; } else if (k < 0) { k = 0; dir = 1; }
+      };
+      shuffle(rest).sort((a, b) => b.r - a.r).forEach((p) => {
+        let guard = 0;
+        while (buckets[k].length >= cap && guard < T * 3) { move(); guard++; }
+        buckets[k].push(p);
+        move();
+      });
+    }
+    const order = { KIP: 0, BEK: 1, GEL: 2, PEN: 3 };
+    const out = {};
+    buckets.forEach((b, k) => {
+      b.sort((a, c) => (order[a.pos] ?? 4) - (order[c.pos] ?? 4) || c.r - a.r);
+      b.forEach((p, j) => { out[p.id] = { k: k, j: j }; });
+    });
+    return out;
+  }
+  doShuffle() {
+    const jit = {};
+    this.state.players.forEach((p) => {
+      jit[p.id] = { x: Math.random() * 8 - 4, y: Math.random() * 24 - 12, r: Math.random() * 44 - 22 };
+    });
+    this.setState({ phase: 'shuffle', jit: jit });
+    clearTimeout(this.t1);
+    this.t1 = setTimeout(() => {
+      this.setState({ phase: 'teams', teams: this.assign() });
+      setTimeout(() => this.celebrate('a'), 380);
+    }, 1150);
+  }
+  addPlayer() {
+    const name = this.state.newName.trim();
+    if (!name || this.state.players.length >= 20) return;
+    const p = { id: this.state.nextId, name: name.slice(0, 18), pos: 'PMN', r: this.state.newR };
+    this.setState({ players: this.state.players.concat([p]), nextId: this.state.nextId + 1, newName: '', phase: 'pool' });
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const st = this.state;
+    const BASE = this.teamMeta();
+    const sp = this.curSport();
+    const pair = !!sp.pair;
+    const n = st.players.length;
+    const T = pair ? Math.max(1, Math.floor(n / 2)) : st.T;
+    const hasBench = pair && n % 2 === 1;
+    const TEAMS = pair
+      ? Array.from({ length: T }, (_, k) => Object.assign({}, BASE[k % 4], { name: 'Pasangan ' + (k + 1), letter: String(k + 1) }))
+      : BASE;
+    const methods = this.methodList();
+    const m = methods.find((x) => x.id === st.method) || methods[methods.length - 1];
+    const ROW = 76;
+    const COLS = 4;
+    const PC = 3;
+    const BOX = 2 * ROW + 44;
+    const poolH = Math.max(ROW, Math.ceil(n / COLS) * ROW);
+    const isTeams = st.phase === 'teams';
+    const isShuf = st.phase === 'shuffle';
+    let maxLen = 0;
+    const counts = [0, 0, 0, 0];
+    if (isTeams && !pair) {
+      Object.keys(st.teams).forEach((id) => { const a = st.teams[id]; counts[a.k] = Math.max(counts[a.k], a.j + 1); });
+      maxLen = Math.max.apply(null, counts);
+    }
+    const boxes = T + (hasBench ? 1 : 0);
+    const arenaH = isTeams
+      ? (pair ? Math.ceil(boxes / PC) * BOX : Math.max(ROW * 2, maxLen * ROW))
+      : (isShuf ? Math.max(poolH, 320) : poolH);
+    const totals = Array.from({ length: 12 }, () => 0);
+    const sizes = Array.from({ length: 12 }, () => 0);
+    const cards = st.players.map((p, i) => {
+      let l; let t; let w; let tf; let d; let z = 1; let team = -1;
+      const a = isTeams ? st.teams[p.id] : null;
+      if (a && pair) {
+        w = 100 / PC; l = (a.k % PC) * w; t = Math.floor(a.k / PC) * BOX + 38 + a.j * ROW; tf = 'rotateY(0deg)'; d = a.k * 80 + a.j * 40;
+        if (a.k < T) { team = a.k; totals[a.k] += p.r; sizes[a.k] += 1; }
+      } else if (a) {
+        w = 100 / T; l = a.k * w; t = a.j * ROW; tf = 'rotateY(0deg)'; d = (a.j * T + a.k) * 55; team = a.k;
+        totals[a.k] += p.r; sizes[a.k] += 1;
+      } else if (isShuf) {
+        const j = st.jit[p.id] || { x: 0, y: 0, r: 0 };
+        w = 100 / COLS; l = 50 - w / 2 + j.x; t = arenaH / 2 - ROW / 2 + j.y - i * 1.5;
+        tf = 'rotateY(180deg) rotateZ(' + j.r.toFixed(1) + 'deg)'; d = i * 26; z = i + 2;
+      } else {
+        w = 100 / COLS; l = (i % COLS) * w; t = Math.floor(i / COLS) * ROW; tf = 'rotateY(0deg)'; d = i * 18;
+      }
+      const tm = team >= 0 ? TEAMS[team] : null;
+      return {
+        name: p.name, pos: p.pos, r: p.r,
+        l: l.toFixed(3), t: Math.round(t), w: w.toFixed(3), tf: tf, d: d, z: z,
+        border: tm ? tm.color : '#2A303D',
+        bg: tm ? tm.tint : '#141821',
+        dots: [1, 2, 3, 4, 5].map((v) => ({ c: v <= p.r ? (tm ? tm.color : '#F2F1EC') : '#2E3442' })),
+        canRemove: st.phase === 'pool',
+        removeLabel: 'Hapus ' + p.name,
+        remove: () => this.setState({ players: this.state.players.filter((x) => x.id !== p.id), phase: 'pool' })
+      };
+    });
+    const used = TEAMS.slice(0, T);
+    const maxT = Math.max(1, Math.max.apply(null, totals.slice(0, T)));
+    const teamsView = used.map((tm, k) => ({
+      name: tm.name, letter: tm.letter, color: tm.color, tint: tm.tint, text: tm.text,
+      total: totals[k],
+      avg: sizes[k] ? (totals[k] / sizes[k]).toFixed(1) : '0.0',
+      bar: ((totals[k] / maxT) * 100).toFixed(1),
+      delay: k * 90
+    }));
+    const tv = totals.slice(0, T);
+    const diff = isTeams ? Math.max.apply(null, tv) - Math.min.apply(null, tv) : 0;
+    const diffLabel = diff <= 1 ? 'sangat seimbang' : (diff <= 3 ? 'cukup seimbang' : 'kurang seimbang, coba metode Seimbang');
+    const pairLabels = (isTeams && pair) ? Array.from({ length: boxes }, (_, k) => {
+      const bench = k >= T;
+      const tm = bench ? null : TEAMS[k];
+      return {
+        l: ((k % PC) * (100 / PC)).toFixed(3), t: Math.floor(k / PC) * BOX + 4, w: (100 / PC).toFixed(3),
+        name: bench ? 'MENUNGGU GILIRAN' : 'PASANGAN ' + (k + 1),
+        total: bench ? '—' : totals[k],
+        tint: bench ? '#181C25' : tm.tint, text: bench ? '#A3A9B6' : tm.text,
+        delay: k * 80
+      };
+    }) : [];
+    const need = T * sp.size;
+    const idealLine = pair
+      ? n + ' pemain → ' + T + ' pasangan ganda' + (hasBench ? ', 1 orang menunggu giliran ronde berikutnya.' : '.')
+      : n >= need
+      ? 'Ideal ' + sp.label.toLowerCase() + ': ' + T + ' tim × ' + sp.size + ' pemain' + (n > need ? ', ' + (n - need) + ' orang jadi cadangan bergilir.' : '.')
+      : sp.label + ' butuh ' + need + ' pemain untuk ' + T + ' tim penuh — kurang ' + (need - n) + ' orang.';
+    const anim = this.props.animasi ?? true;
+    const rerun = () => { if (this.state.phase === 'teams') this.doShuffle(); };
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      rootCls: anim ? '' : 'bt-still',
+      sportName: sp.label,
+      nPlayers: n,
+      T: T,
+      isPair: pair,
+      srcLine: (st.fromRsvp ? 'Daftar pemain dari absen "' + st.fromRsvp + '" · ' : 'Daftar contoh · ') + (st.ratedCount ? 'bintang dari rating otomatis (' + st.ratedCount + ' pemain)' : 'bintang diisi manual'),
+      srcDot: st.fromRsvp || st.ratedCount ? '#7EE2A8' : '#5A6275',
+      notPair: !pair,
+      countTitle: pair ? 'PASANGAN GANDA' : 'JUMLAH TIM',
+      unitLabel: pair ? 'pasangan' : 'tim',
+      methodCols: methods.length,
+      showHeads: isTeams && !pair,
+      pairLabels: pairLabels,
+      methodName: m.name,
+      methodDesc: m.desc,
+      idealLine: idealLine,
+      headline: isShuf ? 'Mengocok…' : (isTeams ? 'Tim sudah jadi' : 'Siap dikocok'),
+      shuffleLabel: isTeams ? 'Kocok Ulang' : 'Kocok Tim',
+      shufCls: isShuf ? 'is-shuffling' : '',
+      arenaCls: isShuf ? 'is-shuffling' : '',
+      arenaH: arenaH,
+      isTeams: isTeams,
+      isPool: st.phase === 'pool',
+      cards: cards,
+      teamsView: teamsView,
+      diff: diff,
+      diffLabel: diffLabel,
+      diffColor: diff <= 1 ? '#7EE2A8' : (diff <= 3 ? '#F6D56E' : '#FF9A7A'),
+      showKiper: sp.bola,
+      kiper: st.kiper,
+      switchBg: st.kiper ? '#FF7A2E' : '#2A303D',
+      knobX: st.kiper ? 24 : 0,
+      toggleKiper: () => { this.setState({ kiper: !this.state.kiper }); rerun(); },
+      sportOpts: this.sportList().map((o) => ({ label: o.label, on: o.id === st.sport, cls: o.id === st.sport ? 'is-on' : '', pick: () => { this.setState({ sport: o.id, swapK: this.tg(this.state.swapK) }); rerun(); } })),
+      teamOpts: [2, 3, 4].map((v) => ({ label: v + ' tim', on: v === T, cls: v === T ? 'is-on' : '', pick: () => { this.setState({ T: v, swapK: this.tg(this.state.swapK) }); rerun(); } })),
+      methodOpts: methods.map((o) => ({ label: o.label, on: o.id === m.id, cls: o.id === m.id ? 'is-on' : '', pick: () => { this.setState({ method: o.id, swapK: this.tg(this.state.swapK) }); rerun(); } })),
+      shuffle: () => { if (this.state.phase !== 'shuffle' && this.state.players.length >= 2) this.doShuffle(); },
+      reset: () => { clearTimeout(this.t1); this.setState({ phase: 'pool', teams: {} }); },
+      newName: st.newName,
+      newR: st.newR,
+      onName: (e) => this.setState({ newName: e.target.value }),
+      onKey: (e) => { if (e.key === 'Enter') this.addPlayer(); },
+      rDown: () => this.setState({ newR: Math.max(1, this.state.newR - 1), rk: this.tg(this.state.rk) }),
+      rUp: () => this.setState({ newR: Math.min(5, this.state.newR + 1), rk: this.tg(this.state.rk) }),
+      rk: st.rk,
+      swapK: st.swapK,
+      addPlayer: () => this.addPlayer(),
+      toast: st.toast,
+      toastK: st.toastK,
+      share: () => {
+        const s = this.state;
+        const lines = [sp.label + ' — hasil bagi tim (scoreboard.tiusapp.com)'];
+        TEAMS.slice(0, T).forEach((tm, k) => {
+          const names = s.players.filter((p) => s.teams[p.id] && s.teams[p.id].k === k).map((p) => p.name);
+          lines.push('Tim ' + tm.name + ': ' + names.join(', '));
+        });
+        const flip = this.state.toastK === 'a' ? 'b' : 'a';
+        const done = (msg) => this.setState({ toast: msg, toastK: flip });
+        try {
+          navigator.clipboard.writeText(lines.join('\n')).then(
+            () => done('Hasil tim disalin — tinggal tempel di grup'),
+            () => done('Tidak bisa menyalin di pratinjau ini')
+          );
+        } catch (err) {
+          done('Tidak bisa menyalin di pratinjau ini');
+        }
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

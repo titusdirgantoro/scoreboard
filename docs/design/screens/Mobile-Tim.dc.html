@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>HP — Hasil Bagi Tim</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.mt-btn{cursor:pointer;transition:transform .18s cubic-bezier(.2,.8,.2,1),background-color .2s}
+.mt-btn:active{transform:scale(.96)}
+.mt-deckWrap{perspective:900px;transition:height .7s cubic-bezier(.2,.8,.2,1)}
+.mt-deck{transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.mt-spin .mt-deck{animation:mtSpin 1s cubic-bezier(.55,0,.3,1)}
+@keyframes mtSpin{0%{transform:rotateX(58deg) rotateZ(-24deg) translateZ(0)}45%{transform:rotateX(58deg) rotateZ(300deg) translateZ(90px)}100%{transform:rotateX(58deg) rotateZ(696deg) translateZ(0)}}
+.mt-card{position:absolute;left:50%;top:50%;width:150px;height:200px;margin:-100px 0 0 -75px;border-radius:16px}
+.mt-spin .mt-card{transition:transform .5s}
+.mt-float{animation:mtFloat 3.2s ease-in-out infinite}
+@keyframes mtFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.mt-row{animation:mtRow .6s cubic-bezier(.2,.8,.2,1.1) both;transform-origin:50% 0%}
+@keyframes mtRow{from{opacity:0;transform:perspective(500px) rotateX(-90deg)}to{opacity:1;transform:none}}
+.mt-col{animation:mtCol .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mtCol{from{opacity:0;transform:translateY(30px) scale(.94)}to{opacity:1;transform:none}}
+.mt-toast{opacity:0;pointer-events:none}
+.mt-toast-a{animation:mtToastA 2.6s ease both}
+.mt-toast-b{animation:mtToastB 2.6s ease both}
+@keyframes mtToastA{0%{opacity:0;transform:translateY(12px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes mtToastB{0%{opacity:0;transform:translateY(12px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;width:390px;height:844px;overflow:hidden;background:#0B0D12;display:flex;flex-direction:column">
+<div aria-hidden="true" style="position:absolute;left:-80px;top:60px;width:340px;height:340px;border-radius:50%;background:radial-gradient(closest-side, rgba(255,122,46,.2), transparent);pointer-events:none"></div>
+<div aria-hidden="true" style="position:absolute;right:-90px;top:140px;width:340px;height:340px;border-radius:50%;background:radial-gradient(closest-side, rgba(77,124,255,.2), transparent);pointer-events:none"></div>
+
+<div style="position:relative;display:flex;align-items:center;gap:12px;padding:56px 16px 8px">
+<a href="BagiTim.dc.html" aria-label="Kembali" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid #2A303D;color:#F2F1EC"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></a>
+<div style="display:flex;flex-direction:column;gap:2px">
+<span class="sb-display" style="font-size:28px;line-height:1;font-weight:900;text-transform:uppercase">Bagi Tim</span>
+<span class="sb-mono" style="font-size:11px;letter-spacing:.12em;color:#A3A9B6">FUTSAL · 10 PEMAIN · SEIMBANG</span>
+</div>
+</div>
+
+<div class="mt-deckWrap {{spinCls}}" style="position:relative;height:{{deckH}}px;display:flex;align-items:center;justify-content:center">
+<button class="mt-btn" onClick="{{shuffle}}" aria-label="Kocok tim" style="position:relative;width:240px;height:100%;border:0;background:transparent;padding:0;perspective:900px">
+<span class="mt-float" style="position:absolute;inset:0;display:block;transform-style:preserve-3d">
+<span class="mt-deck" style="position:absolute;inset:0;display:block;transform:rotateX(58deg) rotateZ(-24deg) scale({{deckScale}})">
+<span class="mt-card" style="display:block;transform:translateZ(0px) rotateZ(-6deg);background:#0D1016;border:1px solid #2A303D"></span>
+<span class="mt-card" style="display:block;transform:translateZ(8px) rotateZ(4deg);background:#11141B;border:1px solid #2A303D"></span>
+<span class="mt-card" style="display:block;transform:translateZ(16px) rotateZ(-3deg);background:#141821;border:1px solid #343B4A"></span>
+<span class="mt-card" style="display:block;transform:translateZ(24px) rotateZ(6deg);background:#4D7CFF;border:1px solid #7D9EFF"></span>
+<span class="mt-card" style="display:flex;align-items:center;justify-content:center;gap:8px;transform:translateZ(32px) rotateZ(0deg);background:#FF7A2E;border:1px solid #FFB089;box-shadow:0 0 50px rgba(255,122,46,.35)">
+<span style="width:26px;height:50px;border-radius:6px;background:#140B05"></span>
+<span style="width:26px;height:50px;border-radius:6px;background:#F2F1EC"></span>
+</span>
+</span>
+</span>
+</button>
+<span class="sb-mono" aria-live="polite" style="position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:11px;letter-spacing:.14em;color:#A3A9B6;text-transform:uppercase">{{deckHint}}</span>
+</div>
+
+<div style="position:relative;flex:1;min-height:0;padding:8px 16px 0;display:flex;flex-direction:column;gap:12px">
+<sc-if value="{{isPool}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">DAFTAR PEMAIN</span>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{pool}}" as="p" hint-placeholder-count="10">
+<span style="display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;background:#12151C;border:1px solid #2A303D;font-size:13px;font-weight:600">{{p.name}}<span class="sb-mono" style="font-size:11px;color:#A3A9B6">{{p.r}}</span></span>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isTeams}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#12151C;border:1px solid #232834">
+<span style="font-size:13px;color:#C9CDD6">Selisih total rating</span>
+<span class="sb-display" style="font-size:24px;line-height:1;font-weight:900;color:{{diffColor}}">{{diff}} · {{diffLabel}}</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<sc-for list="{{teams}}" as="tm" hint-placeholder-count="2">
+<div class="mt-col" style="display:flex;flex-direction:column;border-radius:16px;overflow:hidden;border:1px solid {{tm.color}};background:#0F1218;animation-delay:{{tm.delay}}ms">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:10px 12px;background:{{tm.tint}}">
+<span class="sb-display" style="font-size:22px;line-height:1;font-weight:900;text-transform:uppercase">{{tm.name}}</span>
+<span class="sb-mono" style="font-size:11px;color:{{tm.text}}">Σ {{tm.total}}</span>
+</div>
+<ol style="margin:0;padding:4px 0;list-style:none">
+<sc-for list="{{tm.rows}}" as="r" hint-placeholder-count="5">
+<li class="mt-row" style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 12px;height:38px;font-size:14px;animation-delay:{{r.delay}}ms"><span style="display:flex;align-items:center;gap:8px;min-width:0"><span class="sb-mono" style="font-size:10px;color:#A3A9B6">{{r.pos}}</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.name}}</span></span><span class="sb-mono" style="font-size:11px;color:#C9CDD6">{{r.r}}</span></li>
+</sc-for>
+</ol>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<div style="position:relative;padding:12px 16px 34px;display:flex;gap:10px;border-top:1px solid #1E222C;background:#0D0F14">
+<sc-if value="{{isTeams}}" hint-placeholder-val="{{ false }}">
+<button class="mt-btn" onClick="{{shuffle}}" style="flex:1;min-height:54px;border-radius:14px;border:1px solid #343B4A;background:#12151C;color:#F2F1EC;font-size:15px;font-weight:700">Kocok ulang</button>
+<button class="mt-btn" onClick="{{share}}" style="flex:1.3;min-height:54px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:15px;font-weight:700">Bagikan ke grup</button>
+</sc-if>
+<sc-if value="{{notTeams}}" hint-placeholder-val="{{ true }}">
+<button class="mt-btn" onClick="{{shuffle}}" style="flex:1;min-height:56px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:700">{{mainLabel}}</button>
+</sc-if>
+</div>
+<div class="mt-toast mt-toast-{{toastK}}" role="status" style="position:absolute;left:16px;right:16px;bottom:110px;padding:12px 14px;border-radius:12px;background:#F2F1EC;color:#14161C;font-size:13px;font-weight:600;text-align:center">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      players: [
+        { id: 1, name: 'Andi', pos: 'KIP', r: 4 }, { id: 2, name: 'Budi', pos: 'KIP', r: 3 },
+        { id: 3, name: 'Rizky', pos: 'PEN', r: 5 }, { id: 4, name: 'Fajar', pos: 'GEL', r: 4 },
+        { id: 5, name: 'Dimas', pos: 'BEK', r: 3 }, { id: 6, name: 'Yoga', pos: 'PEN', r: 4 },
+        { id: 7, name: 'Bagas', pos: 'GEL', r: 2 }, { id: 8, name: 'Ilham', pos: 'BEK', r: 4 },
+        { id: 9, name: 'Reza', pos: 'GEL', r: 3 }, { id: 10, name: 'Wahyu', pos: 'GEL', r: 5 }
+      ],
+      phase: 'pool', teams: [[], []], toast: '', toastK: 'n'
+    };
+  }
+  componentWillUnmount() { clearTimeout(this.t1); }
+  assign() {
+    const ps = this.state.players.slice();
+    for (let i = ps.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = ps[i]; ps[i] = ps[j]; ps[j] = t; }
+    const b = [[], []];
+    const tot = (x) => x.reduce((a, p) => a + p.r, 0);
+    const cap = Math.ceil(ps.length / 2);
+    ps.filter((p) => p.pos === 'KIP').forEach((p, i) => b[i % 2].push(p));
+    ps.filter((p) => p.pos !== 'KIP').sort((x, y) => y.r - x.r).forEach((p) => {
+      let k = tot(b[0]) <= tot(b[1]) ? 0 : 1;
+      if (b[k].length >= cap) k = 1 - k;
+      b[k].push(p);
+    });
+    const order = { KIP: 0, BEK: 1, GEL: 2, PEN: 3 };
+    b.forEach((x) => x.sort((p, q) => order[p.pos] - order[q.pos] || q.r - p.r));
+    return b;
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const st = this.state;
+    const meta = [
+      { name: 'Bara', color: '#FF7A2E', tint: 'rgba(255,122,46,.16)', text: '#FFB089' },
+      { name: 'Samudra', color: '#4D7CFF', tint: 'rgba(77,124,255,.18)', text: '#9DB6FF' }
+    ];
+    const isTeams = st.phase === 'teams';
+    const isSpin = st.phase === 'spin';
+    const totals = st.teams.map((t) => t.reduce((a, p) => a + p.r, 0));
+    const diff = Math.abs(totals[0] - totals[1]);
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      spinCls: isSpin ? 'mt-spin' : '',
+      deckH: isTeams ? 170 : 330,
+      deckScale: isTeams ? '0.62' : '1',
+      deckHint: isSpin ? 'Mengocok…' : (isTeams ? 'Ketuk dek untuk kocok ulang' : 'Ketuk dek untuk mengocok'),
+      isPool: st.phase === 'pool',
+      isTeams: isTeams,
+      notTeams: !isTeams,
+      mainLabel: isSpin ? 'Mengocok…' : 'Kocok Tim',
+      pool: st.players.map((p) => ({ name: p.name, r: p.r })),
+      diff: diff,
+      diffLabel: diff <= 1 ? 'Seimbang' : (diff <= 3 ? 'Cukup' : 'Timpang'),
+      diffColor: diff <= 1 ? '#7EE2A8' : (diff <= 3 ? '#F6D56E' : '#FF9A7A'),
+      teams: meta.map((m, k) => ({
+        name: m.name, color: m.color, tint: m.tint, text: m.text,
+        total: totals[k] || 0,
+        delay: k * 120,
+        rows: (st.teams[k] || []).map((p, j) => ({ name: p.name, pos: p.pos, r: p.r, delay: 250 + j * 90 + k * 45 }))
+      })),
+      shuffle: () => {
+        if (this.state.phase === 'spin') return;
+        this.setState({ phase: 'spin' });
+        clearTimeout(this.t1);
+        this.t1 = setTimeout(() => { this.setState({ phase: 'teams', teams: this.assign() }); setTimeout(() => this.celebrate('a'), 300); }, 1000);
+      },
+      toast: st.toast,
+      toastK: st.toastK,
+      share: () => {
+        const s = this.state;
+        const txt = ['Futsal — hasil bagi tim', 'Bara: ' + s.teams[0].map((p) => p.name).join(', '), 'Samudra: ' + s.teams[1].map((p) => p.name).join(', ')].join('\n');
+        const flip = s.toastK === 'a' ? 'b' : 'a';
+        const done = (m) => this.setState({ toast: m, toastK: flip });
+        try {
+          navigator.clipboard.writeText(txt).then(() => done('Disalin — tempel di grup WhatsApp'), () => done('Tidak bisa menyalin di pratinjau ini'));
+        } catch (e) {
+          done('Tidak bisa menyalin di pratinjau ini');
+        }
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

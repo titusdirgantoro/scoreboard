@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Piala Jumat Malam 2026 — halaman event</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:inherit}a:hover{color:inherit}
+button,input{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ev-btn{cursor:pointer}
+.ev-btn:disabled{opacity:.45;cursor:not-allowed}
+.ev-nav a{text-decoration:none;opacity:.8}
+.ev-nav a:hover{opacity:1}
+.ev-stage{perspective:1400px}
+.ev-rig{transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.ev-tile{position:relative;perspective:500px}
+.ev-tile::after{content:'';position:absolute;left:0;right:0;top:50%;height:2px;background:rgba(0,0,0,.35)}
+.ev-n{display:inline-block;transform-origin:50% 50%}
+.ev-k-a{animation:evKA .6s cubic-bezier(.2,.9,.25,1.25)}.ev-k-b{animation:evKB .6s cubic-bezier(.2,.9,.25,1.25)}
+@keyframes evKA{0%{transform:rotateX(-100deg);opacity:.15;filter:brightness(2)}100%{transform:none;opacity:1;filter:none}}
+@keyframes evKB{0%{transform:rotateX(-100deg);opacity:.15;filter:brightness(2)}100%{transform:none;opacity:1;filter:none}}
+.ev-live{animation:evLive 1.6s ease-in-out infinite}
+@keyframes evLive{50%{opacity:.3}}
+.ev-flip{perspective:1100px;cursor:pointer}
+.ev-flipIn{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.3,1.35,.4,1)}
+.ev-flip:hover .ev-flipIn{transform:rotateY(-8deg) rotateX(4deg)}
+.ev-flip.is-flipped .ev-flipIn{transform:rotateY(180deg)}
+.ev-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.ev-back{transform:rotateY(180deg)}
+.ev-sw-a{animation:evSwA .7s cubic-bezier(.2,.9,.25,1.1)}.ev-sw-b{animation:evSwB .7s cubic-bezier(.2,.9,.25,1.1)}
+@keyframes evSwA{from{opacity:0;transform:perspective(1200px) rotateX(-35deg) translateY(30px)}to{opacity:1;transform:none}}
+@keyframes evSwB{from{opacity:0;transform:perspective(1200px) rotateX(-35deg) translateY(30px)}to{opacity:1;transform:none}}
+.ev-form{transform-origin:50% 0%;animation:evForm .8s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes evForm{from{opacity:0;transform:perspective(1000px) rotateX(-80deg)}to{opacity:1;transform:none}}
+.ev-ok{animation:evOk 1s cubic-bezier(.3,1.4,.4,1) both}
+@keyframes evOk{from{opacity:0;transform:perspective(900px) rotateY(90deg) scale(.85)}to{opacity:1;transform:none}}
+.ev-bar{transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.ev-in{width:100%;min-height:48px;padding:0 14px;border-radius:12px;font-size:15px}
+@supports (animation-timeline: view()){
+.ev-rise{animation:evRise linear both;animation-timeline:view();animation-range:entry 0% entry 100%}
+}
+@keyframes evRise{from{opacity:0;transform:perspective(900px) translateY(70px) rotateX(32deg)}to{opacity:1;transform:none}}
+.ev-toast{opacity:0;pointer-events:none}
+.ev-toast-a{animation:evToastA 2.6s ease both}.ev-toast-b{animation:evToastB 2.6s ease both}
+@keyframes evToastA{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes evToastB{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:{{bg}};color:{{fg}}">
+<header style="position:relative;z-index:3;border-bottom:1px solid {{line}};background:{{bg}}">
+<div style="max-width:1240px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<a href="#atas" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+<span class="sb-display" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:{{P}};color:{{onP}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:20px;font-weight:900;overflow:hidden"><sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if><sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}">{{evIni}}</sc-if></span>
+<span style="display:flex;flex-direction:column;gap:1px"><span class="sb-display" style="font-size:22px;line-height:1;font-weight:900;text-transform:uppercase">{{evName}}</span><span style="font-size:12px;color:{{muted}}">{{evOrg}}</span></span>
+</a>
+<nav class="ev-nav" aria-label="Halaman event" style="display:flex;gap:22px;flex-wrap:wrap;font-size:14px;font-weight:600">
+<a href="#jadwal">Jadwal</a><a href="#jadwal">Klasemen</a><a href="#daftar">Pendaftaran</a>
+</nav>
+<div style="display:flex;gap:8px">
+<button class="ev-btn" onClick="{{share}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid {{line}};background:transparent;color:{{fg}};font-size:14px;font-weight:600">Bagikan</button>
+<a class="ev-btn" href="#daftar" style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:12px;background:{{P}};color:{{onP}};font-size:14px;font-weight:800;text-decoration:none">Daftar tim</a>
+</div>
+</div>
+</header>
+
+<section id="atas" style="position:relative;overflow:hidden">
+<div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(135deg, {{stripe}} 0 2px, transparent 2px 22px)"></div>
+<div aria-hidden="true" style="position:absolute;right:-160px;top:-160px;width:560px;height:560px;border-radius:50%;border:2px solid {{ringP}}"></div>
+<div aria-hidden="true" style="position:absolute;right:40px;top:140px;width:260px;height:260px;border-radius:50%;border:2px solid {{ringA}}"></div>
+<div style="position:relative;max-width:1240px;margin:0 auto;padding:56px 24px 64px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(480px,100%),1fr));gap:40px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<span class="sb-mono" style="padding:6px 12px;border-radius:999px;background:{{P}};color:{{onP}};font-size:12px;font-weight:700;letter-spacing:.1em">FUTSAL</span>
+<span class="sb-mono" style="padding:6px 12px;border-radius:999px;border:1px solid {{A}};font-size:12px;font-weight:700;letter-spacing:.1em">BULU TANGKIS</span>
+<span class="sb-mono" style="padding:6px 12px;border-radius:999px;border:1px solid {{line}};color:{{muted}};font-size:12px;font-weight:700;letter-spacing:.1em">16 TIM · GRUP + GUGUR</span>
+</div>
+<h1 class="sb-display" style="margin:0;font-size:clamp(64px,8vw,124px);line-height:.85;font-weight:900;text-transform:uppercase;text-wrap:balance">{{evName}}</h1>
+<ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:16px">
+<li style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>{{evDate}} · mulai 08.00 WIB</li>
+<li style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>{{evVenue}}</li>
+<li style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"></path></svg>Diselenggarakan {{evOrg}}</li>
+</ul>
+<p style="margin:0;max-width:540px;font-size:17px;line-height:1.6;color:{{muted}}">Turnamen futsal dan bulu tangkis antarwarga. Terbuka untuk semua umur dan level.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<a class="ev-btn" href="#daftar" style="display:inline-flex;align-items:center;min-height:54px;padding:0 24px;border-radius:14px;background:{{P}};color:{{onP}};font-size:16px;font-weight:800;text-decoration:none">Daftarkan tim</a>
+<a class="ev-btn" href="#jadwal" style="display:inline-flex;align-items:center;min-height:54px;padding:0 22px;border-radius:14px;border:1px solid {{line}};font-size:16px;font-weight:600;text-decoration:none">Lihat jadwal</a>
+</div>
+</div>
+
+<div class="ev-stage" onMouseMove="{{onTilt}}" onMouseLeave="{{onLeave}}" style="position:relative;display:flex;justify-content:center">
+<div class="ev-rig" style="width:100%;max-width:520px;transform:rotateX({{rx}}deg) rotateY({{ry}}deg)">
+<sc-if value="{{before}}" hint-placeholder-val="{{ true }}">
+<div style="position:relative;padding:26px;border-radius:28px;background:{{surface}};border:1px solid {{line}};box-shadow:0 50px 100px -40px {{shadow}};display:flex;flex-direction:column;gap:18px;transform-style:preserve-3d">
+<div aria-hidden="true" style="position:absolute;inset:0;border-radius:28px;transform:translateZ(-30px);background:{{P}};opacity:.25;filter:blur(30px)"></div>
+<span class="sb-mono" style="position:relative;font-size:12px;font-weight:700;letter-spacing:.16em;color:{{muted}}">PERTANDINGAN PERTAMA DIMULAI DALAM</span>
+<div style="position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<div class="ev-tile" style="width:100%;padding:10px 0;border-radius:16px;background:{{tileBg}};display:flex;justify-content:center;overflow:hidden">
+<span class="sb-display ev-n ev-k-{{t.k}}" style="font-size:64px;line-height:.95;font-weight:900;color:{{t.col}};font-variant-numeric:tabular-nums">{{t.v}}</span>
+</div>
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:{{muted}}">{{t.label}}</span>
+</div>
+</sc-for>
+</div>
+<div style="position:relative;display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid {{line}}">
+<span style="display:flex;justify-content:space-between;font-size:14px"><span style="font-weight:700">Kuota tim</span><span class="sb-mono">{{regCount}}/16 terisi</span></span>
+<span style="height:10px;border-radius:999px;background:{{line}};overflow:hidden"><span class="ev-bar" style="display:block;height:100%;width:{{regPct}}%;border-radius:999px;background:{{P}}"></span></span>
+<span style="font-size:13px;color:{{muted}}">Pendaftaran ditutup 1 Desember 2026</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{during}}" hint-placeholder-val="{{ false }}">
+<div style="position:relative;padding:26px;border-radius:28px;background:{{surface}};border:1px solid {{line}};box-shadow:0 50px 100px -40px {{shadow}};display:flex;flex-direction:column;gap:16px">
+<span class="sb-mono" style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.16em;color:{{muted}}"><span class="ev-live" style="width:8px;height:8px;border-radius:50%;background:{{P}}"></span>LIVE · FUTSAL · LAPANGAN 1</span>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px">
+<span class="sb-display" style="font-size:28px;font-weight:800;text-transform:uppercase">Tim Elang</span>
+<span class="sb-display" style="padding:4px 16px;border-radius:16px;background:{{tileBg}};font-size:96px;line-height:1;font-weight:900"><span style="color:{{Pt}}">2</span><span style="color:{{muted}}"> : </span><span style="color:{{At}}">1</span></span>
+<span class="sb-display" style="font-size:28px;font-weight:800;text-transform:uppercase;text-align:right">Tim Kancil</span>
+</div>
+<span class="sb-mono" style="text-align:center;font-size:18px;font-weight:700">BABAK 2 · 18:42</span>
+<a href="Scoreboard.dc.html" style="align-self:center;font-size:14px;font-weight:700;color:{{Pt}}">Buka papan skor penuh →</a>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</section>
+
+<section id="jadwal" style="max-width:1240px;margin:0 auto;padding:72px 24px;display:flex;flex-direction:column;gap:24px">
+<div class="ev-rise" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
+<h2 class="sb-display" style="margin:0;font-size:clamp(44px,5vw,72px);line-height:.9;font-weight:900;text-transform:uppercase">Jadwal &amp; klasemen</h2>
+<div role="group" aria-label="Cabang" style="display:flex;gap:6px;padding:4px;border-radius:999px;border:1px solid {{line}}">
+<sc-for list="{{tabs}}" as="o" hint-placeholder-count="2"><button class="ev-btn" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 18px;border-radius:999px;border:0;background:{{o.bg}};color:{{o.fg}};font-size:14px;font-weight:700">{{o.label}}</button></sc-for>
+</div>
+</div>
+<div class="ev-sw-{{swK}}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:20px">
+<div style="padding:20px;border-radius:22px;background:{{surface}};border:1px solid {{line}};display:flex;flex-direction:column;gap:6px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:{{muted}}">{{dayLabel}}</span>
+<ol style="margin:0;padding:0;list-style:none">
+<sc-for list="{{matches}}" as="m" hint-placeholder-count="5">
+<li style="display:grid;grid-template-columns:60px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid {{line}}">
+<span class="sb-mono" style="font-size:13px;font-weight:700">{{m.time}}</span>
+<span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{m.a}} <span style="color:{{muted}};font-weight:400">vs</span> {{m.b}}</span><span style="font-size:12px;color:{{muted}}">{{m.court}}</span></span>
+<span class="sb-mono" style="padding:4px 8px;border-radius:6px;background:{{m.bg}};color:{{m.fg}};font-size:11px;font-weight:700">{{m.status}}</span>
+</li>
+</sc-for>
+</ol>
+</div>
+<div style="padding:20px;border-radius:22px;background:{{surface}};border:1px solid {{line}};display:flex;flex-direction:column;gap:10px">
+<span style="display:flex;justify-content:space-between;align-items:center"><span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:{{muted}}">KLASEMEN GRUP A</span><a href="Cup.dc.html" style="font-size:13px;font-weight:700;color:{{Pt}}">Bracket lengkap →</a></span>
+<div class="sb-mono" style="display:grid;grid-template-columns:24px minmax(0,1fr) 36px 36px 48px;gap:6px;font-size:10px;letter-spacing:.1em;color:{{muted}}"><span>#</span><span>TIM</span><span style="text-align:center">M</span><span style="text-align:center">{{diffHead}}</span><span style="text-align:right">POIN</span></div>
+<sc-for list="{{table}}" as="r" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:24px minmax(0,1fr) 36px 36px 48px;gap:6px;align-items:center;min-height:44px;padding:0 8px;margin:0 -8px;border-radius:10px;background:{{r.bg}}">
+<span class="sb-mono" style="font-size:12px;color:{{muted}}">{{r.rank}}</span>
+<span style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.name}}</span>
+<span class="sb-mono" style="text-align:center;font-size:13px">{{r.p}}</span>
+<span class="sb-mono" style="text-align:center;font-size:13px">{{r.d}}</span>
+<span class="sb-display" style="text-align:right;font-size:24px;font-weight:900;color:{{r.ptsCol}}">{{r.pts}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<sc-if value="{{during}}" hint-placeholder-val="{{ false }}">
+<section style="max-width:1240px;margin:0 auto;padding:0 24px 72px;display:flex;flex-direction:column;gap:18px">
+<h2 class="sb-display" style="margin:0;font-size:44px;line-height:.9;font-weight:900;text-transform:uppercase">Sedang berlangsung</h2>
+<p style="margin:0;font-size:14px;color:{{muted}}">Ketuk kartu untuk melihat momen laga.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(360px,100%),1fr));gap:16px">
+<sc-for list="{{live}}" as="l" hint-placeholder-count="2">
+<div style="height:210px">
+<button class="ev-btn ev-flip {{l.cls}}" onClick="{{l.toggle}}" aria-pressed="{{l.on}}" style="display:block;width:100%;height:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left">
+<span class="ev-flipIn" style="display:block">
+<span class="ev-face" style="display:flex;flex-direction:column;justify-content:space-between;padding:20px;border-radius:22px;background:{{surface}};border:1px solid {{line}}">
+<span class="sb-mono" style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;color:{{muted}}"><span class="ev-live" style="width:7px;height:7px;border-radius:50%;background:{{P}}"></span>{{l.meta}}</span>
+<span style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px">
+<span style="font-size:16px;font-weight:700">{{l.a}}</span>
+<span class="sb-display" style="font-size:56px;line-height:1;font-weight:900"><span style="color:{{Pt}}">{{l.sa}}</span><span style="color:{{muted}}"> : </span><span style="color:{{At}}">{{l.sb}}</span></span>
+<span style="font-size:16px;font-weight:700;text-align:right">{{l.b}}</span>
+</span>
+<span class="sb-mono" style="font-size:12px;color:{{muted}}">{{l.clock}}</span>
+</span>
+<span class="ev-face ev-back" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:22px;background:{{P}};color:{{onP}}">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em">MOMEN LAGA</span>
+<sc-for list="{{l.events}}" as="e" hint-placeholder-count="3"><span style="display:flex;gap:10px;font-size:14px;font-weight:600"><span class="sb-mono" style="width:56px;flex:none">{{e.t}}</span>{{e.txt}}</span></sc-for>
+</span>
+</span>
+</button>
+</div>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<section id="daftar" style="max-width:1240px;margin:0 auto;padding:0 24px 72px">
+<div class="ev-rise" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:28px;align-items:start;padding:32px;border-radius:28px;background:{{surface}};border:1px solid {{line}}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:{{Pt}}">PENDAFTARAN TIM</span>
+<h2 class="sb-display" style="margin:0;font-size:56px;line-height:.9;font-weight:900;text-transform:uppercase">Sisa {{regLeft}} slot</h2>
+<span style="height:12px;border-radius:999px;background:{{line}};overflow:hidden"><span class="ev-bar" style="display:block;height:100%;width:{{regPct}}%;border-radius:999px;background:{{P}}"></span></span>
+<dl style="margin:0;display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px 16px;font-size:15px">
+<dt style="color:{{muted}}">Biaya</dt><dd style="margin:0;font-weight:600">{{feeLine}}</dd>
+<dt style="color:{{muted}}">Batas daftar</dt><dd style="margin:0;font-weight:600">1 Desember 2026</dd>
+<dt style="color:{{muted}}">Cabang</dt><dd style="margin:0;font-weight:600">Futsal (5 + 3 cadangan), bulu tangkis ganda</dd>
+</dl>
+</div>
+<div>
+<sc-if value="{{formClosed}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+<p style="margin:0;font-size:16px;line-height:1.6;color:{{muted}}">Isi nama tim, kapten, dan nomor WhatsApp. Panitia mengonfirmasi lewat chat dalam 1×24 jam.</p>
+<button class="ev-btn" onClick="{{openForm}}" style="min-height:54px;padding:0 24px;border-radius:14px;border:0;background:{{P}};color:{{onP}};font-size:16px;font-weight:800">Isi formulir pendaftaran</button>
+</div>
+</sc-if>
+<sc-if value="{{formOpen}}" hint-placeholder-val="{{ false }}">
+<form class="ev-form" onSubmit="{{submit}}" style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px"><label for="ev-team" class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:{{muted}}">NAMA TIM</label><input id="ev-team" class="ev-in" value="{{team}}" onChange="{{onTeam}}" placeholder="mis. Tim Rajawali" style="border:1px solid {{line}};background:{{bg}};color:{{fg}}"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px"><label for="ev-cap" class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:{{muted}}">KAPTEN</label><input id="ev-cap" class="ev-in" value="{{cap}}" onChange="{{onCap}}" placeholder="Nama lengkap" style="border:1px solid {{line}};background:{{bg}};color:{{fg}}"></div>
+<div style="display:flex;flex-direction:column;gap:6px"><label for="ev-wa" class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:{{muted}}">NOMOR WHATSAPP</label><input id="ev-wa" type="tel" inputmode="tel" class="ev-in" value="{{wa}}" onChange="{{onWa}}" placeholder="08xx" style="border:1px solid {{line}};background:{{bg}};color:{{fg}}"></div>
+</div>
+<div role="group" aria-label="Cabang" style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{regSports}}" as="o" hint-placeholder-count="2"><button type="button" class="ev-btn" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid {{o.border}};background:{{o.bg}};color:{{o.fg}};font-size:14px;font-weight:700">{{o.label}}</button></sc-for>
+</div>
+<sc-if value="{{formErr}}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:600;color:{{errCol}}">{{formErrMsg}}</span></sc-if>
+<button type="submit" class="ev-btn" disabled="{{full}}" style="min-height:54px;border-radius:14px;border:0;background:{{P}};color:{{onP}};font-size:16px;font-weight:800">Kirim pendaftaran</button>
+</form>
+</sc-if>
+<sc-if value="{{formDone}}" hint-placeholder-val="{{ false }}">
+<div class="ev-ok" role="status" style="display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:20px;background:{{P}};color:{{onP}}">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em">PENDAFTARAN TERKIRIM</span>
+<span class="sb-display" style="font-size:40px;line-height:.9;font-weight:900;text-transform:uppercase">{{doneTeam}}</span>
+<span style="font-size:15px;line-height:1.5">Menunggu konfirmasi panitia. Kapten akan dihubungi lewat WhatsApp.</span>
+<span style="font-size:14px;line-height:1.5">Sambil menunggu, lengkapi nama dan foto pemain supaya kartu pemain siap dicek di meja verifikasi.</span>
+<a href="KartuPemain.dc.html" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:12px;background:{{onP}};color:{{P}};font-size:14px;font-weight:800;text-decoration:none">Isi data &amp; foto pemain</a>
+<button class="ev-btn" onClick="{{again}}" style="align-self:flex-start;min-height:44px;padding:0 16px;border-radius:12px;border:2px solid {{onP}};background:transparent;color:{{onP}};font-size:14px;font-weight:700">Daftarkan tim lain</button>
+</div>
+</sc-if>
+</div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:0 24px 64px;display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:{{muted}}">DIDUKUNG OLEH</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:12px">
+<span style="display:flex;align-items:center;justify-content:center;min-height:84px;border-radius:16px;border:1px dashed {{line}};font-size:14px;font-weight:600;color:{{muted}}">[LOGO] Warung Bu Siti</span>
+<span style="display:flex;align-items:center;justify-content:center;min-height:84px;border-radius:16px;border:1px dashed {{line}};font-size:14px;font-weight:600;color:{{muted}}">[LOGO] Toko Olahraga Jaya</span>
+<span style="display:flex;align-items:center;justify-content:center;min-height:84px;border-radius:16px;border:1px dashed {{line}};font-size:14px;font-weight:600;color:{{muted}}">[SLOT SPONSOR]</span>
+</div>
+</section>
+
+<footer style="border-top:1px solid {{line}}">
+<div style="max-width:1240px;margin:0 auto;padding:28px 24px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;font-size:13px;color:{{muted}}">
+<span style="display:flex;align-items:center;gap:10px"><svg width="22" height="22" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="{{fg}}"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="{{fg}}"></rect></svg>Halaman ini dibuat dengan <a href="Main.dc.html" style="color:{{Pt}};font-weight:700">scoreboard.tiusapp.com</a> · oleh Titus Dirgantoro</span>
+<a href="EventBuilder.dc.html" style="font-weight:700;color:{{Pt}}">Buat event sendiri →</a>
+</div>
+</footer>
+<div class="ev-toast ev-toast-{{toastK}}" role="status" style="position:fixed;left:50%;bottom:28px;margin-left:-170px;width:340px;padding:14px 18px;border-radius:14px;background:{{fg}};color:{{bg}};font-size:14px;font-weight:600;text-align:center;box-shadow:0 20px 50px -10px rgba(0,0,0,.5)">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px;color:{{f.col}}"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"warnaUtama":{"editor":"color","default":"#FF7A2E","options":["#FF7A2E","#E5333B","#22B573","#E8B43A"],"section":"Tema event"},"warnaAksen":{"editor":"color","default":"#4D7CFF","options":["#4D7CFF","#F2F1EC","#F2C230","#22D3EE"],"section":"Tema event"},"terang":{"editor":"boolean","default":false,"section":"Tema event"},"fase":{"editor":"enum","options":["sebelum","berlangsung"],"default":"sebelum","section":"Keadaan"},"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { theme: this.readTheme(), rx: 4, ry: -10, tab: 'futsal', swK: 'n', flipped: {}, tk: {}, prev: {}, regCount: 11, form: 'closed', team: '', cap: '', wa: '', regSport: 'futsal', formErr: '', doneTeam: '', toast: '', toastK: 'n' };
+  }
+  componentDidMount() {
+    this.watchTheme();
+    this.iv = setInterval(() => this.tick(), 1000);
+    this.tick();
+  }
+  componentWillUnmount() { clearInterval(this.iv); try { window.removeEventListener('storage', this.onStore); } catch (e) { } }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  parts() {
+    const target = Date.UTC(2026, 11, 5, 1, 0, 0);
+    let ms = Math.max(0, target - Date.now());
+    const d = Math.floor(ms / 86400000); ms -= d * 86400000;
+    const h = Math.floor(ms / 3600000); ms -= h * 3600000;
+    const m = Math.floor(ms / 60000); ms -= m * 60000;
+    const s = Math.floor(ms / 1000);
+    return { d: d, h: h, m: m, s: s };
+  }
+  tick() {
+    const p = this.parts();
+    const prev = this.state.prev;
+    const tk = Object.assign({}, this.state.tk);
+    let changed = false;
+    ['d', 'h', 'm', 's'].forEach((k) => { if (prev[k] !== undefined && prev[k] !== p[k]) { tk[k] = this.tg(tk[k]); changed = true; } });
+    if (changed || prev.s === undefined) this.setState({ prev: p, tk: tk });
+  }
+  lum(hex) {
+    const h = (hex || '#000000').replace('#', '');
+    const v = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  contrast(a, b) { const x = this.lum(a); const y = this.lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  mix(hex, toward, t) {
+    const a = hex.replace('#', ''); const b = toward.replace('#', '');
+    const c = [0, 2, 4].map((i) => Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t));
+    return '#' + c.map((x) => x.toString(16).padStart(2, '0')).join('');
+  }
+  readable(col, bg) {
+    let c = col; let i = 0;
+    const toward = this.lum(bg) < 0.2 ? '#FFFFFF' : '#000000';
+    while (this.contrast(c, bg) < 4.5 && i < 10) { c = this.mix(c, toward, 0.15); i++; }
+    return c;
+  }
+  rgba(hex, al) {
+    const h = hex.replace('#', '');
+    return 'rgba(' + parseInt(h.substr(0, 2), 16) + ',' + parseInt(h.substr(2, 2), 16) + ',' + parseInt(h.substr(4, 2), 16) + ',' + al + ')';
+  }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  readTheme() {
+    try { const t = JSON.parse(window.localStorage.getItem('sbEventTheme') || 'null'); return t && t.primary ? t : null; } catch (e) { return null; }
+  }
+  watchTheme() {
+    this.onStore = (e) => { if (e.key === 'sbEventTheme') this.setState({ theme: this.readTheme() }); };
+    try { window.addEventListener('storage', this.onStore); } catch (e) { }
+  }
+  thLum(hex) {
+    const h = (hex || '#000000').replace('#', '');
+    const v = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  thOn(hex) { const l = this.thLum(hex); return (l + 0.05) / 0.05 >= 1.05 / (l + 0.05) ? '#0B0D12' : '#FFFFFF'; }
+  thReadable(col, bg) {
+    let c = col; let i = 0;
+    const con = (a, b) => { const x = this.thLum(a); const y = this.thLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const toward = this.thLum(bg) < 0.2 ? 'FFFFFF' : '000000';
+    while (con(c, bg) < 4.5 && i < 10) {
+      const a = c.replace('#', '');
+      c = '#' + [0, 2, 4].map((k) => Math.round(parseInt(a.substr(k, 2), 16) * 0.85 + parseInt(toward.substr(k, 2), 16) * 0.15).toString(16).padStart(2, '0')).join('');
+      i++;
+    }
+    return c;
+  }
+  thIni(n) {
+    const w = (n || '').trim().split(/\s+/).filter((x) => /[A-Za-z]/.test(x));
+    return ((w[0] || 'E')[0] + (w[1] ? w[1][0] : '')).toUpperCase();
+  }
+  renderVals() {
+    const s = this.state;
+    const th = s.theme;
+    const P = th ? th.primary : (this.props.warnaUtama ?? '#FF7A2E');
+    const A = th ? th.accent : (this.props.warnaAksen ?? '#4D7CFF');
+    const light = th ? th.mode === 'light' : (this.props.terang ?? false);
+    const evName = th ? th.name : 'Piala Jumat Malam 2026';
+    const fase = this.props.fase ?? 'sebelum';
+    const bg = light ? '#F5F4EF' : '#0B0D12';
+    const fg = light ? '#14161C' : '#F2F1EC';
+    const surface = light ? '#FFFFFF' : '#141821';
+    const line = light ? '#DDDAD0' : '#2A303D';
+    const muted = light ? '#55596A' : '#A3A9B6';
+    const onP = this.contrast(P, '#0B0D12') >= this.contrast(P, '#FFFFFF') ? '#0B0D12' : '#FFFFFF';
+    const Pt = this.readable(P, surface);
+    const At = this.readable(A, surface);
+    const p = s.prev.s === undefined ? this.parts() : s.prev;
+    const pad = (v) => String(v).padStart(2, '0');
+    const tabs = [{ id: 'futsal', label: 'Futsal' }, { id: 'badminton', label: 'Bulu Tangkis' }];
+    const futsalM = [
+      { time: '08.00', a: 'Tim Elang', b: 'Tim Kancil', court: 'Lapangan 1 · Grup A', st: 'live' },
+      { time: '08.45', a: 'Tim Banteng', b: 'Tim Garuda', court: 'Lapangan 2 · Grup A', st: 'next' },
+      { time: '09.30', a: 'Tim Rajawali', b: 'Tim Merapi', court: 'Lapangan 1 · Grup B', st: 'next' },
+      { time: '10.15', a: 'Tim Naga', b: 'Tim Kenanga', court: 'Lapangan 2 · Grup B', st: 'next' },
+      { time: '13.00', a: 'Tim Elang', b: 'Tim Banteng', court: 'Lapangan 1 · Grup A', st: 'next' }
+    ];
+    const badM = [
+      { time: '08.00', a: 'Rina / Dewi', b: 'Ayu / Sari', court: 'Lapangan 3 · Grup A', st: 'live' },
+      { time: '08.40', a: 'Budi / Yoga', b: 'Fajar / Ilham', court: 'Lapangan 4 · Grup A', st: 'next' },
+      { time: '09.20', a: 'Tegar / Reza', b: 'Dimas / Galih', court: 'Lapangan 3 · Grup B', st: 'next' },
+      { time: '10.00', a: 'Putri / Laras', b: 'Nina / Tika', court: 'Lapangan 4 · Grup B', st: 'next' }
+    ];
+    const before = fase === 'sebelum';
+    const ms = (s.tab === 'futsal' ? futsalM : badM).map((m) => {
+      const live = !before && m.st === 'live';
+      return { time: m.time, a: m.a, b: m.b, court: m.court, status: live ? 'LIVE' : (before ? 'TERJADWAL' : 'BERIKUTNYA'), bg: live ? P : 'transparent', fg: live ? onP : muted };
+    });
+    const tableF = before
+      ? [{ name: 'Tim Elang', p: 0, d: '0', pts: 0 }, { name: 'Tim Kancil', p: 0, d: '0', pts: 0 }, { name: 'Tim Banteng', p: 0, d: '0', pts: 0 }, { name: 'Tim Garuda', p: 0, d: '0', pts: 0 }]
+      : [{ name: 'Tim Elang', p: 1, d: '+1', pts: 3 }, { name: 'Tim Garuda', p: 0, d: '0', pts: 0 }, { name: 'Tim Banteng', p: 0, d: '0', pts: 0 }, { name: 'Tim Kancil', p: 1, d: '−1', pts: 0 }];
+    const tableB = before
+      ? [{ name: 'Rina / Dewi', p: 0, d: '0', pts: 0 }, { name: 'Ayu / Sari', p: 0, d: '0', pts: 0 }, { name: 'Budi / Yoga', p: 0, d: '0', pts: 0 }, { name: 'Fajar / Ilham', p: 0, d: '0', pts: 0 }]
+      : [{ name: 'Rina / Dewi', p: 1, d: '+1', pts: 1 }, { name: 'Budi / Yoga', p: 0, d: '0', pts: 0 }, { name: 'Fajar / Ilham', p: 0, d: '0', pts: 0 }, { name: 'Ayu / Sari', p: 1, d: '−1', pts: 0 }];
+    const table = (s.tab === 'futsal' ? tableF : tableB).map((r, i) => ({ rank: i + 1, name: r.name, p: r.p, d: r.d, pts: r.pts, ptsCol: i < 2 ? Pt : fg, bg: i < 2 ? this.rgba(P, light ? 0.1 : 0.12) : 'transparent' }));
+    const liveDef = [
+      { id: 'f', meta: 'FUTSAL · LAPANGAN 1', a: 'Tim Elang', b: 'Tim Kancil', sa: 2, sb: 1, clock: 'Babak 2 · 18:42', events: [{ t: "B2 12'", txt: 'Gol — Tim Elang' }, { t: "B2 05'", txt: 'Gol — Tim Kancil' }, { t: "B1 16'", txt: 'Gol — Tim Elang' }] },
+      { id: 'b', meta: 'BULU TANGKIS · LAPANGAN 3', a: 'Rina / Dewi', b: 'Ayu / Sari', sa: 19, sb: 17, clock: 'Gim 2 · gim 1 untuk Rina / Dewi 21–18', events: [{ t: 'Gim 2', txt: 'Reli 34 pukulan, poin Ayu / Sari' }, { t: 'Gim 1', txt: 'Rina / Dewi menang 21–18' }] }
+    ];
+    const full = s.regCount >= 16;
+    const left = Math.max(0, 16 - s.regCount);
+    return {
+      fx: this.fxSlots().map((q) => Object.assign({}, q, { col: q.c === 'b' ? A : (q.c === 'a' ? P : (q.c === 'y' ? '#F2C230' : (q.c === 'g' ? '#7EE2A8' : '#F2F1EC'))) })),
+      onFx: (e) => this.onFx(e),
+      evName: evName, evIni: this.thIni(evName),
+      evOrg: th && th.org ? th.org : 'Karang Taruna RW 05',
+      evDate: th && th.dateLine ? th.dateLine : '5–6 Desember 2026',
+      evVenue: th && th.venue ? th.venue : 'GOR Kecamatan, Jakarta Selatan',
+      evSlug: th && th.slug ? th.slug : 'piala-jumat-malam-2026',
+      hasLogo: !!(th && th.logoUrl), noLogo: !(th && th.logoUrl), logoUrl: th && th.logoUrl ? th.logoUrl : '',
+      fromBuilder: !!th,
+      bg: bg, fg: fg, surface: surface, line: line, muted: muted, P: P, A: A, onP: onP, Pt: Pt, At: At,
+      tileBg: light ? '#14161C' : '#06070A',
+      shadow: light ? 'rgba(20,22,28,.35)' : 'rgba(0,0,0,.9)',
+      stripe: this.rgba(P, light ? 0.06 : 0.05),
+      ringP: this.rgba(P, 0.35), ringA: this.rgba(A, 0.35),
+      errCol: light ? '#B3261E' : '#FF9A7A',
+      before: before, during: !before,
+      tiles: [
+        { label: 'HARI', v: pad(p.d), k: s.tk.d || 'n', col: '#F2F1EC' },
+        { label: 'JAM', v: pad(p.h), k: s.tk.h || 'n', col: '#F2F1EC' },
+        { label: 'MENIT', v: pad(p.m), k: s.tk.m || 'n', col: '#F2F1EC' },
+        { label: 'DETIK', v: pad(p.s), k: s.tk.s || 'n', col: this.readable(P, '#06070A') }
+      ],
+      feeLine: th && th.fee ? (/^\d/.test(String(th.fee)) ? 'Rp' + th.fee : th.fee) + (/gratis/i.test(String(th.fee)) ? '' : ' per tim') : 'Rp250.000 per tim',
+      regCount: s.regCount, regLeft: left, regPct: (s.regCount / 16 * 100).toFixed(1),
+      tabs: tabs.map((o) => ({ label: o.label, on: s.tab === o.id, bg: s.tab === o.id ? P : 'transparent', fg: s.tab === o.id ? onP : fg, pick: () => { if (this.state.tab !== o.id) this.setState({ tab: o.id, swK: this.tg(this.state.swK) }); } })),
+      swK: s.swK,
+      dayLabel: before ? 'HARI 1 · SABTU, 5 DESEMBER' : 'HARI INI · SABTU, 5 DESEMBER',
+      matches: ms,
+      table: table,
+      diffHead: s.tab === 'futsal' ? 'SG' : '±GIM',
+      live: liveDef.map((l) => ({ meta: l.meta, a: l.a, b: l.b, sa: l.sa, sb: l.sb, clock: l.clock, events: l.events, on: !!s.flipped[l.id], cls: s.flipped[l.id] ? 'is-flipped' : '', toggle: () => { const f = Object.assign({}, this.state.flipped); f[l.id] = !f[l.id]; this.setState({ flipped: f }); } })),
+      formClosed: s.form === 'closed', formOpen: s.form === 'open', formDone: s.form === 'done',
+      openForm: () => this.setState({ form: 'open' }),
+      team: s.team, cap: s.cap, wa: s.wa,
+      onTeam: (e) => this.setState({ team: e.target.value }),
+      onCap: (e) => this.setState({ cap: e.target.value }),
+      onWa: (e) => this.setState({ wa: e.target.value.replace(/[^\d+ ]/g, '') }),
+      regSports: [{ id: 'futsal', label: 'Futsal' }, { id: 'badminton', label: 'Bulu Tangkis ganda' }].map((o) => ({ label: o.label, on: s.regSport === o.id, bg: s.regSport === o.id ? P : 'transparent', fg: s.regSport === o.id ? onP : fg, border: s.regSport === o.id ? P : line, pick: () => this.setState({ regSport: o.id }) })),
+      formErr: !!s.formErr, formErrMsg: s.formErr,
+      full: full,
+      submit: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const st = this.state;
+        const digits = st.wa.replace(/\D/g, '');
+        if (st.team.trim().length < 3) { this.setState({ formErr: 'Nama tim minimal 3 huruf.' }); return; }
+        if (st.cap.trim().length < 3) { this.setState({ formErr: 'Isi nama kapten.' }); return; }
+        if (digits.length < 9) { this.setState({ formErr: 'Nomor WhatsApp belum lengkap.' }); return; }
+        this.setState({ form: 'done', doneTeam: st.team.trim(), regCount: Math.min(16, st.regCount + 1), formErr: '', team: '', cap: '', wa: '' });
+        setTimeout(() => this.celebrate('a'), 200);
+      },
+      doneTeam: s.doneTeam,
+      again: () => this.setState({ form: 'open' }),
+      share: () => {
+        const url = 'https://scoreboard.tiusapp.com/e/' + ((this.state.theme && this.state.theme.slug) || 'piala-jumat-malam-2026');
+        try { navigator.clipboard.writeText(url).then(() => this.toastMsg('Link event disalin'), () => this.toastMsg('Tidak bisa menyalin di pratinjau ini')); } catch (err) { this.toastMsg('Tidak bisa menyalin di pratinjau ini'); }
+      },
+      toast: s.toast, toastK: s.toastK,
+      rx: s.rx.toFixed(2), ry: s.ry.toFixed(2),
+      onTilt: (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        this.setState({ ry: -10 + px * 26, rx: 4 - py * 18 });
+      },
+      onLeave: () => this.setState({ rx: 4, ry: -10 })
+    };
+  }
+}
+</script>
+</body>
+</html>

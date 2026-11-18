@@ -1,0 +1,18 @@
+# rahasia
+.env
+.env.*
+!.env.example
+deploy/edge/.env
+
+# build
+/bin/
+web/dist/
+node_modules/
+*.tsbuildinfo
+coverage/
+
+# lokal
+.DS_Store
+*.log
+/tmp/
+backups/

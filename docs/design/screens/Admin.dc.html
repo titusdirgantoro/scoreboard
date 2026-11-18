@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Panel Penyelenggara — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input,select{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ad-btn{cursor:pointer}
+.ad-btn:disabled{opacity:.45;cursor:not-allowed}
+.ad-nav{cursor:pointer}
+.ad-nav:hover{background-color:#181C25!important}
+.ad-nav.is-on{background-color:#F2F1EC!important;color:#0B0D12!important}
+.ad-chip{cursor:pointer}
+.ad-chip:hover{border-color:#5A6275!important;color:#F2F1EC!important}
+.ad-chip.is-on{background-color:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.ad-in{min-height:44px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:#0B0D12;color:#F2F1EC;font-size:14px}
+.ad-in-a{animation:adInA .65s cubic-bezier(.2,.9,.25,1.1) both}.ad-in-b{animation:adInB .65s cubic-bezier(.2,.9,.25,1.1) both}
+@keyframes adInA{from{opacity:0;transform:perspective(1200px) rotateX(-24deg) translateY(30px)}to{opacity:1;transform:none}}
+@keyframes adInB{from{opacity:0;transform:perspective(1200px) rotateX(-24deg) translateY(30px)}to{opacity:1;transform:none}}
+.ad-f-a{display:inline-block;animation:adFA .6s cubic-bezier(.2,.9,.25,1.3)}.ad-f-b{display:inline-block;animation:adFB .6s cubic-bezier(.2,.9,.25,1.3)}
+@keyframes adFA{0%{transform:perspective(300px) rotateX(-110deg) scale(.7);opacity:.1;filter:brightness(2.4)}100%{transform:none;opacity:1;filter:none}}
+@keyframes adFB{0%{transform:perspective(300px) rotateX(-110deg) scale(.7);opacity:.1;filter:brightness(2.4)}100%{transform:none;opacity:1;filter:none}}
+.ad-ping-a{animation:adPingA 1s ease-out}.ad-ping-b{animation:adPingB 1s ease-out}
+@keyframes adPingA{0%{box-shadow:0 0 0 0 rgba(126,226,168,.5)}100%{box-shadow:0 0 0 18px rgba(126,226,168,0)}}
+@keyframes adPingB{0%{box-shadow:0 0 0 0 rgba(126,226,168,.5)}100%{box-shadow:0 0 0 18px rgba(126,226,168,0)}}
+.ad-feed{animation:adFeed .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes adFeed{from{opacity:0;transform:perspective(500px) rotateX(-70deg) translateY(-10px)}to{opacity:1;transform:none}}
+.ad-card-in.ad-leave-acc{animation:adAcc .65s cubic-bezier(.5,0,.6,1) forwards}
+.ad-card-in.ad-leave-rej{animation:adRej .65s cubic-bezier(.5,0,.6,1) forwards}
+@keyframes adAcc{0%{transform:none}40%{transform:perspective(900px) translateZ(60px) rotateY(-12deg)}100%{opacity:0;transform:perspective(900px) translate3d(240px,-60px,-200px) rotateY(-70deg)}}
+@keyframes adRej{0%{transform:none}30%{transform:translateX(-8px) rotateZ(-1.5deg)}100%{opacity:0;transform:perspective(900px) translate3d(0,120px,-200px) rotateX(70deg)}}
+.ad-card-in{animation:adCardIn .7s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes adCardIn{from{opacity:0;transform:perspective(900px) rotateY(80deg)}to{opacity:1;transform:none}}
+.ad-pin-a{display:inline-block;animation:adPinA .6s cubic-bezier(.3,1.4,.4,1) both}.ad-pin-b{display:inline-block;animation:adPinB .6s cubic-bezier(.3,1.4,.4,1) both}
+@keyframes adPinA{from{transform:perspective(300px) rotateY(-180deg);opacity:.2}to{transform:none;opacity:1}}
+@keyframes adPinB{from{transform:perspective(300px) rotateY(-180deg);opacity:.2}to{transform:none;opacity:1}}
+.ad-dot{animation:adDot 1.8s ease-in-out infinite}
+@keyframes adDot{0%,100%{box-shadow:0 0 0 0 rgba(126,226,168,.55)}50%{box-shadow:0 0 0 5px rgba(126,226,168,0)}}
+.ad-prev{perspective:1300px}
+.ad-prevCard{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.ad-prev:hover .ad-prevCard{transform:none}
+.ad-apply-a{animation:adApA 1s cubic-bezier(.3,1.3,.4,1)}.ad-apply-b{animation:adApB 1s cubic-bezier(.3,1.3,.4,1)}
+@keyframes adApA{0%{transform:perspective(1300px) rotateY(0)}50%{transform:perspective(1300px) rotateY(180deg) scale(.9)}100%{transform:perspective(1300px) rotateY(360deg)}}
+@keyframes adApB{0%{transform:perspective(1300px) rotateY(0)}50%{transform:perspective(1300px) rotateY(180deg) scale(.9)}100%{transform:perspective(1300px) rotateY(360deg)}}
+.ad-modal{animation:adModal .55s cubic-bezier(.25,1.3,.35,1) both}
+@keyframes adModal{from{transform:perspective(900px) rotateX(-30deg) translateY(30px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+.ad-knob{transition:transform .45s cubic-bezier(.3,1.6,.4,1)}
+.ad-toast{opacity:0;pointer-events:none}
+.ad-toast-a{animation:adToastA 2.6s ease both}.ad-toast-b{animation:adToastB 2.6s ease both}
+@keyframes adToastA{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes adToastB{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;color:#C9CDD6">Panel penyelenggara</span>
+</div>
+<nav aria-label="Pintasan" style="display:flex;gap:8px;flex-wrap:wrap">
+<a href="Jadwal.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Jadwal otomatis</a>
+<a href="Scoreboard.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Layar TV venue</a>
+<a href="EventPage.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;background:{{tP}};color:{{tOn}};font-size:14px;font-weight:700;text-decoration:none">Halaman event</a>
+</nav>
+</div>
+</header>
+
+<div style="max-width:1360px;margin:0 auto;padding:24px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<aside aria-label="Menu panel" style="flex:1 1 260px;max-width:100%;display:flex;flex-direction:column;gap:14px">
+<div style="padding:18px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:12px">
+<span style="display:flex;align-items:center;gap:12px">
+<span class="sb-display" style="flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:{{tP}};color:{{tOn}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:22px;font-weight:900">{{tIni}}</span>
+<span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span class="sb-display" style="font-size:22px;line-height:1;font-weight:900;text-transform:uppercase">{{tName}}</span><span class="sb-mono" style="font-size:10px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">/e/{{tSlug}}</span></span>
+</span>
+<span class="sb-mono" style="display:flex;align-items:center;gap:8px;font-size:11px;color:#7EE2A8"><span class="ad-dot" style="width:8px;height:8px;border-radius:50%;background:#7EE2A8"></span>TERBIT · {{onlineCount}} LAPANGAN TERSAMBUNG</span>
+</div>
+<nav aria-label="Bagian panel" style="display:flex;flex-direction:column;gap:4px;padding:8px;border-radius:20px;border:1px solid #232834;background:#0F1218">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="10">
+<button class="ad-btn ad-nav {{t.cls}}" onClick="{{t.pick}}" aria-current="{{t.cur}}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:#C9CDD6;font-size:15px;font-weight:600;text-align:left">
+<span>{{t.label}}</span>
+<sc-if value="{{t.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="min-width:24px;padding:2px 7px;border-radius:999px;background:#FF7A2E;color:#140B05;font-size:11px;font-weight:700;text-align:center">{{t.badge}}</span></sc-if>
+</button>
+</sc-for>
+</nav>
+</aside>
+
+<section aria-label="Isi panel" style="flex:999 1 720px;min-width:0">
+
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px"><div style="display:flex;flex-direction:column;gap:6px"><p class="sb-mono" style="margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:{{tPt}}">Ringkasan event · {{hDate}}</p><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">{{tName}}</h1></div><span class="sb-mono" style="padding:6px 12px;border-radius:999px;border:1px solid rgba(255,122,46,.5);color:#FFB089;font-size:12px;font-weight:700">PASS EVENT ≤16 · AKTIF S.D. 5 JAN 2027</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr));gap:12px"><sc-for list="{{hKpis}}" as="k" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:16px;background:#12151C;border:1px solid #232834"><span class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">{{k.l}}</span><span class="sb-display" style="font-size:32px;line-height:1;font-weight:900;color:{{k.c}}">{{k.v}}</span><span style="font-size:12px;color:#A3A9B6">{{k.d}}</span></div></sc-for></div>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+<section aria-labelledby="ad-todo" style="flex:3 1 380px;min-width:0;display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h2 id="ad-todo" class="sb-display" style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase">Yang perlu dikerjakan</h2><span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{todoLeft}} tersisa</span></div>
+<sc-for list="{{todos}}" as="d" hint-placeholder-count="6"><div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#12151C;border:1px solid #232834;opacity:{{d.op}}"><button class="ad-btn" role="checkbox" aria-checked="{{d.done}}" aria-label="Tandai selesai: {{d.t}}" onClick="{{d.toggle}}" style="flex:none;width:26px;height:26px;border-radius:8px;border:2px solid {{d.bd}};background:{{d.bg}};color:#0B0D12;display:inline-flex;align-items:center;justify-content:center"><sc-if value="{{d.done}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if></button><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700;text-decoration:{{d.deco}}">{{d.t}}</span><span style="font-size:12px;color:#A3A9B6">{{d.s}}</span></span><sc-if value="{{d.isTab}}" hint-placeholder-val="{{ true }}"><button class="ad-btn" onClick="{{d.go}}" style="flex:none;min-height:38px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:13px;font-weight:700">{{d.cta}}</button></sc-if><sc-if value="{{d.isLink}}" hint-placeholder-val="{{ false }}"><a href="{{d.href}}" style="flex:none;display:inline-flex;align-items:center;min-height:38px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;color:#F2F1EC;font-size:13px;font-weight:700;text-decoration:none">{{d.cta}}</a></sc-if></div></sc-for>
+</section>
+<section aria-labelledby="ad-alat" style="flex:2 1 280px;min-width:0;display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<h2 id="ad-alat" class="sb-display" style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase">Alat event</h2>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><sc-for list="{{tools}}" as="o" hint-placeholder-count="8"><a href="{{o.href}}" style="display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:12px;background:#12151C;border:1px solid #232834;color:#F2F1EC;text-decoration:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{o.c}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{o.icon}}"></path></svg><span style="font-size:13px;font-weight:700">{{o.t}}</span><span style="font-size:11px;color:#A3A9B6">{{o.s}}</span></a></sc-for></div>
+</section>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isLive}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Live dari semua lapangan</h1>
+<span class="sb-mono" style="font-size:12px;color:#A3A9B6">Skor dikirim dari HP wasit · diperbarui otomatis</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:10px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+<div style="padding:16px;border-radius:16px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:6px"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">{{k.label}}</span><span class="sb-display" style="font-size:40px;line-height:1;font-weight:900;color:{{k.col}}">{{k.v}}</span></div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:14px">
+<sc-for list="{{courtsLive}}" as="c" hint-placeholder-count="4">
+<article class="ad-ping-{{c.pk}}" style="padding:18px;border-radius:20px;border:1px solid {{c.border}};background:#12151C;display:flex;flex-direction:column;gap:12px;opacity:{{c.op}}">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span style="display:flex;flex-direction:column;gap:2px"><span class="sb-display" style="font-size:24px;line-height:1;font-weight:900;text-transform:uppercase">{{c.name}}</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">{{c.sport}}</span></span>
+<span class="sb-mono" style="display:flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:{{c.stBg}};color:{{c.stFg}};font-size:10px;font-weight:700;letter-spacing:.08em"><span style="width:6px;height:6px;border-radius:50%;background:{{c.stFg}}"></span>{{c.status}}</span>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px">
+<span style="font-size:15px;font-weight:700">{{c.a}}</span>
+<span class="sb-display" style="padding:2px 12px;border-radius:12px;background:#06070A;font-size:46px;line-height:1;font-weight:900;font-variant-numeric:tabular-nums"><span class="ad-f-{{c.fa}}" style="color:{{c.colA}}">{{c.sa}}</span><span style="color:#3A4150"> : </span><span class="ad-f-{{c.fb}}" style="color:{{c.colB}}">{{c.sb}}</span></span>
+<span style="font-size:15px;font-weight:700;text-align:right">{{c.b}}</span>
+</div>
+<span style="display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#A3A9B6"><span>Wasit: <strong style="color:#F2F1EC;font-weight:600">{{c.ref}}</strong></span><span class="sb-mono">{{c.ago}}</span></span>
+</article>
+</sc-for>
+</div>
+<div style="padding:18px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:8px">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">AKTIVITAS WASIT</span>
+<ol style="margin:0;padding:0;list-style:none">
+<sc-for list="{{feed}}" as="f" hint-placeholder-count="4">
+<li class="ad-feed" style="display:grid;grid-template-columns:84px 110px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #1E222C;font-size:14px"><span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{f.t}}</span><span style="font-weight:600">{{f.court}}</span><span>{{f.txt}} <span style="color:#A3A9B6">· {{f.ref}}</span></span><span class="sb-mono" style="font-size:11px;color:#7EE2A8">{{f.lat}}</span></li>
+</sc-for>
+</ol>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isReg}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px">
+<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Pendaftaran tim</h1><a href="KartuPemain.dc.html" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#F2F1EC;font-size:14px;font-weight:700;text-decoration:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"></rect><circle cx="12" cy="9" r="3"></circle><path d="M8 17c1-2 2.4-3 4-3s3 1 4 3"></path></svg>Kartu pemain</a></div>
+<div role="group" aria-label="Saring" style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-for list="{{filters}}" as="o" hint-placeholder-count="3"><button class="ad-btn ad-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<span style="display:flex;justify-content:space-between;font-size:14px"><span style="font-weight:600">Kuota event · <a href="Harga.dc.html">Pass Event ≤16 tim</a> · <a href="Upgrade.dc.html">Naikkan kuota</a></span><span class="sb-mono">{{accCount}}/16 diterima</span></span>
+<span style="height:10px;border-radius:999px;background:#1C212B;overflow:hidden"><span style="display:block;height:100%;width:{{accPct}}%;border-radius:999px;background:{{tP}};transition:width .8s cubic-bezier(.2,.8,.2,1)"></span></span>
+</div>
+<sc-if value="{{showPending}}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:14px">
+<sc-for list="{{pendingList}}" as="t" hint-placeholder-count="3">
+<article class="ad-card-in ad-leave-{{t.leave}}" style="padding:18px;border-radius:20px;border:1px solid #2A303D;background:#12151C;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+<span style="display:flex;flex-direction:column;gap:4px"><span class="sb-display" style="font-size:26px;line-height:1;font-weight:900;text-transform:uppercase">{{t.name}}</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">{{t.sport}} · {{t.at}}</span></span>
+<span class="sb-mono" style="flex:none;padding:4px 8px;border-radius:6px;background:{{t.payBg}};color:{{t.payFg}};font-size:10px;font-weight:700">{{t.pay}}</span>
+</div>
+<dl style="margin:0;display:grid;grid-template-columns:80px minmax(0,1fr);gap:6px 10px;font-size:14px">
+<dt style="color:#A3A9B6">Kapten</dt><dd style="margin:0">{{t.cap}}</dd>
+<dt style="color:#A3A9B6">WhatsApp</dt><dd class="sb-mono" style="margin:0;font-size:13px">{{t.wa}}</dd>
+<dt style="color:#A3A9B6">Pemain</dt><dd style="margin:0">{{t.roster}} orang</dd>
+</dl>
+<sc-if value="{{t.notRejecting}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="ad-btn" data-fx="g" onClick="{{t.accept}}" disabled="{{full}}" style="flex:1;min-height:44px;border-radius:12px;border:0;background:#7EE2A8;color:#0B0D12;font-size:14px;font-weight:800">Terima</button>
+<button class="ad-btn" data-fx="w" onClick="{{t.startReject}}" style="flex:1;min-height:44px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:600">Tolak</button>
+<a class="ad-btn" href="{{t.waLink}}" target="_blank" rel="noopener" aria-label="Hubungi kapten {{t.name}} lewat WhatsApp" style="display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"></path></svg></a>
+</div>
+</sc-if>
+<sc-if value="{{t.isRejecting}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#FF9A7A">ALASAN PENOLAKAN</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-for list="{{t.reasons}}" as="r" hint-placeholder-count="3"><button class="ad-btn" data-fx="w" onClick="{{r.pick}}" style="min-height:40px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,154,122,.5);background:transparent;color:#FFC2AE;font-size:13px;font-weight:600">{{r.label}}</button></sc-for>
+<button class="ad-btn" onClick="{{t.cancelReject}}" style="min-height:40px;padding:0 12px;border-radius:999px;border:0;background:transparent;color:#A3A9B6;font-size:13px;font-weight:600">Batal</button>
+</div>
+</div>
+</sc-if>
+</article>
+</sc-for>
+</div>
+<sc-if value="{{noPending}}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:24px;border-radius:16px;border:1px dashed #343B4A;color:#A3A9B6;text-align:center">Semua pendaftaran sudah diproses.</p></sc-if>
+</sc-if>
+<sc-if value="{{showDoneList}}" hint-placeholder-val="{{ false }}">
+<ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px">
+<sc-for list="{{doneList}}" as="t" hint-placeholder-count="5">
+<li class="ad-card-in" style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;background:#12151C;border:1px solid #232834;animation-delay:{{t.delay}}ms">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{t.name}}</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">{{t.sub}}</span></span>
+<span class="sb-mono" style="padding:3px 8px;border-radius:6px;background:{{t.payBg}};color:{{t.payFg}};font-size:10px;font-weight:700">{{t.pay}}</span>
+<button class="ad-btn" onClick="{{t.undo}}" style="min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{t.undoLabel}}</button>
+</li>
+</sc-for>
+</ol>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isRef}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Wasit &amp; lapangan</h1>
+<p style="margin:0;font-size:15px;line-height:1.6;color:#A3A9B6">Tiap lapangan punya link remote sendiri. Wasit membuka link di HP dan memasukkan PIN — skornya langsung masuk ke layar TV venue dan halaman event.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{courtRows}}" as="c" hint-placeholder-count="4">
+<article style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:14px;align-items:center;padding:16px;border-radius:18px;border:1px solid #232834;background:#12151C">
+<span style="display:flex;flex-direction:column;gap:4px"><span class="sb-display" style="font-size:24px;line-height:1;font-weight:900;text-transform:uppercase">{{c.name}}</span><span class="sb-mono" style="display:flex;align-items:center;gap:6px;font-size:11px;color:{{c.stFg}}"><span style="width:7px;height:7px;border-radius:50%;background:{{c.stFg}}"></span>{{c.status}}</span></span>
+<span style="display:flex;flex-direction:column;gap:6px">
+<label class="sb-mono" for="{{c.selId}}" style="font-size:10px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">WASIT</label>
+<select id="{{c.selId}}" class="ad-in" value="{{c.ref}}" onChange="{{c.onRef}}">
+<sc-for list="{{c.opts}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.label}}</option></sc-for>
+</select>
+</span>
+<span style="display:flex;align-items:center;gap:10px">
+<span aria-label="PIN {{c.pinLabel}}" style="display:flex;gap:4px">
+<sc-for list="{{c.pinDigits}}" as="d" hint-placeholder-count="4"><span class="sb-display" style="width:34px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#06070A;border:1px solid #2A303D;font-size:26px;font-weight:900"><span class="ad-pin-{{c.pk}}" style="animation-delay:{{d.delay}}ms">{{d.v}}</span></span></sc-for>
+</span>
+<button class="ad-btn" onClick="{{c.newPin}}" style="min-height:40px;padding:0 10px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:12px;font-weight:600">PIN baru</button>
+</span>
+<span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+<button class="ad-btn" onClick="{{c.copy}}" disabled="{{c.noRef}}" style="min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:13px;font-weight:600">Salin link</button>
+<a class="ad-btn" href="{{c.waLink}}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border-radius:10px;background:#1F7A45;color:#FFFFFF;font-size:13px;font-weight:700;text-decoration:none">Kirim ke wasit</a>
+</span>
+<span class="sb-mono" style="grid-column:1/-1;font-size:12px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{c.link}}</span>
+</article>
+</sc-for>
+</div>
+<button class="ad-btn" onClick="{{addCourt}}" disabled="{{maxCourts}}" style="align-self:flex-start;min-height:48px;padding:0 18px;border-radius:12px;border:1px dashed #3A4150;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">+ Tambah lapangan</button>
+</div>
+</sc-if>
+
+<sc-if value="{{isTheme}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Tema di semua tampilan</h1>
+<p style="margin:0;font-size:15px;line-height:1.6;color:#A3A9B6">Logo dan warna dari Buat Event dipakai di papan skor TV, bracket Cup, dan halaman event. Ubah di sini, semuanya ikut berubah.</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+<div style="flex:1 1 300px;display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:20px;border:1px solid #232834;background:#0F1218">
+<label class="sb-mono" for="ad-name" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">NAMA EVENT</label>
+<input id="ad-name" class="ad-in" value="{{tName}}" onChange="{{onTName}}" maxlength="48" style="min-height:48px;font-size:16px;font-weight:600">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">PALET</span>
+<div role="group" aria-label="Palet" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+<sc-for list="{{pals}}" as="p" hint-placeholder-count="6"><button class="ad-btn" onClick="{{p.pick}}" aria-pressed="{{p.on}}" aria-label="{{p.name}}" style="display:flex;align-items:center;justify-content:center;gap:0;min-height:44px;border-radius:12px;border:2px solid {{p.border}};background:#12151C"><span style="width:20px;height:20px;border-radius:50%;background:{{p.p}}"></span><span style="width:20px;height:20px;margin-left:-6px;border-radius:50%;background:{{p.a}};border:2px solid #12151C"></span></button></sc-for>
+</div>
+<div style="display:flex;gap:10px">
+<label style="flex:1;display:flex;align-items:center;gap:8px;padding:8px;border-radius:12px;border:1px solid #2A303D"><input type="color" value="{{tP}}" onChange="{{onTP}}" aria-label="Warna utama" style="width:40px;height:40px;padding:0;border:0;background:transparent;cursor:pointer"><span class="sb-mono" style="font-size:12px">{{tPUp}}</span></label>
+<label style="flex:1;display:flex;align-items:center;gap:8px;padding:8px;border-radius:12px;border:1px solid #2A303D"><input type="color" value="{{tA}}" onChange="{{onTA}}" aria-label="Warna aksen" style="width:40px;height:40px;padding:0;border:0;background:transparent;cursor:pointer"><span class="sb-mono" style="font-size:12px">{{tAUp}}</span></label>
+</div>
+<button class="ad-btn" onClick="{{applyTheme}}" style="min-height:54px;border-radius:14px;border:0;background:{{tP}};color:{{tOn}};font-size:16px;font-weight:800">Terapkan ke semua tampilan</button>
+<span style="font-size:12px;line-height:1.5;color:#A3A9B6">{{syncNote}}</span>
+</div>
+<div class="ad-prev" style="flex:2 1 460px;min-width:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:14px">
+<sc-for list="{{previews}}" as="v" hint-placeholder-count="3">
+<div class="ad-prevCard ad-apply-{{applyK}}" style="transform:{{v.tf}};animation-delay:{{v.delay}}ms">
+<span class="sb-mono" style="display:block;margin-bottom:8px;font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">{{v.label}}</span>
+<div style="aspect-ratio:{{v.ratio}};border-radius:14px;overflow:hidden;border:1px solid #2A303D;background:{{tBg}};color:{{tFg}};display:flex;flex-direction:column;box-shadow:0 30px 60px -30px rgba(0,0,0,.9)">
+<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:{{tP}};color:{{tOn}}"><span class="sb-display" style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:{{tOn}};color:{{tP}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:11px;font-weight:900">{{tIni}}</span><span class="sb-display" style="font-size:14px;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{tName}}</span></div>
+<sc-if value="{{v.isTv}}" hint-placeholder-val="{{ true }}"><div style="flex:1;display:flex;align-items:center;justify-content:center;gap:10px"><span class="sb-display" style="font-size:54px;line-height:1;font-weight:900;color:{{tPt}}">2</span><span class="sb-display" style="font-size:30px;color:#5A6275">:</span><span class="sb-display" style="font-size:54px;line-height:1;font-weight:900;color:{{tAt}}">1</span></div></sc-if>
+<sc-if value="{{v.isBracket}}" hint-placeholder-val="{{ false }}"><div style="flex:1;display:flex;gap:8px;align-items:center;padding:10px"><span style="flex:1;display:flex;flex-direction:column;gap:6px"><span style="height:12px;border-radius:4px;background:{{tLine}}"></span><span style="height:12px;border-radius:4px;background:{{tLine}}"></span><span style="height:12px;border-radius:4px;background:{{tLine}}"></span><span style="height:12px;border-radius:4px;background:{{tLine}}"></span></span><span style="flex:1;display:flex;flex-direction:column;gap:22px"><span style="height:12px;border-radius:4px;background:{{tA}}"></span><span style="height:12px;border-radius:4px;background:{{tA}}"></span></span><span style="flex:.7;height:12px;border-radius:4px;background:{{tP}}"></span></div></sc-if>
+<sc-if value="{{v.isPage}}" hint-placeholder-val="{{ false }}"><div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:10px"><span class="sb-display" style="font-size:22px;line-height:.95;font-weight:900;text-transform:uppercase">{{tName}}</span><span style="height:8px;width:70%;border-radius:4px;background:{{tLine}}"></span><span style="margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:30px;border-radius:8px;background:{{tP}};color:{{tOn}};font-size:11px;font-weight:800">Daftar tim</span></div></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isMatch}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Laga &amp; hasil</h1><div role="group" aria-label="Saring laga" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{mFilters}}" as="o" hint-placeholder-count="4"><button class="ad-btn ad-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div></div>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#A3A9B6;max-width:760px">Skor diisi wasit dari remote. Kalau ada salah input, koreksi di sini dengan alasan; perubahan langsung tampil di papan TV dan tercatat di riwayat koreksi.</p>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{matches}}" as="m" hint-placeholder-count="8">
+<div style="display:flex;flex-direction:column;gap:10px;padding:12px 14px;border-radius:14px;background:#12151C;border:1px solid {{m.bd}}">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+<span class="sb-mono" style="flex:none;width:100px;font-size:11px;color:#A3A9B6">{{m.time}} · {{m.court}}</span>
+<span style="flex:1 1 140px;min-width:0;text-align:right;font-size:15px;font-weight:{{m.aW}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{m.a}}</span>
+<span class="sb-display" style="flex:none;min-width:88px;text-align:center;font-size:26px;font-weight:900">{{m.score}}</span>
+<span style="flex:1 1 140px;min-width:0;font-size:15px;font-weight:{{m.bW}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{m.b}}</span>
+<span class="sb-mono" style="flex:none;padding:3px 8px;border-radius:999px;border:1px solid {{m.stBd}};color:{{m.stC}};font-size:10px;font-weight:700">{{m.st}}</span>
+<sc-if value="{{m.canFix}}" hint-placeholder-val="{{ true }}"><button class="ad-btn" onClick="{{m.edit}}" style="flex:none;min-height:38px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:13px;font-weight:700">{{m.fixLabel}}</button></sc-if>
+</div>
+<sc-if value="{{m.editing}}" hint-placeholder-val="{{ false }}">
+<div class="ad-card-in" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;padding:12px;border-radius:12px;background:#0B0D12;border:1px dashed #4A5263">
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">{{m.a}}<input class="ad-in" type="number" min="0" value="{{edSa}}" onChange="{{onEdSa}}" style="width:90px"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">{{m.b}}<input class="ad-in" type="number" min="0" value="{{edSb}}" onChange="{{onEdSb}}" style="width:90px"></label>
+<label style="flex:1 1 200px;display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Alasan koreksi (wajib)<input class="ad-in" value="{{edReason}}" onChange="{{onEdReason}}" maxlength="80" placeholder="mis. gol kedua dicatat ke tim yang salah"></label>
+<button class="ad-btn" data-fx="y" onClick="{{saveFix}}" disabled="{{cantFix}}" style="min-height:44px;padding:0 16px;border-radius:10px;border:0;background:{{tP}};color:{{tOn}};font-size:14px;font-weight:800">Simpan koreksi</button>
+<button class="ad-btn" onClick="{{cancelFix}}" style="min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Batal</button>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{noMatches}}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:18px;border-radius:14px;border:1px dashed #343B4A;color:#A3A9B6;font-size:14px;text-align:center">Tidak ada laga di filter ini.</p></sc-if>
+<section aria-labelledby="ad-fix" style="display:flex;flex-direction:column;gap:6px">
+<h2 id="ad-fix" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Riwayat koreksi</h2>
+<sc-for list="{{fixes}}" as="f" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:90px minmax(0,1fr);gap:12px;padding:10px 14px;border-radius:12px;background:#12151C;border:1px solid #232834;font-size:13px"><span class="sb-mono" style="color:#A3A9B6">{{f.at}}</span><span style="min-width:0"><strong>{{f.match}}</strong> · {{f.from}} → {{f.to}} · {{f.reason}} · oleh {{f.who}}</span></div></sc-for>
+</section>
+</div>
+</sc-if>
+<sc-if value="{{isMoney}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Keuangan event</h1><button class="ad-btn" onClick="{{exportMoney}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Unduh laporan CSV</button></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:12px"><sc-for list="{{moneyKpis}}" as="k" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:16px;background:#12151C;border:1px solid #232834"><span class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">{{k.l}}</span><span class="sb-display" style="font-size:28px;line-height:1;font-weight:900;color:{{k.c}}">{{k.v}}</span><span style="font-size:12px;color:#A3A9B6">{{k.d}}</span></div></sc-for></div>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+<section aria-labelledby="ad-bayar" style="flex:3 1 420px;min-width:0;display:flex;flex-direction:column;gap:8px">
+<h2 id="ad-bayar" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Pembayaran per tim · {{feeTxt}}</h2>
+<sc-for list="{{payRows}}" as="r" hint-placeholder-count="8"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#12151C;border:1px solid #232834"><span style="flex:1 1 160px;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.name}}</span><span style="font-size:12px;color:#A3A9B6">{{r.cap}} · {{r.sport}}</span></span><span class="sb-mono" style="flex:none;padding:3px 8px;border-radius:999px;background:{{r.bg}};color:{{r.fg}};font-size:10px;font-weight:700">{{r.st}}</span><span class="sb-mono" style="flex:none;width:72px;font-size:11px;color:#A3A9B6">{{r.method}}</span><sc-if value="{{r.unpaid}}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:6px"><button class="ad-btn" onClick="{{r.remind}}" style="min-height:36px;padding:0 10px;border-radius:9px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:12px;font-weight:700">Kirim tagihan</button><button class="ad-btn" onClick="{{r.cash}}" style="min-height:36px;padding:0 10px;border-radius:9px;border:1px solid #2F6B4C;background:transparent;color:#7EE2A8;font-size:12px;font-weight:700">Lunas tunai</button></span></sc-if></div></sc-for>
+</section>
+<section aria-labelledby="ad-cair" style="flex:2 1 280px;min-width:0;display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<h2 id="ad-cair" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Pencairan</h2>
+<span class="sb-mono" style="font-size:11px;color:#A3A9B6">SALDO ONLINE SIAP DICAIRKAN</span>
+<span class="sb-display" style="font-size:40px;line-height:1;font-weight:900;color:#7EE2A8">{{saldoTxt}}</span>
+<span style="font-size:13px;line-height:1.5;color:#A3A9B6">Ke {{bankLine}}. Pembayaran tunai tidak masuk saldo karena sudah dipegang panitia.</span>
+<button class="ad-btn" data-fx="g" onClick="{{payout}}" disabled="{{cantPayout}}" style="min-height:48px;padding:0 16px;border-radius:12px;border:0;background:#7EE2A8;color:#0B2A18;font-size:15px;font-weight:800">{{payoutLabel}}</button>
+<span style="font-size:12px;color:#A3A9B6">Biaya pembayaran online Rp2.000 per tim {{feeWho}}.</span>
+</section>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isNews}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:16px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Pengumuman</h1>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+<section aria-label="Tulis pengumuman" style="flex:3 1 380px;min-width:0;display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#C9CDD6">Judul<input class="ad-in" value="{{nTitle}}" onChange="{{onNTitle}}" maxlength="60" placeholder="mis. Jadwal semifinal maju 30 menit"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#C9CDD6">Isi<textarea value="{{nBody}}" onChange="{{onNBody}}" maxlength="400" rows="4" style="min-height:110px;padding:10px 12px;border-radius:10px;border:1px solid #343B4A;background:#0B0D12;color:#F2F1EC;font-size:14px;line-height:1.5;resize:vertical;font-family:inherit"></textarea></label>
+<span style="font-size:13px;font-weight:700;color:#C9CDD6">Kepada</span>
+<div role="group" aria-label="Penerima" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{auds}}" as="o" hint-placeholder-count="4"><button class="ad-btn ad-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div>
+<span style="font-size:13px;font-weight:700;color:#C9CDD6">Lewat</span>
+<div role="radiogroup" aria-label="Saluran" style="display:flex;flex-direction:column;gap:6px"><sc-for list="{{chans}}" as="c" hint-placeholder-count="3"><button class="ad-btn" role="radio" aria-checked="{{c.on}}" onClick="{{c.pick}}" style="display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:6px 12px;border-radius:12px;border:1px solid {{c.bd}};background:{{c.bg}};color:#F2F1EC;text-align:left"><span aria-hidden="true" style="flex:none;width:18px;height:18px;border-radius:50%;border:2px solid {{c.ring}};display:inline-flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:{{c.dot}}"></span></span><span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{c.t}}</span><span style="font-size:12px;color:#A3A9B6">{{c.s}}</span></span></button></sc-for></div>
+<button class="ad-btn" data-fx="y" onClick="{{sendNews}}" disabled="{{cantSend}}" style="align-self:flex-start;min-height:48px;padding:0 18px;border-radius:12px;border:0;background:{{tP}};color:{{tOn}};font-size:15px;font-weight:800">{{sendLabel}}</button>
+</section>
+<section aria-labelledby="ad-sent" style="flex:2 1 280px;min-width:0;display:flex;flex-direction:column;gap:8px">
+<h2 id="ad-sent" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Sudah dikirim</h2>
+<sc-for list="{{sent}}" as="n" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:12px;background:#12151C;border:1px solid #232834"><span style="font-size:14px;font-weight:700">{{n.title}}</span><span style="font-size:12px;color:#A3A9B6">{{n.aud}} · {{n.ch}} · {{n.at}}</span><span class="sb-mono" style="font-size:11px;color:#7EE2A8">{{n.reads}}</span></div></sc-for>
+</section>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isCrew}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:16px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Panitia &amp; akses</h1>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#A3A9B6;max-width:760px">Admin bisa mengubah semua isi event. Wasit dan petugas meja verifikasi tidak perlu akun: cukup link + PIN, tanpa batas jumlah.</p>
+<div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{crew}}" as="c" hint-placeholder-count="5"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#12151C;border:1px solid #232834"><span class="sb-display" style="flex:none;width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:{{c.col}};color:#0B0D12;font-size:15px;font-weight:900">{{c.ini}}</span><span style="flex:1 1 180px;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{c.name}}</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{c.contact}}</span></span><span class="sb-mono" style="flex:none;padding:3px 9px;border-radius:999px;border:1px solid {{c.bd}};color:{{c.fg}};font-size:10px;font-weight:700">{{c.role}}</span><span style="flex:none;font-size:12px;color:#A3A9B6;width:150px">{{c.access}}</span><sc-if value="{{c.canRemove}}" hint-placeholder-val="{{ true }}"><button class="ad-btn" onClick="{{c.remove}}" aria-label="Hapus {{c.name}} dari panitia" style="flex:none;min-height:36px;padding:0 10px;border-radius:9px;border:1px solid #6B3434;background:transparent;color:#FF9C9C;font-size:12px;font-weight:700">Hapus</button></sc-if></div></sc-for></div>
+<section aria-labelledby="ad-inv" style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<h2 id="ad-inv" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Undang panitia</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:8px;align-items:end">
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Nama<input class="ad-in" value="{{invName}}" onChange="{{onInvName}}" maxlength="32"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Email atau nomor WhatsApp<input class="ad-in" value="{{invContact}}" onChange="{{onInvContact}}" maxlength="40"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Peran<select class="ad-in" value="{{invRole}}" onChange="{{onInvRole}}"><sc-for list="{{roleOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
+</div>
+<sc-if value="{{adminLimit}}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:0;padding:10px 12px;border-radius:10px;background:rgba(192,132,252,.12);color:#D7B0FD;font-size:13px;line-height:1.5">Pass Event memakai 1 akun admin. Tambah admin sampai 5 orang dengan <a href="Harga.dc.html" style="color:#D7B0FD;font-weight:700">paket Pro</a>, atau pilih peran Wasit / Meja verifikasi yang tidak dibatasi.</p></sc-if>
+<button class="ad-btn" onClick="{{invite}}" disabled="{{cantInvite}}" style="align-self:flex-start;min-height:46px;padding:0 18px;border-radius:12px;border:0;background:#F2F1EC;color:#0B0D12;font-size:14px;font-weight:800">Kirim undangan</button>
+</section>
+</div>
+</sc-if>
+<sc-if value="{{isSettings}}" hint-placeholder-val="{{ false }}">
+<div class="ad-in-{{tabK}}" style="display:flex;flex-direction:column;gap:16px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Pengaturan event</h1>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+<section aria-labelledby="ad-reg2" style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<h2 id="ad-reg2" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Pendaftaran &amp; akses</h2>
+<button class="ad-btn" role="switch" aria-checked="{{regOpen}}" onClick="{{tRegOpen}}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:54px;padding:6px 12px;border-radius:12px;border:1px solid #232834;background:#12151C;color:#F2F1EC;text-align:left"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">Pendaftaran tim dibuka</span><span style="font-size:12px;color:#A3A9B6">{{regLine}}</span></span><span aria-hidden="true" style="flex:none;width:40px;height:24px;border-radius:12px;background:{{regSw.track}};padding:3px"><span class="ad-knob" style="display:block;width:18px;height:18px;border-radius:50%;background:#F2F1EC;transform:translateX({{regSw.kx}}px)"></span></span></button>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Tutup pendaftaran otomatis<input class="ad-in" type="date" value="{{regClose}}" onChange="{{onRegClose}}" style="color-scheme:dark"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Biaya pendaftaran per tim (Rp)<input class="ad-in" type="number" min="0" step="25000" value="{{feeVal}}" onChange="{{onFee}}"></label>
+<span style="font-size:13px;font-weight:700;color:#C9CDD6">Siapa yang bisa melihat</span>
+<div role="group" aria-label="Visibilitas" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{visOpts}}" as="o" hint-placeholder-count="3"><button class="ad-btn ad-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div>
+<sc-if value="{{isPrivate}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="font-size:13px;color:#F2D37A">PIN penonton: {{viewPin}}</span></sc-if>
+<a href="EventBuilder.dc.html" style="align-self:flex-start;font-size:14px;font-weight:700">Ubah nama, tanggal, lokasi, dan format di Buat Event</a>
+</section>
+<section aria-labelledby="ad-paket" style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<h2 id="ad-paket" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Paket event</h2>
+<span style="font-size:15px;font-weight:700">Pass Event ≤16 tim</span>
+<span style="font-size:13px;line-height:1.5;color:#A3A9B6">Aktif sampai 5 Januari 2027, lalu hasil dan sertifikat tetap bisa dilihat. Kuota saat ini {{accCount}} dari 16 tim.</span>
+<a href="Upgrade.dc.html" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;background:{{tP}};color:{{tOn}};font-size:14px;font-weight:800;text-decoration:none">Naikkan ke ≤32 tim</a>
+<div style="margin-top:8px;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;border:1px solid #6B3434;background:rgba(255,107,107,.06)">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#FF9C9C">ZONA BERBAHAYA</span>
+<button class="ad-btn" onClick="{{archive}}" style="align-self:flex-start;min-height:42px;padding:0 14px;border-radius:10px;border:1px solid #6B3434;background:transparent;color:#FF9C9C;font-size:13px;font-weight:700">{{archiveLabel}}</button>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Ketik nama event untuk menghapus permanen<input class="ad-in" value="{{delName}}" onChange="{{onDelName}}" placeholder="{{tName}}"></label>
+<button class="ad-btn" onClick="{{deleteEvent}}" disabled="{{cantDelete}}" style="align-self:flex-start;min-height:42px;padding:0 14px;border-radius:10px;border:0;background:#E5333B;color:#FFFFFF;font-size:13px;font-weight:800">Hapus event</button>
+</div>
+</section>
+</div>
+</div>
+</sc-if>
+</section>
+</div>
+<sc-if value="{{hasModal}}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;background:rgba(5,6,9,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:80">
+<section role="alertdialog" aria-modal="true" aria-labelledby="ad-mt" class="ad-modal" style="width:100%;max-width:480px;display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:20px;background:#12151C;border:1px solid #343B4A;box-shadow:0 40px 90px rgba(0,0,0,.6)">
+<h2 id="ad-mt" class="sb-display" style="margin:0;font-size:30px;line-height:.95;font-weight:900;text-transform:uppercase">{{modal.title}}</h2>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#C9CDD6">{{modal.body}}</p>
+<div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="ad-btn" onClick="{{closeModal}}" style="min-height:46px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Batal</button><button class="ad-btn" data-fx="y" onClick="{{confirmModal}}" style="min-height:46px;padding:0 18px;border-radius:12px;border:0;background:{{modal.btnBg}};color:{{modal.btnFg}};font-size:14px;font-weight:800">{{modal.cta}}</button></div>
+</section>
+</div>
+</sc-if>
+<div class="ad-toast ad-toast-{{toastK}}" role="status" style="position:fixed;left:50%;bottom:28px;margin-left:-180px;width:360px;padding:14px 18px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:14px;font-weight:600;text-align:center;box-shadow:0 20px 50px -10px rgba(0,0,0,.6)">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    const now = Date.now();
+    this.state = {
+      tab: 'home', tabK: 'a', mF: 'all', editing: null, edSa: 0, edSb: 0, edReason: '', fixes: [{ at: '11 Nov 08.20', match: 'Tim Naga vs Tim Kenanga', from: '1–2', to: '2–2', reason: 'gol menit 14 tercatat ke tim yang salah', who: 'Sari (koordinator wasit)' }],
+      matches: [
+        { id: 'g1', time: '07.30', court: 'Lap. 1', a: 'Tim Naga', b: 'Tim Kenanga', sa: 2, sb: 2, st: 'done' }, { id: 'g2', time: '07.30', court: 'Lap. 3', a: 'Rina / Dewi', b: 'Ayu / Sari', sa: 2, sb: 0, st: 'done' },
+        { id: 'g3', time: '08.00', court: 'Lap. 2', a: 'Tim Rajawali', b: 'Tim Merapi', sa: 3, sb: 1, st: 'done' }, { id: 'g4', time: '08.30', court: 'Lap. 1', a: 'Tim Elang', b: 'Tim Kancil', sa: 2, sb: 1, st: 'live' },
+        { id: 'g5', time: '08.30', court: 'Lap. 2', a: 'Tim Banteng', b: 'Tim Garuda', sa: 0, sb: 0, st: 'live' }, { id: 'g6', time: '08.30', court: 'Lap. 3', a: 'Putri / Laras', b: 'Nina / Tika', sa: 1, sb: 0, st: 'live' },
+        { id: 'g7', time: '09.15', court: 'Lap. 4', a: 'Budi / Yoga', b: 'Fajar / Ilham', sa: 0, sb: 0, st: 'next' }, { id: 'g8', time: '09.30', court: 'Lap. 1', a: 'Tim Rajawali', b: 'Tim Naga', sa: 0, sb: 0, st: 'next' }
+      ],
+      fee: this.feeFromTheme(), cashPaid: {}, payoutSt: 'idle', paidOut: 0, feeBy: 'tim',
+      nTitle: '', nBody: '', nAud: 'all', nCh: 'page',
+      sent: [{ title: 'Technical meeting Jumat 19.00 di sekretariat', aud: 'Semua manajer tim', ch: 'Tombol bagikan WhatsApp', at: '9 Nov 20.10', reads: 'dibuka 13 dari 14 manajer' }],
+      crew: [
+        { id: 'c1', name: 'Darto Wibowo', contact: 'darto@contoh.id', role: 'admin', owner: true }, { id: 'c2', name: 'Sari Utami', contact: 'link + PIN · Lapangan 3', role: 'wasit' },
+        { id: 'c3', name: 'Andi', contact: 'link + PIN · Lapangan 1', role: 'wasit' }, { id: 'c4', name: 'Yoga', contact: 'link + PIN · Lapangan 2', role: 'wasit' }, { id: 'c5', name: 'Meja verifikasi GOR', contact: 'link + PIN · pintu masuk', role: 'meja' }
+      ],
+      invName: '', invContact: '', invRole: 'wasit', regOpen: true, regClose: '2026-12-01', vis: 'public', archived: false, delName: '', todoDone: {}, waLeft: 86, modal: null, filter: 'pending', leaving: {}, rejecting: null,
+      theme: this.readTheme() || this.defTheme(), applyK: 'n', synced: false,
+      teams: [
+        { id: 1, name: 'Tim Rajawali', sport: 'Futsal', cap: 'Rizky Pratama', wa: '0812-xxxx-1201', roster: 8, paid: true, at: '10 Nov, 21.14', st: 'pending' },
+        { id: 2, name: 'Tim Merapi', sport: 'Futsal', cap: 'Dimas Saputra', wa: '0813-xxxx-4410', roster: 6, paid: false, at: '10 Nov, 22.03', st: 'pending' },
+        { id: 3, name: 'Rina / Dewi', sport: 'Bulu Tangkis', cap: 'Rina Kurnia', wa: '0857-xxxx-0912', roster: 2, paid: true, at: '11 Nov, 07.40', st: 'pending' },
+        { id: 4, name: 'Tim Elang', sport: 'Futsal', cap: 'Fajar Nugroho', wa: '0812-xxxx-7781', roster: 8, paid: true, at: '2 Nov', st: 'acc' },
+        { id: 5, name: 'Tim Kancil', sport: 'Futsal', cap: 'Bagas Wibowo', wa: '0819-xxxx-3320', roster: 7, paid: true, at: '3 Nov', st: 'acc' },
+        { id: 6, name: 'Tim Banteng', sport: 'Futsal', cap: 'Ilham Ramadhan', wa: '0813-xxxx-5501', roster: 8, paid: true, at: '3 Nov', st: 'acc' },
+        { id: 7, name: 'Tim Garuda', sport: 'Futsal', cap: 'Wahyu Setiawan', wa: '0812-xxxx-6677', roster: 8, paid: false, at: '4 Nov', st: 'acc' },
+        { id: 8, name: 'Tim Naga', sport: 'Futsal', cap: 'Reza Maulana', wa: '0857-xxxx-2213', roster: 6, paid: true, at: '5 Nov', st: 'acc' },
+        { id: 9, name: 'Tim Kenanga', sport: 'Futsal', cap: 'Galih Prasetyo', wa: '0813-xxxx-9081', roster: 7, paid: true, at: '5 Nov', st: 'acc' },
+        { id: 10, name: 'Putri / Laras', sport: 'Bulu Tangkis', cap: 'Putri Ayu', wa: '0812-xxxx-1122', roster: 2, paid: true, at: '6 Nov', st: 'acc' },
+        { id: 11, name: 'Nina / Tika', sport: 'Bulu Tangkis', cap: 'Nina Sari', wa: '0819-xxxx-4456', roster: 2, paid: true, at: '6 Nov', st: 'acc' },
+        { id: 12, name: 'Budi / Yoga', sport: 'Bulu Tangkis', cap: 'Budi Santoso', wa: '0813-xxxx-7788', roster: 2, paid: true, at: '7 Nov', st: 'acc' },
+        { id: 13, name: 'Fajar / Ilham', sport: 'Bulu Tangkis', cap: 'Fajar Hidayat', wa: '0857-xxxx-3344', roster: 2, paid: false, at: '7 Nov', st: 'acc' },
+        { id: 14, name: 'Ayu / Sari', sport: 'Bulu Tangkis', cap: 'Ayu Lestari', wa: '0812-xxxx-5566', roster: 2, paid: true, at: '8 Nov', st: 'acc' },
+        { id: 15, name: 'Tim Bayangan', sport: 'Futsal', cap: '—', wa: '—', roster: 3, paid: false, at: '8 Nov', st: 'rej', reason: 'Data tidak lengkap' }
+      ],
+      refs: ['Andi', 'Yoga', 'Sari', 'Bagas', 'Wahyu'],
+      courts: [
+        { id: 'L1', name: 'Lapangan 1', sport: 'Futsal', ref: 'Andi', pin: '4821', a: 'Tim Elang', b: 'Tim Kancil', sa: 2, sb: 1, at: now - 4000 },
+        { id: 'L2', name: 'Lapangan 2', sport: 'Futsal', ref: 'Yoga', pin: '1937', a: 'Tim Banteng', b: 'Tim Garuda', sa: 0, sb: 0, at: now - 12000 },
+        { id: 'L3', name: 'Lapangan 3', sport: 'Bulu Tangkis', ref: 'Sari', pin: '7302', a: 'Putri / Laras', b: 'Nina / Tika', sa: 14, sb: 12, at: now - 2000 },
+        { id: 'L4', name: 'Lapangan 4', sport: 'Bulu Tangkis', ref: '', pin: '5160', a: 'Budi / Yoga', b: 'Fajar / Ilham', sa: 0, sb: 0, at: 0 }
+      ],
+      feed: [
+        { t: '08:41:12', court: 'Lapangan 3', ref: 'Sari', txt: '+1 Putri / Laras', lat: '0,3 dtk' },
+        { t: '08:40:58', court: 'Lapangan 1', ref: 'Andi', txt: 'Gol — Tim Elang', lat: '0,4 dtk' },
+        { t: '08:40:31', court: 'Lapangan 2', ref: 'Yoga', txt: 'Babak 1 dimulai', lat: '0,2 dtk' }
+      ],
+      fk: {}, pk: {}, pinK: {}, now: now, toast: '', toastK: 'n'
+    };
+  }
+  defTheme() { return { name: 'Piala Jumat Malam 2026', primary: '#FF7A2E', accent: '#4D7CFF', mode: 'dark', slug: 'piala-jumat-malam-2026', org: 'Karang Taruna RW 05' }; }
+  readTheme() {
+    try { const t = JSON.parse(window.localStorage.getItem('sbEventTheme') || 'null'); return t && t.primary ? t : null; } catch (e) { return null; }
+  }
+  writeTheme(t) {
+    try { window.localStorage.setItem('sbEventTheme', JSON.stringify(t)); return true; } catch (e) { return false; }
+  }
+  componentDidMount() {
+    this.onStore = (e) => { if (e.key === 'sbEventTheme') { const t = this.readTheme(); if (t) this.setState({ theme: t }); } };
+    try { window.addEventListener('storage', this.onStore); } catch (e) { }
+    this.n = 0;
+    this.iv = setInterval(() => this.tick(), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.iv);
+    try { window.removeEventListener('storage', this.onStore); } catch (e) { }
+    (this.timers || []).forEach((t) => clearTimeout(t));
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  feeFromTheme() { const t = this.readTheme(); if (!t || t.fee == null || t.fee === '') return 250000; if (/gratis/i.test(String(t.fee))) return 0; const n = parseInt(String(t.fee).replace(/\D/g, ''), 10); return isNaN(n) ? 250000 : n; }
+  goTab(id) { if (this.state.tab !== id) this.setState({ tab: id, tabK: this.tg(this.state.tabK) }); }
+  rp(n) { return 'Rp' + Math.round(n).toLocaleString('id-ID'); }
+  later(fn, ms) { this.timers = (this.timers || []).concat([setTimeout(fn, ms)]); }
+  tick() {
+    this.n += 1;
+    const upd = { now: Date.now() };
+    if (this.n % 3 === 0) {
+      const live = this.state.courts.filter((c) => c.ref);
+      if (live.length) {
+        const c = live[Math.floor(Math.random() * live.length)];
+        const futsal = c.sport === 'Futsal';
+        if (!futsal || Math.random() < 0.35) {
+          const side = Math.random() < 0.5 ? 'a' : 'b';
+          const courts = this.state.courts.map((x) => {
+            if (x.id !== c.id) return x;
+            const y = Object.assign({}, x);
+            y[side === 'a' ? 'sa' : 'sb'] += 1;
+            if (!futsal && Math.max(y.sa, y.sb) >= 21 && Math.abs(y.sa - y.sb) >= 2) { y.sa = 0; y.sb = 0; }
+            y.at = Date.now();
+            return y;
+          });
+          const fk = Object.assign({}, this.state.fk);
+          fk[c.id + side] = this.tg(fk[c.id + side]);
+          const pk = Object.assign({}, this.state.pk);
+          pk[c.id] = this.tg(pk[c.id]);
+          const d = new Date();
+          const p = (v) => String(v).padStart(2, '0');
+          const who = side === 'a' ? c.a : c.b;
+          const entry = { t: p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds()), court: c.name, ref: c.ref, txt: (futsal ? 'Gol — ' : '+1 ') + who, lat: '0,' + (2 + Math.floor(Math.random() * 4)) + ' dtk' };
+          Object.assign(upd, { courts: courts, fk: fk, pk: pk, feed: [entry].concat(this.state.feed).slice(0, 6) });
+        }
+      }
+    }
+    this.setState(upd);
+  }
+  ask(m) { this.setState({ modal: m }); }
+  confirm() { const m = this.state.modal; if (!m) return; this.setState({ modal: null }); m.run(); }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  lum(hex) {
+    const h = (hex || '#000000').replace('#', '');
+    const v = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  contrast(a, b) { const x = this.lum(a); const y = this.lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  mix(hex, toward, t) {
+    const a = hex.replace('#', ''); const b = toward.replace('#', '');
+    const c = [0, 2, 4].map((i) => Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t));
+    return '#' + c.map((x) => x.toString(16).padStart(2, '0')).join('');
+  }
+  readable(col, bg) {
+    let c = col; let i = 0;
+    const toward = this.lum(bg) < 0.2 ? '#FFFFFF' : '#000000';
+    while (this.contrast(c, bg) < 4.5 && i < 10) { c = this.mix(c, toward, 0.15); i++; }
+    return c;
+  }
+  initials(n) {
+    const w = (n || '').trim().split(/\s+/).filter((x) => /[A-Za-z]/.test(x));
+    return ((w[0] || 'E')[0] + (w[1] ? w[1][0] : '')).toUpperCase();
+  }
+  setTeam(id, patch) { this.setState({ teams: this.state.teams.map((t) => (t.id === id ? Object.assign({}, t, patch) : t)) }); }
+  leaveThen(id, kind, patch) {
+    const lv = Object.assign({}, this.state.leaving); lv[id] = kind;
+    this.setState({ leaving: lv, rejecting: null });
+    this.later(() => {
+      const l2 = Object.assign({}, this.state.leaving); delete l2[id];
+      this.setState({ leaving: l2, teams: this.state.teams.map((t) => (t.id === id ? Object.assign({}, t, patch) : t)) });
+    }, 640);
+  }
+  setCourt(id, patch) { this.setState({ courts: this.state.courts.map((c) => (c.id === id ? Object.assign({}, c, patch) : c)) }); }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const th = s.theme;
+    const tP = th.primary || '#FF7A2E';
+    const tA = th.accent || '#4D7CFF';
+    const dark = (th.mode || 'dark') === 'dark';
+    const tBg = dark ? '#0B0D12' : '#F5F4EF';
+    const tFg = dark ? '#F2F1EC' : '#14161C';
+    const tOn = this.contrast(tP, '#0B0D12') >= this.contrast(tP, '#FFFFFF') ? '#0B0D12' : '#FFFFFF';
+    const slug = th.slug || 'piala-jumat-malam-2026';
+    const acc = s.teams.filter((t) => t.st === 'acc');
+    const pend = s.teams.filter((t) => t.st === 'pending');
+    const rej = s.teams.filter((t) => t.st === 'rej');
+    const online = s.courts.filter((c) => c.ref);
+    const full = acc.length >= 16;
+    const payTag = (t) => ({ pay: t.paid || s.cashPaid[t.id] ? 'LUNAS' : 'BELUM BAYAR', payBg: t.paid || s.cashPaid[t.id] ? 'rgba(126,226,168,.14)' : 'rgba(246,213,110,.14)', payFg: t.paid || s.cashPaid[t.id] ? '#7EE2A8' : '#F6D56E' });
+    const unpaidAcc = s.teams.filter((t) => t.st !== 'rej' && !t.paid && !s.cashPaid[t.id]);
+    const tabsDef = [{ id: 'home', label: 'Ringkasan' }, { id: 'live', label: 'Live semua lapangan' }, { id: 'reg', label: 'Pendaftaran', badge: pend.length }, { id: 'match', label: 'Laga & hasil' }, { id: 'ref', label: 'Wasit & lapangan' }, { id: 'money', label: 'Keuangan', badge: unpaidAcc.length }, { id: 'news', label: 'Pengumuman' }, { id: 'crew', label: 'Panitia & akses' }, { id: 'theme', label: 'Tema event' }, { id: 'settings', label: 'Pengaturan' }];
+    const ago = (at) => {
+      if (!at) return 'belum ada data';
+      const sec = Math.max(0, Math.round((s.now - at) / 1000));
+      return sec < 2 ? 'baru saja' : sec + ' dtk lalu';
+    };
+    const link = (c) => 'scoreboard.tiusapp.com/e/' + slug + '/w/' + c.id.toLowerCase();
+    const reasons = ['Kuota penuh', 'Data tidak lengkap', 'Belum bayar'];
+    const pals = [['#FF7A2E', '#4D7CFF', 'Arena Malam'], ['#E5333B', '#F2F1EC', 'Merah Putih'], ['#22B573', '#F2C230', 'Hijau Lapangan'], ['#1E9BFF', '#16D6B5', 'Laut Biru'], ['#A855F7', '#22D3EE', 'Ungu Neon'], ['#E8B43A', '#E5333B', 'Emas Juara']];
+    const payList = s.teams.filter((t) => t.st !== 'rej');
+    const onlinePaid = payList.filter((t) => t.paid);
+    const cashList = payList.filter((t) => !t.paid && s.cashPaid[t.id]);
+    const unpaidList = payList.filter((t) => !t.paid && !s.cashPaid[t.id]);
+    const saldo = Math.max(0, onlinePaid.length * s.fee - s.paidOut);
+    const cashSum = cashList.length * s.fee;
+    const totalIn = (onlinePaid.length + cashList.length) * s.fee;
+    const rpJt = (n) => 'Rp' + (n / 1e6).toFixed(2).replace('.', ',') + ' jt';
+    const liveM = s.matches.map((m) => { if (m.st !== 'live') return m; const c = s.courts.find((x) => x.a === m.a && x.b === m.b); return c ? Object.assign({}, m, { sa: c.sa, sb: c.sb }) : m; });
+    const doneN = liveM.filter((m) => m.st === 'done').length;
+    const liveN = liveM.filter((m) => m.st === 'live').length;
+    const noRef = s.courts.filter((c) => !c.ref);
+    const audDefs = [{ id: 'all', l: 'Semua manajer & panitia', n: acc.length + s.crew.length }, { id: 'man', l: 'Manajer tim', n: acc.length }, { id: 'crew', l: 'Wasit & panitia', n: s.crew.length }];
+    const aud = audDefs.find((a) => a.id === s.nAud) || audDefs[0];
+    const chDefs = [
+      { id: 'page', t: 'Halaman event', s: 'Tampil di bagian pengumuman halaman event · gratis' },
+      { id: 'share', t: 'Bagikan sendiri lewat WhatsApp', s: 'Membuka WhatsApp-mu dengan teks siap kirim · gratis' },
+      { id: 'wa', t: 'WhatsApp otomatis', s: 'Dikirim sistem ke ' + aud.n + ' nomor · sisa kuota ' + s.waLeft + ' pesan' }
+    ];
+    const isWa = s.nCh === 'wa';
+    const nOk = s.nTitle.trim().length >= 3 && s.nBody.trim().length >= 5 && !(isWa && aud.n > s.waLeft);
+    const roleName = { admin: 'ADMIN', bendahara: 'BENDAHARA', wasit: 'WASIT', meja: 'MEJA VERIFIKASI' };
+    const roleAccess = { admin: 'Semua isi event', bendahara: 'Keuangan & tagihan', wasit: 'Isi skor lapangan yang ditugaskan', meja: 'Cek kartu pemain & absen' };
+    const roleCol = { admin: '#FF9A5C', bendahara: '#F2D37A', wasit: '#8FB0FF', meja: '#D7B0FD' };
+    const adminLimit = s.invRole === 'admin' || s.invRole === 'bendahara';
+    const md = s.modal;
+    const stamp = () => { const d = new Date(); return 'Hari ini ' + String(d.getHours()).padStart(2, '0') + '.' + String(d.getMinutes()).padStart(2, '0'); };
+    const rosterSum = acc.reduce((n, t) => n + t.roster, 0);
+    const todoDefs = [
+      { id: 'reg', t: pend.length ? 'Verifikasi ' + pend.length + ' pendaftar baru' : 'Semua pendaftar sudah diverifikasi', s: 'Cek data tim dan bukti bayar', auto: pend.length === 0, tab: 'reg', cta: 'Buka' },
+      { id: 'ref', t: noRef.length ? 'Tunjuk wasit untuk ' + noRef.map((c) => c.name).join(', ') : 'Semua lapangan sudah ada wasit', s: 'Wasit masuk lewat link + PIN, tanpa akun', auto: noRef.length === 0, tab: 'ref', cta: 'Atur' },
+      { id: 'pay', t: unpaidList.length ? 'Tagih ' + unpaidList.length + ' tim yang belum bayar' : 'Semua tim sudah lunas', s: 'Biaya ' + this.rp(s.fee) + ' per tim', auto: unpaidList.length === 0, tab: 'money', cta: 'Tagih' },
+      { id: 'news', t: 'Umumkan jadwal babak gugur', s: 'Ke manajer tim dan wasit', auto: s.sent.length > 1, tab: 'news', cta: 'Tulis' },
+      { id: 'jadwal', t: 'Cek ulang jadwal babak gugur', s: 'Pastikan tidak ada tim main dua laga beruntun', href: 'Jadwal.dc.html', cta: 'Jadwal' },
+      { id: 'kartu', t: 'Cetak kartu pemain untuk meja verifikasi', s: acc.length + ' tim · ' + rosterSum + ' pemain', href: 'KartuPemain.dc.html', cta: 'Kartu' }
+    ].map((d) => Object.assign(d, { done: !!(d.auto || s.todoDone[d.id]) }));
+    const setTh = (patch) => this.setState({ theme: Object.assign({}, this.state.theme, patch) });
+    return {
+      tP: tP, tA: tA, tOn: tOn, tBg: tBg, tFg: tFg, tLine: dark ? '#2A303D' : '#DDDAD0',
+      tPt: this.readable(tP, tBg), tAt: this.readable(tA, tBg),
+      tPUp: tP.toUpperCase(), tAUp: tA.toUpperCase(),
+      tName: th.name || 'Nama event', tIni: this.initials(th.name), tSlug: slug,
+      onlineCount: online.length,
+      tabK: s.tabK,
+      tabs: tabsDef.map((t) => ({ label: t.label, hasBadge: !!t.badge, badge: t.badge || 0, cls: s.tab === t.id ? 'is-on' : '', cur: s.tab === t.id ? 'page' : 'false', pick: () => { if (this.state.tab !== t.id) this.setState({ tab: t.id, tabK: this.tg(this.state.tabK) }); } })),
+      isLive: s.tab === 'live', isReg: s.tab === 'reg', isRef: s.tab === 'ref', isTheme: s.tab === 'theme',
+      isHome: s.tab === 'home', isMatch: s.tab === 'match', isMoney: s.tab === 'money', isNews: s.tab === 'news', isCrew: s.tab === 'crew', isSettings: s.tab === 'settings',
+      hDate: 'Hari-H · ' + (th.dateLine || '5–6 Desember 2026'),
+      hKpis: [
+        { l: 'TIM DITERIMA', v: acc.length + '/16', d: pend.length + ' menunggu verifikasi', c: '#F2F1EC' },
+        { l: 'LAGA', v: doneN + '/' + liveM.length, d: liveN + ' sedang berlangsung', c: '#7EE2A8' },
+        { l: 'LAPANGAN LIVE', v: online.length + '/' + s.courts.length, d: noRef.length ? noRef.length + ' belum ada wasit' : 'semua ada wasit', c: noRef.length ? '#F6D56E' : '#7EE2A8' },
+        { l: 'KAS TERKUMPUL', v: rpJt(totalIn), d: unpaidList.length + ' tim belum bayar', c: '#F2D37A' },
+        { l: 'KUOTA WHATSAPP', v: String(s.waLeft), d: 'pesan otomatis tersisa', c: '#C9CDD6' }
+      ],
+      todoLeft: todoDefs.filter((d) => !d.done).length,
+      todos: todoDefs.map((d) => ({
+        t: d.t, s: d.s, done: d.done, cta: d.cta, isTab: !!d.tab, isLink: !!d.href, href: d.href || '#',
+        op: d.done ? '.55' : '1', bd: d.done ? '#7EE2A8' : '#4A5263', bg: d.done ? '#7EE2A8' : 'transparent', deco: d.done ? 'line-through' : 'none',
+        go: () => this.goTab(d.tab),
+        toggle: () => { if (d.auto) { this.toastMsg('Selesai otomatis — ' + d.t.toLowerCase()); return; } const td = Object.assign({}, this.state.todoDone); td[d.id] = !td[d.id]; this.setState({ todoDone: td }); if (td[d.id]) this.toastMsg('Ditandai selesai'); }
+      })),
+      tools: [
+        { t: 'Jadwal otomatis', s: 'Atur ulang jam & lapangan', href: 'Jadwal.dc.html', c: '#FF9A5C', icon: 'M4 6h16v14H4zM4 10h16M9 3v4M15 3v4' },
+        { t: 'Bracket cup', s: 'Grup & babak gugur', href: 'Cup.dc.html', c: '#8FB0FF', icon: 'M4 5h5v5H4zM4 14h5v5H4zM9 7.5h4v9H9M13 12h7' },
+        { t: 'Layar TV venue', s: 'Papan skor besar', href: 'Scoreboard.dc.html', c: '#7EE2A8', icon: 'M3 5h18v12H3zM8 21h8M12 17v4' },
+        { t: 'Remote wasit', s: 'Tampilan HP wasit', href: 'Mobile-Skor.dc.html', c: '#F2D37A', icon: 'M7 2h10v20H7zM11 18h2' },
+        { t: 'Kartu pemain', s: 'Cetak per tim', href: 'KartuPemain.dc.html', c: '#D7B0FD', icon: 'M3 6h18v12H3zM7 10h4M7 14h6M15 10h2' },
+        { t: 'Story hasil laga', s: 'Format 9:16 Instagram', href: 'KartuHasil.dc.html', c: '#FF9A5C', icon: 'M8 2h8v20H8zM11 5h2M10 18h4' },
+        { t: 'E-sertifikat', s: 'Juara & peserta', href: 'Sertifikat.dc.html', c: '#F2D37A', icon: 'M5 3h14v12H5zM9 15l-1 6 4-2 4 2-1-6' },
+        { t: 'Halaman event', s: 'Yang dilihat publik', href: 'EventPage.dc.html', c: '#8FB0FF', icon: 'M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18' }
+      ],
+      mFilters: [['all', 'Semua'], ['live', 'Live'], ['done', 'Selesai'], ['next', 'Berikutnya']].map((o) => ({ label: o[1], on: s.mF === o[0], cls: s.mF === o[0] ? 'is-on' : '', pick: () => this.setState({ mF: o[0], editing: null }) })),
+      matches: liveM.filter((m) => s.mF === 'all' || m.st === s.mF).map((m) => {
+        const done = m.st === 'done'; const next = m.st === 'next'; const ed = s.editing === m.id;
+        const stv = { live: ['LIVE', '#7EE2A8', 'rgba(126,226,168,.5)'], done: ['SELESAI', '#A3A9B6', '#343B4A'], next: ['BERIKUTNYA', '#F6D56E', 'rgba(246,213,110,.45)'] }[m.st];
+        return {
+          time: m.time, court: m.court, a: m.a, b: m.b, score: next ? '— : —' : m.sa + ' – ' + m.sb,
+          aW: done && m.sa > m.sb ? 800 : 500, bW: done && m.sb > m.sa ? 800 : 500,
+          st: stv[0], stC: stv[1], stBd: stv[2], bd: ed ? '#4A5263' : '#232834',
+          canFix: !ed, editing: ed, fixLabel: next ? 'Isi hasil / WO' : 'Koreksi',
+          edit: () => this.setState({ editing: m.id, edSa: m.sa, edSb: m.sb, edReason: next ? 'WO: ' : '' })
+        };
+      }),
+      noMatches: liveM.filter((m) => s.mF === 'all' || m.st === s.mF).length === 0,
+      edSa: s.edSa, edSb: s.edSb, edReason: s.edReason,
+      onEdSa: (e) => this.setState({ edSa: Math.max(0, parseInt(e.target.value, 10) || 0) }),
+      onEdSb: (e) => this.setState({ edSb: Math.max(0, parseInt(e.target.value, 10) || 0) }),
+      onEdReason: (e) => this.setState({ edReason: e.target.value }),
+      cantFix: s.edReason.replace(/^WO:\s*/, '').trim().length < 4,
+      cancelFix: () => this.setState({ editing: null }),
+      saveFix: () => {
+        const m = liveM.find((x) => x.id === this.state.editing); if (!m) return;
+        const st = this.state; if (st.edReason.replace(/^WO:\s*/, '').trim().length < 4) return;
+        const from = m.st === 'next' ? 'belum main' : m.sa + '–' + m.sb;
+        const to = st.edSa + '–' + st.edSb;
+        const patch = { sa: st.edSa, sb: st.edSb, st: m.st === 'next' ? 'done' : m.st };
+        const c = this.state.courts.find((x) => x.a === m.a && x.b === m.b);
+        if (c && m.st === 'live') this.setCourt(c.id, { sa: st.edSa, sb: st.edSb, at: Date.now() });
+        this.setState({
+          matches: this.state.matches.map((x) => (x.id === m.id ? Object.assign({}, x, patch) : x)),
+          fixes: [{ at: stamp(), match: m.a + ' vs ' + m.b, from: from, to: to, reason: st.edReason.trim(), who: 'Darto (admin)' }].concat(this.state.fixes),
+          editing: null
+        });
+        this.toastMsg(m.st === 'live' ? 'Skor dikoreksi — papan TV ikut berubah' : 'Hasil ' + m.a + ' vs ' + m.b + ' disimpan');
+        this.later(() => this.celebrate('y'), 200);
+      },
+      fixes: s.fixes,
+      feeTxt: this.rp(s.fee) + '/tim',
+      moneyKpis: [
+        { l: 'TERKUMPUL', v: this.rp(totalIn), d: (onlinePaid.length + cashList.length) + ' dari ' + payList.length + ' tim', c: '#F2F1EC' },
+        { l: 'SALDO ONLINE', v: this.rp(saldo), d: s.paidOut ? this.rp(s.paidOut) + ' sedang dicairkan' : 'QRIS & virtual account', c: '#7EE2A8' },
+        { l: 'TUNAI DI PANITIA', v: this.rp(cashSum), d: cashList.length + ' tim bayar di tempat', c: '#F2D37A' },
+        { l: 'BELUM BAYAR', v: this.rp(unpaidList.length * s.fee), d: unpaidList.length + ' tim', c: '#FF9A7A' }
+      ],
+      payRows: payList.map((t) => {
+        const cash = !t.paid && !!s.cashPaid[t.id]; const un = !t.paid && !cash;
+        return {
+          name: t.name, sport: t.sport, cap: (t.st === 'pending' ? 'Menunggu verifikasi · ' : '') + 'Kapten ' + t.cap,
+          st: t.paid ? 'LUNAS' : cash ? 'LUNAS TUNAI' : 'BELUM BAYAR', bg: un ? 'rgba(246,213,110,.14)' : 'rgba(126,226,168,.14)', fg: un ? '#F6D56E' : '#7EE2A8',
+          method: t.paid ? (t.id % 3 === 0 ? 'VA BCA' : 'QRIS') : cash ? 'Tunai' : '—', unpaid: un,
+          remind: () => { if (this.state.waLeft < 1) { this.toastMsg('Kuota WhatsApp habis — tambah kuota atau kirim manual'); return; } this.setState({ waLeft: this.state.waLeft - 1 }); this.toastMsg('Tagihan ' + this.rp(this.state.fee) + ' + link bayar dikirim ke WhatsApp ' + t.cap); },
+          cash: () => this.ask({ title: 'Tandai lunas tunai?', body: t.name + ' membayar ' + this.rp(this.state.fee) + ' langsung ke panitia. Kuitansi digital dikirim ke kapten ' + t.cap + ' dan tercatat atas namamu.', cta: 'Tandai lunas', btnBg: '#7EE2A8', btnFg: '#0B2A18', run: () => { const cp = Object.assign({}, this.state.cashPaid); cp[t.id] = true; this.setState({ cashPaid: cp }); this.toastMsg(t.name + ' lunas tunai'); this.celebrate('g'); } })
+        };
+      }),
+      saldoTxt: this.rp(saldo), bankLine: 'BCA ••••4471 a.n. Karang Taruna RW 05',
+      cantPayout: saldo <= 0,
+      payoutLabel: saldo > 0 ? 'Cairkan ' + this.rp(saldo) : s.paidOut ? 'Diproses · tiba maks. 1 hari kerja' : 'Belum ada saldo',
+      feeWho: 'ditambahkan ke tagihan pendaftar, jadi saldo diterima utuh',
+      payout: () => this.ask({ title: 'Cairkan ' + this.rp(saldo) + '?', body: 'Dana dikirim ke BCA ••••4471 a.n. Karang Taruna RW 05, tiba maksimal 1 hari kerja. Riwayat pencairan masuk laporan keuangan.', cta: 'Cairkan sekarang', btnBg: '#7EE2A8', btnFg: '#0B2A18', run: () => { this.setState({ paidOut: this.state.paidOut + saldo }); this.toastMsg('Pencairan ' + this.rp(saldo) + ' diproses'); this.celebrate('g'); } }),
+      exportMoney: () => {
+        const rows = [['Tim', 'Kapten', 'Cabang', 'Status', 'Metode', 'Nominal']].concat(payList.map((t) => { const cash = !t.paid && !!s.cashPaid[t.id]; return [t.name, t.cap, t.sport, t.paid ? 'Lunas' : cash ? 'Lunas tunai' : 'Belum bayar', t.paid ? (t.id % 3 === 0 ? 'VA BCA' : 'QRIS') : cash ? 'Tunai' : '-', t.paid || cash ? s.fee : 0]; }));
+        const csv = rows.map((r) => r.map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
+        try { const b = new Blob(['﻿' + csv], { type: 'text/csv' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = 'keuangan-' + slug + '.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 1500); this.toastMsg('Laporan ' + payList.length + ' tim diunduh (bisa dibuka di Excel)'); } catch (err) { this.toastMsg('Unduhan tidak tersedia di pratinjau ini'); }
+      },
+      nTitle: s.nTitle, nBody: s.nBody, onNTitle: (e) => this.setState({ nTitle: e.target.value }), onNBody: (e) => this.setState({ nBody: e.target.value }),
+      auds: audDefs.map((a) => ({ label: a.l + ' (' + a.n + ')', on: s.nAud === a.id, cls: s.nAud === a.id ? 'is-on' : '', pick: () => this.setState({ nAud: a.id }) })),
+      chans: chDefs.map((c) => { const on = s.nCh === c.id; return { t: c.t, s: c.s, on: on, ring: on ? tP : '#4A5263', dot: on ? tP : 'transparent', bd: on ? tP : '#232834', bg: on ? 'rgba(255,255,255,.04)' : '#12151C', pick: () => this.setState({ nCh: c.id }) }; }),
+      cantSend: !nOk,
+      sendLabel: isWa ? (aud.n > s.waLeft ? 'Kuota WhatsApp tidak cukup' : 'Kirim ke ' + aud.n + ' nomor') : s.nCh === 'share' ? 'Buka WhatsApp' : 'Terbitkan di halaman event',
+      sendNews: () => {
+        const st = this.state; if (!nOk) return;
+        const chL = { page: 'Halaman event', share: 'Dibagikan lewat WhatsApp', wa: 'WhatsApp otomatis' }[st.nCh];
+        const reads = { page: 'tampil di halaman event', share: 'menunggu kamu kirim di WhatsApp', wa: 'terkirim ke ' + aud.n + ' nomor' }[st.nCh];
+        if (st.nCh === 'share') { try { window.open('https://wa.me/?text=' + encodeURIComponent('*' + st.nTitle.trim() + '*\n' + st.nBody.trim() + '\n\nhttps://scoreboard.tiusapp.com/e/' + slug), '_blank', 'noopener'); } catch (err) { } }
+        this.setState({ sent: [{ title: st.nTitle.trim(), aud: aud.l, ch: chL, at: 'baru saja', reads: reads }].concat(st.sent), nTitle: '', nBody: '', waLeft: st.nCh === 'wa' ? st.waLeft - aud.n : st.waLeft });
+        this.toastMsg(st.nCh === 'wa' ? 'Pengumuman terkirim ke ' + aud.n + ' nomor WhatsApp' : st.nCh === 'share' ? 'Teks siap dikirim di WhatsApp' : 'Pengumuman terbit di halaman event');
+        this.later(() => this.celebrate('y'), 200);
+      },
+      sent: s.sent,
+      crew: s.crew.map((c) => ({
+        name: c.name, contact: c.contact, ini: this.initials(c.name), col: c.owner ? tP : roleCol[c.role],
+        role: c.owner ? 'PEMILIK' : roleName[c.role], fg: c.owner ? '#F2F1EC' : roleCol[c.role], bd: c.owner ? '#5A6275' : roleCol[c.role],
+        access: c.owner ? 'Semua akses, paket & hapus event' : roleAccess[c.role], canRemove: !c.owner,
+        remove: () => this.ask({ title: 'Hapus ' + c.name + '?', body: c.role === 'wasit' || c.role === 'meja' ? 'Link dan PIN-nya langsung tidak berlaku. Skor yang sudah diisi tetap tersimpan.' : 'Akses akun ini ke event langsung dicabut.', cta: 'Hapus dari panitia', btnBg: '#FF6B6B', btnFg: '#14161C', run: () => { this.setState({ crew: this.state.crew.filter((x) => x.id !== c.id) }); this.toastMsg(c.name + ' dihapus dari panitia'); } })
+      })),
+      invName: s.invName, invContact: s.invContact, invRole: s.invRole,
+      onInvName: (e) => this.setState({ invName: e.target.value }), onInvContact: (e) => this.setState({ invContact: e.target.value }), onInvRole: (e) => this.setState({ invRole: e.target.value }),
+      roleOpts: [{ v: 'wasit', l: 'Wasit (link + PIN)' }, { v: 'meja', l: 'Meja verifikasi (link + PIN)' }, { v: 'admin', l: 'Admin (butuh akun)' }, { v: 'bendahara', l: 'Bendahara (butuh akun)' }],
+      adminLimit: adminLimit,
+      cantInvite: adminLimit || s.invName.trim().length < 2 || s.invContact.trim().length < 5,
+      invite: () => {
+        const st = this.state; if (adminLimit || st.invName.trim().length < 2 || st.invContact.trim().length < 5) return;
+        const pinRole = st.invRole === 'wasit' || st.invRole === 'meja';
+        this.setState({ crew: st.crew.concat([{ id: 'c' + Date.now(), name: st.invName.trim(), contact: pinRole ? 'link + PIN dikirim · ' + st.invContact.trim() : st.invContact.trim(), role: st.invRole }]), invName: '', invContact: '' });
+        this.toastMsg('Undangan dikirim ke ' + st.invContact.trim());
+      },
+      regOpen: s.regOpen, regSw: { track: s.regOpen ? '#7EE2A8' : '#343B4A', kx: s.regOpen ? 16 : 0 },
+      regLine: s.regOpen ? 'Sisa ' + Math.max(0, 16 - acc.length) + ' slot · tombol Daftar tampil di halaman event' : 'Ditutup · tombol Daftar disembunyikan',
+      tRegOpen: () => { const v = !this.state.regOpen; this.setState({ regOpen: v }); this.toastMsg(v ? 'Pendaftaran dibuka lagi' : 'Pendaftaran ditutup'); },
+      regClose: s.regClose, onRegClose: (e) => this.setState({ regClose: e.target.value }),
+      feeVal: s.fee, onFee: (e) => { const v = Math.max(0, parseInt(e.target.value, 10) || 0); this.setState({ fee: v }); this.writeTheme(Object.assign({}, this.state.theme, { slug: slug, fee: v ? this.rp(v) : 'Gratis' })); },
+      visOpts: [['public', 'Publik'], ['link', 'Hanya yang punya link'], ['private', 'Privat dengan PIN']].map((o) => ({ label: o[1], on: s.vis === o[0], cls: s.vis === o[0] ? 'is-on' : '', pick: () => { this.setState({ vis: o[0] }); this.toastMsg('Visibilitas: ' + o[1].toLowerCase()); } })),
+      isPrivate: s.vis === 'private', viewPin: '2468',
+      archiveLabel: s.archived ? 'Pulihkan dari arsip' : 'Arsipkan event',
+      archive: () => { if (this.state.archived) { this.setState({ archived: false }); this.toastMsg('Event aktif lagi'); return; } this.ask({ title: 'Arsipkan event?', body: 'Halaman event jadi hanya-baca: hasil, bracket, dan sertifikat tetap bisa dilihat, tapi skor dan pendaftaran dikunci.', cta: 'Arsipkan', btnBg: '#F2C230', btnFg: '#14161C', run: () => { this.setState({ archived: true }); this.toastMsg('Event diarsipkan'); } }); },
+      delName: s.delName, onDelName: (e) => this.setState({ delName: e.target.value }),
+      cantDelete: s.delName.trim() !== (th.name || '').trim(),
+      deleteEvent: () => this.ask({ title: 'Hapus permanen?', body: 'Semua tim, skor, jadwal, dan sertifikat “' + (th.name || 'event') + '” dihapus dan link-nya mati. Ini tidak bisa dibatalkan.', cta: 'Hapus selamanya', btnBg: '#E5333B', btnFg: '#FFFFFF', run: () => { this.setState({ delName: '' }); this.toastMsg('Pratinjau: event tidak benar-benar dihapus'); } }),
+      hasModal: !!md, modal: md ? { title: md.title, body: md.body, cta: md.cta, btnBg: md.btnBg, btnFg: md.btnFg } : { title: '', body: '', cta: '', btnBg: '#F2F1EC', btnFg: '#0B0D12' },
+      closeModal: () => this.setState({ modal: null }), confirmModal: () => this.confirm(),
+
+      kpis: [
+        { label: 'TIM DITERIMA', v: acc.length + '/16', col: '#F2F1EC' },
+        { label: 'MENUNGGU', v: String(pend.length), col: pend.length ? '#F6D56E' : '#F2F1EC' },
+        { label: 'LAPANGAN LIVE', v: online.length + '/' + s.courts.length, col: '#7EE2A8' },
+        { label: 'BELUM BAYAR', v: String(unpaidAcc.length), col: '#FF9A7A' }
+      ],
+      courtsLive: s.courts.map((c) => {
+        const on = !!c.ref;
+        return {
+          name: c.name, sport: c.sport.toUpperCase(), a: c.a, b: c.b, sa: c.sa, sb: c.sb,
+          fa: s.fk[c.id + 'a'] || 'n', fb: s.fk[c.id + 'b'] || 'n', pk: s.pk[c.id] || 'n',
+          colA: this.readable(tP, '#06070A'), colB: this.readable(tA, '#06070A'),
+          ref: on ? c.ref : 'belum ditunjuk', ago: on ? ago(c.at) : '—',
+          status: on ? 'TERSAMBUNG' : 'TANPA WASIT', stBg: on ? 'rgba(126,226,168,.14)' : 'rgba(246,213,110,.14)', stFg: on ? '#7EE2A8' : '#F6D56E',
+          border: on ? '#2A303D' : 'rgba(246,213,110,.35)', op: on ? '1' : '.8'
+        };
+      }),
+      feed: s.feed,
+      filters: [{ id: 'pending', label: 'Menunggu (' + pend.length + ')' }, { id: 'acc', label: 'Diterima (' + acc.length + ')' }, { id: 'rej', label: 'Ditolak (' + rej.length + ')' }].map((o) => ({ label: o.label, on: s.filter === o.id, cls: s.filter === o.id ? 'is-on' : '', pick: () => this.setState({ filter: o.id }) })),
+      accCount: acc.length, accPct: (acc.length / 16 * 100).toFixed(1), full: full,
+      showPending: s.filter === 'pending', noPending: s.filter === 'pending' && pend.length === 0,
+      pendingList: pend.map((t) => Object.assign({}, t, payTag(t), {
+        leave: s.leaving[t.id] || 'none',
+        isRejecting: s.rejecting === t.id, notRejecting: s.rejecting !== t.id,
+        waLink: 'https://wa.me/?text=' + encodeURIComponent('Halo ' + t.cap + ', pendaftaran ' + t.name + ' di ' + (th.name || 'event') + ' sedang kami proses.'),
+        accept: () => { this.leaveThen(t.id, 'acc', { st: 'acc' }); this.later(() => this.toastMsg(t.name + ' diterima — kapten dapat notifikasi WhatsApp'), 650); },
+        startReject: () => this.setState({ rejecting: t.id }),
+        cancelReject: () => this.setState({ rejecting: null }),
+        reasons: reasons.map((r) => ({ label: r, pick: () => { this.leaveThen(t.id, 'rej', { st: 'rej', reason: r }); this.later(() => this.toastMsg(t.name + ' ditolak: ' + r.toLowerCase()), 650); } }))
+      })),
+      showDoneList: s.filter !== 'pending',
+      doneList: (s.filter === 'acc' ? acc : rej).map((t, i) => Object.assign({}, t, payTag(t), {
+        delay: i * 40,
+        sub: t.sport + ' · ' + (t.st === 'rej' ? 'Alasan: ' + t.reason : 'Kapten ' + t.cap),
+        undoLabel: t.st === 'rej' ? 'Pulihkan' : 'Batalkan',
+        undo: () => this.setTeam(t.id, { st: 'pending' })
+      })),
+      courtRows: s.courts.map((c) => ({
+        name: c.name, selId: 'ad-ref-' + c.id, ref: c.ref,
+        status: c.ref ? 'Wasit ' + c.ref + ' tersambung' : 'Belum ada wasit',
+        stFg: c.ref ? '#7EE2A8' : '#F6D56E',
+        opts: [{ v: '', label: '— Pilih wasit —' }].concat(s.refs.map((r) => ({ v: r, label: r }))),
+        onRef: (e) => { this.setCourt(c.id, { ref: e.target.value, at: e.target.value ? Date.now() : 0 }); if (e.target.value) this.toastMsg(e.target.value + ' ditugaskan di ' + c.name); },
+        pinLabel: c.pin.split('').join(' '),
+        pinDigits: c.pin.split('').map((v, i) => ({ v: v, delay: i * 70 })),
+        pk: s.pinK[c.id] || 'n',
+        newPin: () => { const pin = String(Math.floor(1000 + Math.random() * 9000)); const pk = Object.assign({}, this.state.pinK); pk[c.id] = this.tg(pk[c.id]); this.setState({ pinK: pk }); this.setCourt(c.id, { pin: pin }); this.toastMsg('PIN ' + c.name + ' diganti — link lama tidak berlaku'); },
+        link: 'https://' + link(c),
+        noRef: !c.ref,
+        copy: () => { try { navigator.clipboard.writeText('https://' + link(c) + ' PIN ' + c.pin).then(() => this.toastMsg('Link wasit ' + c.name + ' disalin'), () => this.toastMsg('Tidak bisa menyalin di pratinjau ini')); } catch (err) { this.toastMsg('Tidak bisa menyalin di pratinjau ini'); } },
+        waLink: 'https://wa.me/?text=' + encodeURIComponent('Link wasit ' + c.name + ' (' + (th.name || 'event') + '): https://' + link(c) + ' — PIN ' + c.pin)
+      })),
+      addCourt: () => { const n = this.state.courts.length + 1; this.setState({ courts: this.state.courts.concat([{ id: 'L' + n, name: 'Lapangan ' + n, sport: 'Futsal', ref: '', pin: String(Math.floor(1000 + Math.random() * 9000)), a: 'Menunggu jadwal', b: '—', sa: 0, sb: 0, at: 0 }]) }); },
+      maxCourts: s.courts.length >= 6,
+      onTName: (e) => setTh({ name: e.target.value }),
+      onTP: (e) => setTh({ primary: e.target.value }),
+      onTA: (e) => setTh({ accent: e.target.value }),
+      pals: pals.map((p) => { const on = p[0].toLowerCase() === tP.toLowerCase() && p[1].toLowerCase() === tA.toLowerCase(); return { p: p[0], a: p[1], name: p[2], on: on, border: on ? '#F2F1EC' : '#232834', pick: () => setTh({ primary: p[0], accent: p[1] }) }; }),
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      applyTheme: () => {
+        const ok = this.writeTheme(Object.assign({}, this.state.theme, { slug: slug }));
+        this.setState({ applyK: this.tg(this.state.applyK), synced: ok });
+        this.toastMsg(ok ? 'Tema diterapkan ke papan skor TV, bracket, dan halaman event' : 'Tema tersimpan di panel ini');
+        this.later(() => this.celebrate('a'), 300);
+      },
+      applyK: s.applyK,
+      syncNote: s.synced ? 'Tersinkron. Buka papan skor, Cup, atau halaman event untuk melihat hasilnya.' : 'Tampilan lain membaca tema yang sama begitu diterapkan.',
+      previews: [{ label: 'PAPAN SKOR TV', ratio: '16/9', isTv: true, tf: 'perspective(1300px) rotateY(16deg) rotateX(6deg)' }, { label: 'BRACKET CUP', ratio: '16/10', isBracket: true, tf: 'perspective(1300px) rotateX(10deg)' }, { label: 'HALAMAN EVENT', ratio: '9/12', isPage: true, tf: 'perspective(1300px) rotateY(-16deg) rotateX(6deg)' }].map((v, i) => Object.assign({ isTv: false, isBracket: false, isPage: false, delay: i * 120 }, v)),
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>

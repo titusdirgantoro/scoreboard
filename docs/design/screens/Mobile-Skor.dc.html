@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>HP — Remote Wasit</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ms-zone{cursor:pointer;transition:transform .25s cubic-bezier(.3,1.4,.4,1);transform-origin:50% 50%}
+.ms-zone:active{transform:perspective(800px) rotateX(7deg) scale(.97)}
+.ms-zone:disabled{cursor:default}
+.ms-rip{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;opacity:0;pointer-events:none}
+.ms-rip-a{animation:msRipA .7s ease-out}
+.ms-rip-b{animation:msRipB .7s ease-out}
+@keyframes msRipA{from{opacity:.5;transform:scale(.2)}to{opacity:0;transform:scale(14)}}
+@keyframes msRipB{from{opacity:.5;transform:scale(.2)}to{opacity:0;transform:scale(14)}}
+.ms-num{display:inline-block;transform-origin:50% 50%}
+.ms-flip-a{animation:msFlipA .55s cubic-bezier(.2,.9,.25,1.2)}
+.ms-flip-b{animation:msFlipB .55s cubic-bezier(.2,.9,.25,1.2)}
+@keyframes msFlipA{from{transform:perspective(600px) rotateX(-95deg);opacity:.1}to{transform:none;opacity:1}}
+@keyframes msFlipB{from{transform:perspective(600px) rotateX(-95deg);opacity:.1}to{transform:none;opacity:1}}
+.ms-tool{cursor:pointer;transition:background-color .2s,transform .18s}
+.ms-tool:active{transform:scale(.94)}
+.ms-tool:disabled{opacity:.4;cursor:not-allowed}
+.ms-ban{opacity:0;pointer-events:none}
+.ms-ban-a{animation:msBanA 2s cubic-bezier(.2,.8,.2,1) both}
+.ms-ban-b{animation:msBanB 2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes msBanA{0%{opacity:0;transform:perspective(700px) rotateX(80deg) scale(.6)}20%{opacity:1;transform:perspective(700px) rotateX(-8deg) scale(1.04)}75%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-20px)}}
+@keyframes msBanB{0%{opacity:0;transform:perspective(700px) rotateX(80deg) scale(.6)}20%{opacity:1;transform:perspective(700px) rotateX(-8deg) scale(1.04)}75%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-20px)}}
+.ms-dot{animation:msDot 1.8s ease-in-out infinite}
+.ms-sw-a{animation:msSwA .7s cubic-bezier(.3,1.3,.4,1)}
+.ms-sw-b{animation:msSwB .7s cubic-bezier(.3,1.3,.4,1)}
+@keyframes msSwA{from{transform:perspective(800px) rotateX(-90deg) scale(.9);opacity:.2}to{transform:none;opacity:1}}
+@keyframes msSwB{from{transform:perspective(800px) rotateX(90deg) scale(.9);opacity:.2}to{transform:none;opacity:1}}
+@keyframes msDot{0%,100%{box-shadow:0 0 0 0 rgba(126,226,168,.6)}50%{box-shadow:0 0 0 6px rgba(126,226,168,0)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;width:390px;height:844px;overflow:hidden;background:#0B0D12;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:56px 16px 10px">
+<a href="Scoreboard.dc.html" aria-label="Kembali ke papan skor" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid #2A303D;color:#F2F1EC"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></a>
+<span class="sb-display" style="font-size:26px;line-height:1;font-weight:900;text-transform:uppercase">Remote Wasit</span>
+<span class="sb-mono" style="display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#12151C;border:1px solid #2A303D;font-size:10px;letter-spacing:.1em;color:#C9CDD6"><span class="ms-dot" style="width:7px;height:7px;border-radius:50%;background:#7EE2A8"></span>TV TERHUBUNG</span>
+</div>
+<div class="sb-mono" style="display:flex;align-items:center;justify-content:space-between;padding:4px 18px 10px;font-size:11px;letter-spacing:.12em;color:#A3A9B6">
+<span>BULU TANGKIS · GIM {{game}} / 3</span>
+<span>{{status}}</span>
+</div>
+
+<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:0;padding:0 12px">
+<button class="ms-zone ms-sw-{{swapK}}" data-fx="{{top.fx}}" onClick="{{top.act}}" disabled="{{done}}" aria-label="Poin untuk {{top.name}}" style="position:relative;flex:1;overflow:hidden;border-radius:24px 24px 10px 10px;border:1px solid {{top.border}};background:{{top.bg}};color:#F2F1EC;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0">
+<span class="ms-rip ms-rip-{{top.rk}}" style="background:{{top.color}}"></span>
+<span style="display:flex;align-items:center;gap:8px">
+<span class="sb-display" style="font-size:26px;font-weight:800;text-transform:uppercase">{{top.name}}</span>
+<sc-if value="{{top.serve}}" hint-placeholder-val="{{ true }}"><span class="sb-mono" style="padding:3px 7px;border-radius:6px;background:{{top.color}};color:#0B0D12;font-size:10px;font-weight:700;letter-spacing:.1em">SERVIS</span></sc-if>
+</span>
+<span class="sb-display ms-num ms-flip-{{top.fk}}" style="font-size:168px;line-height:.9;font-weight:900;color:{{top.digit}};text-shadow:0 0 40px {{top.glow}};font-variant-numeric:tabular-nums">{{top.pts}}</span>
+<span class="sb-mono" style="font-size:11px;letter-spacing:.14em;color:#C9CDD6">GIM MENANG {{top.games}} · KETUK UNTUK POIN</span>
+</button>
+
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0">
+<button class="ms-tool" onClick="{{undo}}" disabled="{{noUndo}}" style="min-height:48px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:#12151C;color:#F2F1EC;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"></path></svg>Batal</button>
+<span class="sb-display" style="font-size:30px;line-height:1;font-weight:900">{{gamesLine}}</span>
+<button class="ms-tool" onClick="{{swap}}" aria-label="Tukar posisi tim" style="min-height:48px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:#12151C;color:#F2F1EC;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M7 4L3 8M7 4l4 4"></path><path d="M17 20V4M17 20l-4-4M17 20l4-4"></path></svg>Tukar</button>
+</div>
+
+<button class="ms-zone ms-sw-{{swapK}}" data-fx="{{bot.fx}}" onClick="{{bot.act}}" disabled="{{done}}" aria-label="Poin untuk {{bot.name}}" style="position:relative;flex:1;overflow:hidden;border-radius:10px 10px 24px 24px;border:1px solid {{bot.border}};background:{{bot.bg}};color:#F2F1EC;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0">
+<span class="ms-rip ms-rip-{{bot.rk}}" style="background:{{bot.color}}"></span>
+<span style="display:flex;align-items:center;gap:8px">
+<span class="sb-display" style="font-size:26px;font-weight:800;text-transform:uppercase">{{bot.name}}</span>
+<sc-if value="{{bot.serve}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="padding:3px 7px;border-radius:6px;background:{{bot.color}};color:#0B0D12;font-size:10px;font-weight:700;letter-spacing:.1em">SERVIS</span></sc-if>
+</span>
+<span class="sb-display ms-num ms-flip-{{bot.fk}}" style="font-size:168px;line-height:.9;font-weight:900;color:{{bot.digit}};text-shadow:0 0 40px {{bot.glow}};font-variant-numeric:tabular-nums">{{bot.pts}}</span>
+<span class="sb-mono" style="font-size:11px;letter-spacing:.14em;color:#C9CDD6">GIM MENANG {{bot.games}} · KETUK UNTUK POIN</span>
+</button>
+</div>
+
+<div style="padding:10px 16px 30px;display:flex;justify-content:center">
+<sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:8px;width:100%"><button class="ms-tool" onClick="{{reset}}" style="flex:1;min-width:0;min-height:52px;border-radius:14px;border:0;background:#F2F1EC;color:#0B0D12;font-size:14px;font-weight:700">{{winLine}} · Laga baru</button><a href="KartuHasil.dc.html" onClick="{{saveLast}}" style="flex:none;display:inline-flex;align-items:center;min-height:52px;padding:0 14px;border-radius:14px;background:#FF7A2E;color:#140B05;font-size:14px;font-weight:800;text-decoration:none">Story hasil</a></div>
+</sc-if>
+<sc-if value="{{notDone}}" hint-placeholder-val="{{ true }}">
+<span class="sb-mono" style="min-height:52px;display:flex;align-items:center;font-size:11px;letter-spacing:.12em;color:#A3A9B6;text-align:center;gap:6px">SKOR TERKIRIM KE TV<span aria-hidden="true">·</span><a href="AturanPoin.dc.html" style="color:#FFB089;font-weight:700">ATURAN POIN</a></span>
+</sc-if>
+</div>
+
+<div class="ms-ban ms-ban-{{bk}}" aria-live="polite" style="position:absolute;left:24px;right:24px;top:380px;display:flex;justify-content:center">
+<span class="sb-display" style="padding:12px 22px;border-radius:16px;background:#F2F1EC;color:#0B0D12;font-size:40px;line-height:1;font-weight:900;text-transform:uppercase;text-align:center;box-shadow:0 24px 60px -10px rgba(0,0,0,.7)">{{banner}}</span>
+</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { a: 18, b: 17, ga: 1, gb: 1, game: 3, server: 'a', winner: '', hist: [], swapped: false, fa: 'n', fb: 'n', ra: 'n', rb: 'n', bk: 'n', banner: '', swapK: 'n' };
+  }
+  tog(v) { return v === 'a' ? 'b' : 'a'; }
+  snap() {
+    const s = this.state;
+    return JSON.stringify({ a: s.a, b: s.b, ga: s.ga, gb: s.gb, game: s.game, server: s.server, winner: s.winner });
+  }
+  point(side) {
+    const s = this.state;
+    if (s.winner) return;
+    const other = side === 'a' ? 'b' : 'a';
+    const nm = side === 'a' ? 'Bara' : 'Samudra';
+    const upd = { hist: s.hist.concat([this.snap()]).slice(-40), server: side };
+    let mine = s[side] + 1;
+    const theirs = s[other];
+    upd[side] = mine;
+    upd[side === 'a' ? 'fa' : 'fb'] = this.tog(s[side === 'a' ? 'fa' : 'fb']);
+    upd[side === 'a' ? 'ra' : 'rb'] = this.tog(s[side === 'a' ? 'ra' : 'rb']);
+    const won = (mine >= 21 && mine - theirs >= 2) || mine === 30;
+    if (won) {
+      const gk = side === 'a' ? 'ga' : 'gb';
+      const g = s[gk] + 1;
+      upd[gk] = g;
+      upd.bk = this.tog(s.bk);
+      upd.fa = this.tog(s.fa);
+      upd.fb = this.tog(s.fb);
+      if (g >= 2) {
+        upd.winner = side;
+        upd.banner = nm + ' menang!';
+      } else {
+        upd.banner = 'Gim ' + s.game + ' · ' + nm;
+        upd.game = s.game + 1;
+        upd.a = 0;
+        upd.b = 0;
+      }
+    }
+    this.setState(upd);
+    if (won) {
+      const p = this.lastXY || { x: 195, y: 420 };
+      if (upd.winner) setTimeout(() => this.celebrate('y'), 120);
+      else setTimeout(() => this.burstMany([{ x: p.x, y: p.y, c: side, big: true }, { x: 195, y: 420, c: 'w' }]), 100);
+    }
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  saveLast() {
+    const s = this.state;
+    const m = { sport: 'badminton', sportLabel: 'Bulu Tangkis', a: 'Bara', b: 'Samudra', sa: s.ga, sb: s.gb, unit: 'gim', sets: [], live: !s.winner, at: Date.now() };
+    try { window.localStorage.setItem('sbLastMatch', JSON.stringify(m)); } catch (e) { }
+  }
+  componentDidUpdate(pp, ps) { if (this.state.winner && !ps.winner) this.saveLast(); }
+  renderVals() {
+    const s = this.state;
+    const mk = (side) => {
+      const A = side === 'a';
+      return {
+        name: A ? 'Bara' : 'Samudra',
+        pts: s[side],
+        games: A ? s.ga : s.gb,
+        serve: s.server === side && !s.winner,
+        color: A ? '#FF7A2E' : '#4D7CFF',
+        digit: A ? '#FF7A2E' : '#6E95FF',
+        glow: A ? 'rgba(255,122,46,.5)' : 'rgba(77,124,255,.55)',
+        bg: A ? 'linear-gradient(180deg, rgba(255,122,46,.16), rgba(255,122,46,.05))' : 'linear-gradient(180deg, rgba(77,124,255,.06), rgba(77,124,255,.18))',
+        border: A ? 'rgba(255,122,46,.45)' : 'rgba(77,124,255,.5)',
+        fx: A ? 'a' : 'b',
+        fk: A ? s.fa : s.fb,
+        rk: A ? s.ra : s.rb,
+        act: () => this.point(side)
+      };
+    };
+    const top = s.swapped ? mk('b') : mk('a');
+    const bot = s.swapped ? mk('a') : mk('b');
+    const deuce = s.a >= 20 && s.b >= 20;
+    const status = s.winner ? 'SELESAI' : (deuce ? (s.a === 29 && s.b === 29 ? 'POIN EMAS' : 'DEUCE') : 'MAIN KE 21');
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      top: top,
+      bot: bot,
+      game: s.game,
+      status: status,
+      gamesLine: (s.swapped ? s.gb : s.ga) + ' – ' + (s.swapped ? s.ga : s.gb),
+      done: !!s.winner,
+      notDone: !s.winner,
+      saveLast: () => this.saveLast(),
+      winLine: s.winner ? (s.winner === 'a' ? 'Bara' : 'Samudra') + ' menang ' + Math.max(s.ga, s.gb) + '–' + Math.min(s.ga, s.gb) : '',
+      noUndo: s.hist.length === 0,
+      undo: () => {
+        const h = this.state.hist;
+        if (!h.length) return;
+        const p = JSON.parse(h[h.length - 1]);
+        this.setState(Object.assign(p, { hist: h.slice(0, -1), fa: this.tog(this.state.fa), fb: this.tog(this.state.fb) }));
+      },
+      swap: () => this.setState({ swapped: !this.state.swapped, swapK: this.state.swapK === 'a' ? 'b' : 'a' }),
+      swapK: s.swapK,
+      reset: () => this.setState({ a: 0, b: 0, ga: 0, gb: 0, game: 1, server: 'a', winner: '', hist: this.state.hist.concat([this.snap()]).slice(-40), fa: this.tog(this.state.fa), fb: this.tog(this.state.fb) }),
+      bk: s.bk,
+      banner: s.banner
+    };
+  }
+}
+</script>
+</body>
+</html>

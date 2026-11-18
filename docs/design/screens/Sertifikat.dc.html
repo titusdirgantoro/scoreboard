@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>E-Sertifikat Juara — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500;1,600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.st-btn{cursor:pointer}
+.st-btn:disabled{opacity:.5;cursor:not-allowed}
+.st-chipbtn.is-on{background:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.st-row{cursor:pointer;transition:transform .5s cubic-bezier(.3,1.4,.4,1),border-color .25s,background-color .25s}
+.st-row:hover{transform:perspective(800px) translateZ(18px) rotateX(5deg);border-color:#4A5263!important}
+.st-row.is-on{border-color:#F2C230!important;background:#18160E!important}
+.st-in{width:100%;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid #2A303D;background:#0D0F14;color:#F2F1EC;font-size:14px}
+.st-in:focus{border-color:#F2C230!important;outline:none}
+.st-stage{perspective:1800px}
+.st-tilt{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.st-turn-a{animation:stTurnA 1s cubic-bezier(.25,1.15,.35,1) both}.st-turn-b{animation:stTurnB 1s cubic-bezier(.25,1.15,.35,1) both}
+@keyframes stTurnA{0%{transform:rotateY(-100deg);opacity:.15}50%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes stTurnB{0%{transform:rotateY(-100deg);opacity:.15}50%{opacity:1}100%{transform:none;opacity:1}}
+.st-thump-a{animation:stThumpA .9s ease-out}.st-thump-b{animation:stThumpB .9s ease-out}
+@keyframes stThumpA{0%,38%{transform:none}48%{transform:translateZ(-46px) rotateX(3deg)}70%{transform:translateZ(10px)}100%{transform:none}}
+@keyframes stThumpB{0%,38%{transform:none}48%{transform:translateZ(-46px) rotateX(3deg)}70%{transform:translateZ(10px)}100%{transform:none}}
+.st-seal-a{animation:stSealA .9s cubic-bezier(.3,1.5,.4,1) both}.st-seal-b{animation:stSealB .9s cubic-bezier(.3,1.5,.4,1) both}
+@keyframes stSealA{0%{transform:scale(3.4) rotate(-50deg);opacity:0}45%{transform:scale(.88) rotate(6deg);opacity:1}100%{transform:none;opacity:1}}
+@keyframes stSealB{0%{transform:scale(3.4) rotate(-50deg);opacity:0}45%{transform:scale(.88) rotate(6deg);opacity:1}100%{transform:none;opacity:1}}
+.st-chip{display:inline-flex;align-items:center;height:26px;padding:0 9px;border-radius:999px;border:1px solid;font-size:11px;font-weight:700;white-space:nowrap}
+.st-chip-a{animation:stChipA .7s cubic-bezier(.3,1.5,.4,1)}.st-chip-b{animation:stChipB .7s cubic-bezier(.3,1.5,.4,1)}
+@keyframes stChipA{from{transform:perspective(200px) rotateX(-180deg)}to{transform:none}}
+@keyframes stChipB{from{transform:perspective(200px) rotateX(-180deg)}to{transform:none}}
+.st-look{cursor:pointer;transition:transform .5s cubic-bezier(.3,1.5,.4,1),border-color .25s,background-color .25s}
+.st-look:hover{transform:perspective(600px) translateZ(16px) rotateX(8deg)}
+.st-look.is-on{border-color:#F2C230!important;background:#18160E!important}
+.st-tok{cursor:pointer;transition:transform .4s cubic-bezier(.3,1.6,.4,1),background-color .2s}
+.st-tok:hover{transform:translateY(-2px);background:#232834!important}
+.st-ta{width:100%;min-height:120px;resize:vertical;padding:10px 12px;border-radius:10px;border:1px solid #2A303D;background:#0D0F14;color:#F2F1EC;font-size:14px;line-height:1.5;font-family:inherit}
+.st-ta:focus{border-color:#F2C230!important;outline:none}
+.st-knob{transition:transform .45s cubic-bezier(.3,1.6,.4,1)}
+.st-toast{opacity:0;pointer-events:none}
+.st-toast-a{animation:stToastA 2.8s ease both}.st-toast-b{animation:stToastB 2.8s ease both}
+@keyframes stToastA{0%{opacity:0;transform:translateY(16px) rotateX(-40deg)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes stToastB{0%{opacity:0;transform:translateY(16px) rotateX(-40deg)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC;min-height:1800px">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="display:flex;align-items:center;gap:8px;font-size:15px;color:#C9CDD6"><span class="sb-display" style="flex:none;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:{{P}};color:{{onP}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:12px;font-weight:900"><sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if><sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}">{{evIni}}</sc-if></span><span>{{evName}} · <strong style="color:#F2F1EC;font-weight:600">E-sertifikat</strong></span></span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<a href="Cup.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Mode Cup</a>
+<a href="KartuHasil.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Kartu hasil</a>
+</div>
+</div>
+</header>
+
+<main style="max-width:1360px;margin:0 auto;padding:32px 24px 72px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px;max-width:780px">
+<p class="sb-mono" style="margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#F2C230">E-sertifikat · A4 lanskap · PDF</p>
+<h1 class="sb-display" style="margin:0;font-size:clamp(52px,6vw,88px);line-height:.88;font-weight:900;text-transform:uppercase">Final selesai, sertifikat terbit</h1>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#A3A9B6">Daftar penerima terisi sendiri dari hasil Cup: juara 1–3, MVP, top skor, dan penghargaan lain. Tiap sertifikat punya nomor unik dan link cek keaslian, lalu dikirim ke manajer tim lewat WhatsApp atau email.</p>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;background:#12151C;border:1px solid #232834">
+<span class="sb-display" style="font-size:36px;line-height:1;font-weight:900;color:#F2C230">{{sentCount}}</span>
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">dari {{total}} terkirim</span><span style="font-size:12px;color:#A3A9B6">{{issuedCount}} sudah terbit</span></span>
+</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+<section aria-labelledby="st-pen" style="flex:1 1 300px;max-width:380px;min-width:0;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+<h2 id="st-pen" class="sb-display" style="margin:0;font-size:26px;font-weight:800;text-transform:uppercase">Penerima</h2>
+<span class="sb-mono" style="font-size:11px;color:#A3A9B6">{{srcLine}}</span>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<button class="st-row {{r.cls}}" onClick="{{r.pick}}" aria-pressed="{{r.on}}" style="width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1px solid #232834;background:#12151C;color:#F2F1EC">
+<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true" style="flex:none"><circle cx="17" cy="17" r="15" fill="{{r.medal}}"></circle><circle cx="17" cy="17" r="11.5" fill="none" stroke="{{r.medalDark}}" stroke-width="1.2"></circle><text x="17" y="21.5" text-anchor="middle" font-family="Big Shoulders, Impact, sans-serif" font-weight="900" font-size="{{r.fs}}" fill="#14161C">{{r.mark}}</text></svg>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span class="sb-mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#A3A9B6">{{r.cat}}</span><span style="font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.name}}</span><span style="font-size:12px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.sub}}</span></span>
+<span class="st-chip st-chip-{{r.k}}" style="color:{{r.stc}};border-color:{{r.stb}}">{{r.status}}</span>
+</button>
+</sc-for>
+<button class="st-btn" data-fx="y" onClick="{{sendAll}}" disabled="{{sendOff}}" style="margin-top:4px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 18px;border-radius:14px;border:0;background:#F2C230;color:#14161C;font-size:15px;font-weight:800"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"></path></svg>{{sendAllLabel}}</button>
+
+<div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+<span class="sb-mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A3A9B6">Gaya</span>
+<div role="group" aria-label="Gaya sertifikat" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px">
+<sc-for list="{{styles}}" as="o" hint-placeholder-count="5"><button class="st-look {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 4px;border-radius:12px;border:2px solid #232834;background:#12151C;color:#F2F1EC;font-size:12px;font-weight:700"><span aria-hidden="true" style="width:54px;height:38px;border-radius:3px;background:{{o.paper}};box-shadow:inset 0 0 0 3px {{o.frame}},inset 0 0 0 5px {{o.paper}},inset 0 0 0 6px {{o.line}};display:flex;align-items:center;justify-content:center"><span style="font-family:{{o.font}};font-size:7px;font-weight:800;letter-spacing:.08em;color:{{o.ink}}">SERTIFIKAT</span></span>{{o.label}}</button></sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="sb-mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A3A9B6">Teks sertifikat</span><button class="st-btn" onClick="{{resetText}}" style="min-height:36px;padding:0 4px;border:0;background:transparent;color:#F2D37A;font-size:13px;font-weight:700;text-decoration:underline">Kembalikan bawaan</button></div>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Judul<input class="st-in" value="{{edTitle}}" onChange="{{onTitle}}" maxlength="24" placeholder="SERTIFIKAT"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Kalimat pembuka<input class="st-in" value="{{edIntro}}" onChange="{{onIntro}}" maxlength="40" placeholder="Diberikan kepada"></label>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px">
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Sebutan · {{rCat}}<input class="st-in" value="{{edRank}}" onChange="{{onRank}}" maxlength="24"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Nama di sertifikat<input class="st-in" value="{{edName}}" onChange="{{onNameEd}}" maxlength="40"></label>
+</div>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6"><span style="display:flex;justify-content:space-between"><span>Keterangan</span><span class="sb-mono" style="color:{{bodyCountC}}">{{bodyCount}}/320</span></span><textarea class="st-ta" value="{{edBody}}" onChange="{{onBody}}" maxlength="320" rows="5"></textarea></label>
+<div role="group" aria-label="Sisipkan isian otomatis" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{tokens}}" as="t" hint-placeholder-count="7"><button class="st-tok" onClick="{{t.add}}" style="min-height:36px;padding:0 10px;border-radius:8px;border:1px solid #2A303D;background:#151922;color:#C9CDD6;font-size:12px;font-weight:600"><span class="sb-mono">{{t.t}}</span></button></sc-for></div>
+<span style="font-size:12px;line-height:1.5;color:#A3A9B6">Kata dalam kurung kurawal terisi sendiri untuk tiap penerima. Judul, kalimat pembuka, dan keterangan berlaku untuk semua sertifikat; sebutan dan nama hanya untuk penerima yang dipilih.</span>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="sb-mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A3A9B6">Penanda tangan</span>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px">
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Nama kiri<input class="st-in" value="{{sig1}}" onChange="{{onSig1}}" maxlength="32"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Jabatan kiri<input class="st-in" value="{{role1}}" onChange="{{onRole1}}" maxlength="32"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Nama kanan<input class="st-in" value="{{sig2}}" onChange="{{onSig2}}" maxlength="32"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Jabatan kanan<input class="st-in" value="{{role2}}" onChange="{{onRole2}}" maxlength="32"></label>
+</div>
+</div>
+
+<button class="st-btn" role="switch" aria-checked="{{peserta}}" onClick="{{tPeserta}}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:6px 14px;border-radius:12px;border:1px solid #232834;background:#12151C;color:#F2F1EC;text-align:left">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Sertifikat peserta</span><span style="font-size:12px;color:#A3A9B6">Ikut terbit untuk {{pesertaN}} tim lain yang bertanding</span></span>
+<span aria-hidden="true" style="flex:none;width:44px;height:26px;border-radius:13px;background:{{pTrack}};padding:3px"><span class="st-knob" style="display:block;width:20px;height:20px;border-radius:50%;background:#F2F1EC;transform:translateX({{pKx}}px)"></span></span>
+</button>
+</section>
+
+<section aria-label="Pratinjau sertifikat" style="flex:3 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px">
+<div class="st-stage" data-tilt="1" onPointerMove="{{onTilt}}" onPointerLeave="{{onLeave}}" style="padding:16px 8px 8px">
+<div class="st-tilt" style="position:relative;transform-style:preserve-3d;transform:rotateX({{rx}}deg) rotateY({{ry}}deg)">
+<div class="st-turn-{{turnK}}" style="position:relative;transform-style:preserve-3d;transform-origin:left center">
+<div class="st-thump-{{stampK}}" style="position:relative;transform-style:preserve-3d">
+<div aria-hidden="true" style="position:absolute;inset:0;border-radius:8px;background:#000;transform:translateZ(-14px);box-shadow:0 50px 90px rgba(0,0,0,.55)"></div>
+<div role="img" aria-label="{{certAria}}" style="position:relative;width:100%;aspect-ratio:297/210;container-type:inline-size;overflow:hidden;border-radius:8px;background:{{paper}};color:{{ink}};transform:translateZ(0)">
+<sc-if value="{{isModern}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:10cqw;background:{{P}};display:flex;align-items:center;justify-content:center"><span class="sb-display" style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:2.4cqw;font-weight:900;letter-spacing:.32em;text-transform:uppercase;color:{{onP}};white-space:nowrap">{{evName}}</span></div>
+</sc-if>
+<sc-if value="{{isArena}}" hint-placeholder-val="{{ false }}"><svg aria-hidden="true" viewBox="0 0 297 210" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width=".7"><rect x="12" y="12" width="273" height="186"></rect><line x1="148.5" y1="12" x2="148.5" y2="198"></line><circle cx="148.5" cy="105" r="28"></circle><rect x="12" y="60" width="32" height="90"></rect><rect x="253" y="60" width="32" height="90"></rect></g><polygon points="0,186 0,210 30,210" fill="{{P}}"></polygon><polygon points="297,0 267,0 297,24" fill="{{A}}"></polygon></svg></sc-if>
+<div aria-hidden="true" style="position:absolute;top:2.2cqw;right:2.2cqw;bottom:2.2cqw;left:{{frameL}};border:.55cqw {{frameStyle}} {{frame}}"></div>
+<sc-if value="{{isPrestise}}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="position:absolute;top:4.3cqw;right:4.3cqw;bottom:4.3cqw;left:4.3cqw;border:1px dashed {{frame}};opacity:.7"></div><svg aria-hidden="true" viewBox="0 0 120 12" style="position:absolute;left:50%;top:3.6cqw;width:22cqw;height:2.2cqw;transform:translateX(-50%)"><path d="M0 6h46M74 6h46" stroke="{{frame}}" stroke-width="1"></path><path d="M60 1l5 5-5 5-5-5z" fill="{{frame}}"></path><circle cx="50" cy="6" r="1.6" fill="{{frame}}"></circle><circle cx="70" cy="6" r="1.6" fill="{{frame}}"></circle></svg></sc-if>
+<div aria-hidden="true" style="position:absolute;top:3.4cqw;right:3.4cqw;bottom:3.4cqw;left:{{lineL}};border:1px solid {{line}}"></div>
+<sc-if value="{{showCorners}}" hint-placeholder-val="{{ true }}"><svg aria-hidden="true" viewBox="0 0 40 40" style="position:absolute;top:1.2cqw;right:1.2cqw;width:7cqw;height:7cqw"><path d="M2 2h36v36" fill="none" stroke="{{orn}}" stroke-width="3"></path><path d="M10 2v8h-8M38 30h-8v8" fill="none" stroke="{{orn}}" stroke-width="2"></path></svg>
+<svg aria-hidden="true" viewBox="0 0 40 40" style="position:absolute;bottom:1.2cqw;right:1.2cqw;width:7cqw;height:7cqw;transform:scaleY(-1)"><path d="M2 2h36v36" fill="none" stroke="{{orn}}" stroke-width="3"></path><path d="M10 2v8h-8M38 30h-8v8" fill="none" stroke="{{orn}}" stroke-width="2"></path></svg></sc-if>
+<sc-if value="{{showLeftCorners}}" hint-placeholder-val="{{ true }}">
+<svg aria-hidden="true" viewBox="0 0 40 40" style="position:absolute;top:1.2cqw;left:1.2cqw;width:7cqw;height:7cqw;transform:scaleX(-1)"><path d="M2 2h36v36" fill="none" stroke="{{orn}}" stroke-width="3"></path><path d="M10 2v8h-8M38 30h-8v8" fill="none" stroke="{{orn}}" stroke-width="2"></path></svg>
+<svg aria-hidden="true" viewBox="0 0 40 40" style="position:absolute;bottom:1.2cqw;left:1.2cqw;width:7cqw;height:7cqw;transform:scale(-1,-1)"><path d="M2 2h36v36" fill="none" stroke="{{orn}}" stroke-width="3"></path><path d="M10 2v8h-8M38 30h-8v8" fill="none" stroke="{{orn}}" stroke-width="2"></path></svg>
+</sc-if>
+<sc-if value="{{isDraft}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" class="sb-display" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22cqw;font-weight:900;letter-spacing:.1em;color:{{ink}};opacity:.06;transform:rotate(-16deg)">DRAF</div>
+</sc-if>
+<div style="position:absolute;top:5.4cqw;right:7cqw;bottom:4.4cqw;left:{{contentL}};display:flex;flex-direction:column;align-items:center;text-align:center">
+<div style="display:flex;align-items:center;gap:1.2cqw">
+<span class="sb-display" style="flex:none;width:5.2cqw;height:5.2cqw;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:{{P}};color:{{onP}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:2.2cqw;font-weight:900"><sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if><sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}">{{evIni}}</sc-if></span>
+<span style="display:flex;flex-direction:column;align-items:flex-start;gap:.2cqw"><span class="sb-display" style="font-size:2cqw;line-height:1;font-weight:900;letter-spacing:.06em;text-transform:uppercase">{{evName}}</span><span class="sb-mono" style="font-size:1.05cqw;letter-spacing:.14em;text-transform:uppercase;color:{{muted}}">{{evOrg}}</span></span>
+</div>
+<span class="sb-display" style="margin-top:2cqw;font-family:{{fTitle}};font-size:{{titleFs}}cqw;line-height:1.22;font-weight:900;letter-spacing:{{titleLs}}em;padding-left:{{titleLs}}em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{certTitle}}</span>
+<span class="sb-display" style="margin-top:.5cqw;font-family:{{fRank}};font-style:{{rankStyle}};font-size:3.2cqw;line-height:1.15;font-weight:900;letter-spacing:{{rankLs}}em;color:{{rankInk}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{rankTitle}}</span>
+<span style="margin-top:1.6cqw;font-family:{{fIntro}};font-style:{{introStyle}};font-size:{{introFs}}cqw;line-height:1.2;color:{{muted}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{introTxt}}</span>
+<span class="sb-display" style="margin-top:.5cqw;font-family:{{fName}};font-size:{{nameFs}}cqw;line-height:1.02;font-weight:{{nameW}};text-transform:{{nameTf}};max-width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;">{{rName}}</span>
+<span style="margin-top:.6cqw;font-size:1.55cqw;line-height:1.2;font-weight:700;color:{{muted}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{rSub}}</span>
+<span aria-hidden="true" style="margin-top:1.3cqw;width:14cqw;height:.3cqw;background:{{frame}}"></span>
+<p style="margin:1.3cqw 0 0;max-width:64cqw;font-family:{{fBody}};font-size:1.42cqw;line-height:1.6;color:{{ink2}};display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;">{{body}}</p>
+<div style="margin-top:auto;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:end;gap:3cqw">
+<span style="display:flex;flex-direction:column;align-items:center;gap:.3cqw;min-width:0">
+<svg aria-hidden="true" viewBox="0 0 160 50" style="width:15cqw;height:4.6cqw"><path d="M8 36c10-22 18-26 20-14s-6 20 2 12 14-26 20-18-4 22 6 14 10-18 18-12 4 14 14 8 16-14 24-10 10 8 20 4 14-6 20-6" fill="none" stroke="{{ink}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span aria-hidden="true" style="width:100%;max-width:20cqw;height:1px;background:{{ink}};opacity:.6"></span>
+<span style="font-size:1.4cqw;line-height:1.2;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{sig1}}</span>
+<span style="font-size:1.1cqw;line-height:1.2;color:{{muted}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{role1}}</span>
+</span>
+<span class="st-seal-{{sealK}}" style="display:inline-block;width:11cqw;height:11.4cqw;opacity:{{sealOp}}">
+<svg viewBox="0 0 120 124" width="100%" height="100%" aria-hidden="true"><path d="M42 78L30 118l14-8 8 12 8-38z" fill="{{medalDark}}"></path><path d="M78 78l12 40-14-8-8 12-8-38z" fill="{{medalDark}}"></path><circle cx="60" cy="54" r="45" fill="none" stroke="{{medal}}" stroke-width="10" stroke-dasharray="5 3.2"></circle><circle cx="60" cy="54" r="39" fill="{{medal}}"></circle><circle cx="60" cy="54" r="31" fill="none" stroke="{{medalDark}}" stroke-width="1.5"></circle><text x="60" y="{{sealY}}" text-anchor="middle" font-family="Big Shoulders, Impact, sans-serif" font-weight="900" font-size="{{sealFs}}" fill="#14161C">{{sealTxt}}</text></svg>
+</span>
+<span style="display:flex;flex-direction:column;align-items:center;gap:.3cqw;min-width:0">
+<svg aria-hidden="true" viewBox="0 0 160 50" style="width:15cqw;height:4.6cqw"><path d="M10 30c6-10 14-20 22-16s-8 22 4 18 12-22 22-20-2 20 10 16 18-16 26-14-2 14 10 12 20-10 30-8 14 4 18 2" fill="none" stroke="{{ink}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span aria-hidden="true" style="width:100%;max-width:20cqw;height:1px;background:{{ink}};opacity:.6"></span>
+<span style="font-size:1.4cqw;line-height:1.2;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{sig2}}</span>
+<span style="font-size:1.1cqw;line-height:1.2;color:{{muted}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">{{role2}}</span>
+</span>
+</div>
+<div class="sb-mono" style="width:100%;margin-top:1.5cqw;display:flex;justify-content:space-between;gap:2cqw;font-size:.95cqw;color:{{muted}}"><span>No. {{certNo}}</span><span>Cek keaslian: scoreboard.tiusapp.com/v/{{certCode}}</span></div>
+</div>
+</div>
+<span aria-hidden="true" class="sb-mono" style="position:absolute;right:-10px;top:-14px;transform:translateZ(48px);padding:5px 10px;border-radius:8px;background:#12151C;border:1px solid #2A303D;font-size:11px;color:#C9CDD6">A4 · 297 × 210 mm</span>
+</div>
+</div>
+</div>
+</div>
+<sc-if value="{{locked}}" hint-placeholder-val="{{ false }}"><div role="note" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:12px 16px;border-radius:14px;background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#E3C8FF;font-size:14px;line-height:1.5;text-align:center"><span>E-sertifikat termasuk Pass Event. Di paket Gratis kamu bisa mengatur dan melihat pratinjau dulu.</span><a href="Upgrade.dc.html" style="display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:10px;background:#C084FC;color:#1A0B2E;font-size:14px;font-weight:800;text-decoration:none">Buka dengan Pass Event</a></div></sc-if>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px">
+<button class="st-btn" data-fx="y" onClick="{{issue}}" disabled="{{issueOff}}" style="display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:0 22px;border-radius:14px;border:0;background:#F2F1EC;color:#14161C;font-size:15px;font-weight:800"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"></circle><path d="M8.5 14L7 22l5-3 5 3-1.5-8"></path></svg>{{issueLabel}}</button>
+<button class="st-btn" onClick="{{download}}" disabled="{{locked}}" style="display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:0 20px;border-radius:14px;border:1px solid #343B4A;background:#12151C;color:#F2F1EC;font-size:15px;font-weight:700"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg>Unduh PDF</button>
+<button class="st-btn" onClick="{{sendOne}}" disabled="{{locked}}" style="display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:0 20px;border-radius:14px;border:1px solid #343B4A;background:#12151C;color:#F2F1EC;font-size:15px;font-weight:700"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"></path></svg>Kirim ke {{contact}}</button>
+</div>
+<p style="margin:0;font-size:13px;color:#A3A9B6;text-align:center">Nomor sertifikat dan link cek keaslian dibuat otomatis. Gerakkan kursor di atas sertifikat untuk melihat kedalamannya.</p>
+</section>
+</div>
+</main>
+<div style="position:fixed;left:0;right:0;bottom:28px;display:flex;justify-content:center;pointer-events:none;perspective:600px;z-index:50">
+<div role="status" aria-live="polite" class="st-toast st-toast-{{toastK}}" style="max-width:min(560px,92vw);padding:14px 20px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:15px;font-weight:700;box-shadow:0 20px 50px rgba(0,0,0,.5)">{{toast}}</div>
+</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"warnaUtama":{"editor":"color","default":"#FF7A2E"},"warnaAksen":{"editor":"color","default":"#4D7CFF"},"paket":{"editor":"enum","options":["pass","gratis"],"default":"pass","section":"Keadaan"},"$preview":{"width":1440,"height":1800}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    const ch = this.readChamp();
+    const sport = ch && ch.sport ? ch.sport : 'Futsal';
+    const j1 = ch && ch.champ ? ch.champ : 'Tim Rajawali';
+    const j2 = ch && ch.runner ? ch.runner : 'Tim Elang';
+    const list = [
+      { id: 'j1', cat: 'Juara I', title: 'JUARA I', mark: 'I', medal: 'gold', name: j1, team: '', role: 'Juara I', kind: 'team', contact: 'manajer ' + j1 },
+      { id: 'j2', cat: 'Juara II', title: 'JUARA II', mark: 'II', medal: 'silver', name: j2, team: '', role: 'Juara II', kind: 'team', contact: 'manajer ' + j2 },
+      { id: 'j3', cat: 'Juara III', title: 'JUARA III', mark: 'III', medal: 'bronze', name: 'Tim Garuda', team: '', role: 'Juara III', kind: 'team', contact: 'manajer Tim Garuda' },
+      { id: 'mvp', cat: 'Pemain terbaik', title: 'PEMAIN TERBAIK', mark: 'MVP', medal: 'mvp', name: 'Rizky Pratama', team: j1, role: 'Pemain Terbaik (MVP)', kind: 'player', contact: 'Rizky' },
+      { id: 'top', cat: 'Top skor · 9 gol', title: 'TOP SKOR', mark: 'TOP', medal: 'award', name: 'Wahyu Hidayat', team: j2, role: 'Pencetak Gol Terbanyak dengan 9 gol', kind: 'player', contact: 'Wahyu' },
+      { id: 'gk', cat: 'Kiper terbaik', title: 'KIPER TERBAIK', mark: 'GK', medal: 'award', name: 'Andi Saputra', team: 'Tim Garuda', role: 'Kiper Terbaik', kind: 'player', contact: 'Andi' },
+      { id: 'fp', cat: 'Fair play', title: 'TIM FAIR PLAY', mark: 'FP', medal: 'award', name: 'Tim Banteng', team: '', role: 'Tim Fair Play', kind: 'team', contact: 'manajer Tim Banteng' }
+    ];
+    const status = {}; const k = {};
+    list.forEach((r) => { status[r.id] = 'draf'; k[r.id] = 'n'; });
+    status.j1 = 'terbit';
+    this.state = {
+      theme: this.readTheme(), fromCup: !!ch, sport: sport, size: ch && ch.size ? ch.size : 16, list: list, sel: 'j1', status: status, chipK: k,
+      look: 'klasik', sig1: 'Hendra Wijaya', role1: 'Ketua Panitia', sig2: 'Sari Utami', role2: 'Koordinator Wasit',
+      peserta: true, tTitle: 'SERTIFIKAT', tIntro: 'Diberikan kepada', tBody: this.defBody(), rankOv: {}, nameOv: {}, rx: 2, ry: -6, turnK: 'n', stampK: 'n', sealK: 'n', sending: false, toast: '', toastK: 'n'
+    };
+  }
+  defBody() { return 'atas prestasinya sebagai {peran} cabang {cabang} pada {event} yang diselenggarakan oleh {penyelenggara} di {lokasi}, {tanggal}.'; }
+  ov(key, id, val) { const o = Object.assign({}, this.state[key]); if (val === null) delete o[id]; else o[id] = val; const x = {}; x[key] = o; this.setState(x); }
+  readTheme() {
+    try { const t = JSON.parse(window.localStorage.getItem('sbEventTheme') || 'null'); return t && t.primary ? t : null; } catch (e) { return null; }
+  }
+  readChamp() {
+    try { const c = JSON.parse(window.localStorage.getItem('sbChamp') || 'null'); return c && c.champ ? c : null; } catch (e) { return null; }
+  }
+  watchTheme() {
+    this.onStore = (e) => { if (e.key === 'sbEventTheme') this.setState({ theme: this.readTheme() }); };
+    try { window.addEventListener('storage', this.onStore); } catch (e) { }
+  }
+  componentDidMount() { this.watchTheme(); }
+  componentWillUnmount() {
+    try { window.removeEventListener('storage', this.onStore); } catch (e) { }
+    if (this.raf) cancelAnimationFrame(this.raf);
+    (this.timers || []).forEach((t) => clearTimeout(t));
+  }
+  thLum(hex) {
+    const h = (hex || '#000000').replace('#', '');
+    const v = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  thOn(hex) { const l = this.thLum(hex); return (l + 0.05) / 0.05 >= 1.05 / (l + 0.05) ? '#0B0D12' : '#FFFFFF'; }
+  thReadable(col, bg) {
+    let c = col; let i = 0;
+    const con = (a, b) => { const x = this.thLum(a); const y = this.thLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const toward = this.thLum(bg) < 0.2 ? 'FFFFFF' : '000000';
+    while (con(c, bg) < 4.5 && i < 14) {
+      const a = c.replace('#', '');
+      c = '#' + [0, 2, 4].map((k) => Math.round(parseInt(a.substr(k, 2), 16) * 0.85 + parseInt(toward.substr(k, 2), 16) * 0.15).toString(16).padStart(2, '0')).join('');
+      i++;
+    }
+    return c;
+  }
+  thIni(n) {
+    const w = (n || '').trim().split(/\s+/).filter((x) => /[A-Za-z]/.test(x));
+    return ((w[0] || 'E')[0] + (w[1] ? w[1][0] : '')).toUpperCase();
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  later(fn, ms) { if (!this.timers) this.timers = []; this.timers.push(setTimeout(fn, ms)); }
+  cur() { const s = this.state; return s.list.find((r) => r.id === s.sel) || s.list[0]; }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  ev() {
+    const th = this.state.theme;
+    return {
+      name: th && th.name ? th.name : 'Piala Jumat Malam 2026',
+      org: th && th.org ? th.org : 'Karang Taruna RW 05',
+      venue: th && th.venue ? th.venue : 'GOR Kecamatan, Jakarta Selatan',
+      date: th && th.dateLine ? th.dateLine : '5–6 Desember 2026'
+    };
+  }
+  codes(r) {
+    const ev = this.ev();
+    const words = ev.name.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w));
+    const ini = (words.map((w) => w[0]).join('').toUpperCase() + 'EVT').slice(0, Math.max(2, Math.min(4, words.length)));
+    const ym = ev.name.match(/(20\d\d)/);
+    const year = ym ? ym[1] : '2026';
+    const sp = this.state.sport.toLowerCase();
+    const sc = sp.indexOf('futsal') >= 0 ? 'FUT' : (sp.indexOf('bulu') >= 0 || sp.indexOf('badminton') >= 0 ? 'BTK' : (sp.indexOf('voli') >= 0 ? 'VOL' : (sp.indexOf('basket') >= 0 ? 'BSK' : (sp.indexOf('padel') >= 0 ? 'PDL' : (sp.indexOf('meja') >= 0 ? 'TMJ' : (sp.indexOf('tenis') >= 0 ? 'TNS' : (sp.indexOf('sepak') >= 0 ? 'SPB' : 'ESP')))))));
+    const n = String(this.state.list.findIndex((x) => x.id === r.id) + 1).padStart(3, '0');
+    return { no: ini + '/' + year + '/' + sc + '/' + n, code: ini + year.slice(2) + '-' + sc + '-' + n };
+  }
+  pick(id) {
+    if (id === this.state.sel) return;
+    this.setState({ sel: id, turnK: this.tg(this.state.turnK), sealK: this.state.status[id] === 'draf' ? this.state.sealK : this.tg(this.state.sealK) });
+  }
+  setStatus(id, st) {
+    const status = Object.assign({}, this.state.status); status[id] = st;
+    const k = Object.assign({}, this.state.chipK); k[id] = this.tg(k[id]);
+    this.setState({ status: status, chipK: k });
+  }
+  issue() {
+    const r = this.cur();
+    if (this.state.status[r.id] !== 'draf') return;
+    this.setStatus(r.id, 'terbit');
+    this.setState({ stampK: this.tg(this.state.stampK), sealK: this.tg(this.state.sealK) });
+    this.later(() => this.celebrate('y'), 380);
+    this.toastMsg('Sertifikat ' + r.cat.toLowerCase() + ' terbit · No. ' + this.codes(r).no);
+  }
+  sendOne() {
+    const r = this.cur();
+    if (this.state.status[r.id] === 'draf') {
+      this.setState({ stampK: this.tg(this.state.stampK), sealK: this.tg(this.state.sealK) });
+    }
+    this.setStatus(r.id, 'terkirim');
+    this.toastMsg('PDF dikirim ke ' + r.contact + ' lewat WhatsApp');
+  }
+  sendAll() {
+    if (this.state.sending) return;
+    const ids = this.state.list.map((r) => r.id).filter((id) => this.state.status[id] !== 'terkirim');
+    if (!ids.length) { this.toastMsg('Semua sertifikat sudah terkirim'); return; }
+    this.setState({ sending: true });
+    ids.forEach((id, i) => this.later(() => this.setStatus(id, 'terkirim'), 260 + i * 330));
+    this.later(() => {
+      this.setState({ sending: false });
+      const extra = this.state.peserta ? ' + ' + this.pesertaN() + ' sertifikat peserta' : '';
+      this.toastMsg(ids.length + ' sertifikat juara' + extra + ' terkirim ke manajer tim');
+      this.celebrate('y');
+    }, 420 + ids.length * 330);
+  }
+  pesertaN() { return Math.max(0, (this.state.size || 16) - 3); }
+  download() {
+    const r = this.cur();
+    const sl = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    this.toastMsg('Tersimpan: sertifikat-' + sl(r.cat) + '-' + sl(r.name) + '.pdf · A4 lanskap');
+  }
+  onTilt(e) {
+    const el = e.target && e.target.closest ? e.target.closest('[data-tilt]') : null;
+    if (!el) return;
+    const rc = el.getBoundingClientRect();
+    if (!rc.width || !rc.height) return;
+    const px = (e.clientX - rc.left) / rc.width - 0.5;
+    const py = (e.clientY - rc.top) / rc.height - 0.5;
+    if (this.raf) return;
+    this.raf = requestAnimationFrame(() => { this.raf = 0; this.setState({ rx: Math.round(-py * 120) / 10, ry: Math.round(px * 180) / 10 }); });
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const lockP = (this.props.paket || 'pass') === 'gratis';
+    const stat = lockP ? Object.keys(this.state.status).reduce((o, k) => { o[k] = 'draf'; return o; }, {}) : this.state.status;
+    const s = this.state;
+    const th = s.theme;
+    const P = th ? th.primary : (this.props.warnaUtama ?? '#FF7A2E');
+    const A = th ? th.accent : (this.props.warnaAksen ?? '#4D7CFF');
+    const ev = this.ev();
+    const r = this.cur();
+    const MED = { gold: ['#F2C230', '#A87C0A'], silver: ['#D3D7DF', '#868D9B'], bronze: ['#D9935E', '#8F5228'], mvp: ['#C084FC', '#7E45C4'], award: [P, A] };
+    const med = MED[r.medal] || MED.award;
+    const look = s.look;
+    const L = {
+      klasik: { paper: '#FBFAF6', ink: '#14161C', ink2: '#2A2E37', muted: '#5A5F6B', frame: P, line: '#14161C', orn: A },
+      modern: { paper: '#FFFFFF', ink: '#14161C', ink2: '#2A2E37', muted: '#5A5F6B', frame: '#14161C', line: '#D6D3CA', orn: P },
+      gelap: { paper: '#0D0F14', ink: '#F2F1EC', ink2: '#D5D7DD', muted: '#A3A9B6', frame: '#F2C230', line: '#3A4150', orn: P },
+      prestise: { paper: '#FBF6E9', ink: '#2B2216', ink2: '#3D3326', muted: '#6E5E44', frame: '#B8892E', line: '#B8892E', orn: '#B8892E' },
+      arena: { paper: '#0E1A2B', ink: '#F2F1EC', ink2: '#D5DCE6', muted: '#A9B8CC', frame: P, line: 'rgba(255,255,255,.22)', orn: P }
+    }[look];
+    const SERIF = "'Playfair Display', Georgia, 'Times New Roman', serif";
+    const DISP = "'Big Shoulders', 'Arial Narrow', Impact, sans-serif";
+    const isPrestise = look === 'prestise'; const isArena = look === 'arena';
+    const st = stat[r.id];
+    const cd = this.codes(r);
+    const isModern = look === 'modern';
+    const nm = (s.nameOv[r.id] ?? '').trim() || r.name;
+    const TOK = { peran: r.role, nama: nm, cabang: s.sport, event: ev.name, penyelenggara: ev.org, lokasi: ev.venue, tanggal: ev.date };
+    const body = (s.tBody.trim() ? s.tBody : this.defBody()).replace(/\{(peran|nama|cabang|event|penyelenggara|lokasi|tanggal)\}/g, (all, k) => TOK[k]);
+    const certTitle = s.tTitle.trim() || 'SERTIFIKAT';
+    const rankTxt = (s.rankOv[r.id] ?? '').trim() || r.title;
+    const STC = { draf: ['DRAF', '#A3A9B6', '#343B4A'], terbit: ['TERBIT', '#F2C230', 'rgba(242,194,48,.5)'], terkirim: ['TERKIRIM', '#7EE2A8', 'rgba(126,226,168,.45)'] };
+    const sentCount = s.list.filter((x) => stat[x.id] === 'terkirim').length;
+    const issuedCount = s.list.filter((x) => stat[x.id] !== 'draf').length;
+    const left = s.list.length - sentCount;
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      P: P, A: A, onP: this.thOn(P),
+      evName: ev.name, evOrg: ev.org, evIni: this.thIni(ev.name),
+      hasLogo: !!(th && th.logoUrl), noLogo: !(th && th.logoUrl), logoUrl: th && th.logoUrl ? th.logoUrl : '',
+      srcLine: s.fromCup ? 'dari hasil Mode Cup' : 'contoh · ' + s.sport,
+      total: s.list.length, sentCount: sentCount, issuedCount: issuedCount,
+      rows: s.list.map((x) => {
+        const m = MED[x.medal] || MED.award; const on = x.id === r.id; const c = STC[stat[x.id]];
+        return {
+          cat: x.cat, name: x.name, sub: x.kind === 'player' ? x.team : 'Tim · ' + s.sport,
+          medal: m[0], medalDark: m[1], mark: x.mark, fs: x.mark.length > 2 ? 9 : (x.mark.length > 1 ? 11 : 14),
+          status: c[0], stc: c[1], stb: c[2], k: s.chipK[x.id],
+          on: on, cls: on ? 'is-on' : '', pick: () => this.pick(x.id)
+        };
+      }),
+      locked: (this.props.paket || 'pass') === 'gratis', sendOff: s.sending || (this.props.paket || 'pass') === 'gratis',
+      sendAll: () => { if ((this.props.paket || 'pass') !== 'gratis') this.sendAll(); }, sending: s.sending,
+      sendAllLabel: s.sending ? 'Mengirim…' : (left ? 'Terbitkan & kirim semua (' + left + ')' : 'Semua sudah terkirim'),
+      styles: [['klasik', 'Klasik', '#FBFAF6', P, '#14161C', '#14161C', DISP], ['modern', 'Modern', '#FFFFFF', '#14161C', '#D6D3CA', '#14161C', DISP], ['gelap', 'Gelap', '#0D0F14', '#F2C230', '#3A4150', '#F2F1EC', DISP], ['prestise', 'Prestise', '#FBF6E9', '#B8892E', '#B8892E', '#2B2216', SERIF], ['arena', 'Arena', '#0E1A2B', P, 'rgba(255,255,255,.3)', '#F2F1EC', DISP]].map((o) => ({ label: o[1], paper: o[2], frame: o[3], line: o[4], ink: o[5], font: o[6], on: look === o[0], cls: look === o[0] ? 'is-on' : '', pick: () => { if (this.state.look !== o[0]) this.setState({ look: o[0], turnK: this.tg(this.state.turnK) }); } })),
+      sig1: s.sig1, sig2: s.sig2, role1: s.role1, role2: s.role2,
+      onSig1: (e) => this.setState({ sig1: e.target.value }), onSig2: (e) => this.setState({ sig2: e.target.value }),
+      onRole1: (e) => this.setState({ role1: e.target.value }), onRole2: (e) => this.setState({ role2: e.target.value }),
+      peserta: s.peserta, pesertaN: this.pesertaN(), pTrack: s.peserta ? '#F2C230' : '#343B4A', pKx: s.peserta ? 18 : 0,
+      tPeserta: () => this.setState({ peserta: !this.state.peserta }),
+      onTilt: (e) => this.onTilt(e), onLeave: () => this.setState({ rx: 2, ry: -6 }),
+      rx: s.rx, ry: s.ry, turnK: s.turnK, stampK: s.stampK, sealK: s.sealK,
+      certAria: 'Sertifikat ' + rankTxt.toLowerCase() + ' untuk ' + nm,
+      paper: L.paper, ink: L.ink, ink2: L.ink2, muted: L.muted, frame: L.frame, line: L.line, orn: L.orn,
+      isModern: isModern, notModern: !isModern, isPrestise: isPrestise, isArena: isArena,
+      showCorners: !isArena, showLeftCorners: !isModern && !isArena, frameStyle: isPrestise ? 'double' : 'solid',
+      fTitle: isPrestise ? SERIF : DISP, fRank: isPrestise ? SERIF : DISP, fName: isPrestise ? SERIF : DISP, fIntro: isPrestise ? SERIF : 'Inter, system-ui, sans-serif', fBody: isPrestise ? SERIF : 'Inter, system-ui, sans-serif',
+      titleLs: isPrestise ? 0.12 : (isArena ? 0.06 : 0.2), rankLs: isPrestise ? 0.04 : 0.14, rankStyle: isPrestise ? 'italic' : 'normal', introStyle: isPrestise ? 'italic' : 'normal', introFs: isPrestise ? 1.7 : 1.4,
+      nameTf: isPrestise ? 'none' : 'uppercase', nameW: isPrestise ? 800 : 900,
+      certTitle: certTitle, introTxt: s.tIntro.trim() || 'Diberikan kepada',
+      titleFs: (isPrestise ? 0.9 : 1) * (certTitle.length <= 10 ? 6.4 : (certTitle.length <= 15 ? 5 : 3.9)),
+      frameL: isModern ? '12.2cqw' : '2.2cqw', lineL: isModern ? '13.4cqw' : '3.4cqw', contentL: isModern ? '16cqw' : '7cqw',
+      isDraft: st === 'draf',
+      rankTitle: rankTxt, rankInk: this.thReadable(med[0], L.paper),
+      rName: nm, nameFs: (isPrestise ? 0.86 : 1) * (nm.length > 26 ? 3.8 : (nm.length > 22 ? 4.2 : (nm.length > 15 ? 5.2 : 6.2))),
+      rCat: r.cat, edTitle: s.tTitle, edIntro: s.tIntro, edBody: s.tBody, edRank: s.rankOv[r.id] ?? r.title, edName: s.nameOv[r.id] ?? r.name,
+      bodyCount: s.tBody.length, bodyCountC: s.tBody.length > 290 ? '#F2C230' : '#A3A9B6',
+      onTitle: (e) => this.setState({ tTitle: e.target.value }), onIntro: (e) => this.setState({ tIntro: e.target.value }), onBody: (e) => this.setState({ tBody: e.target.value.slice(0, 320) }),
+      onRank: (e) => this.ov('rankOv', this.cur().id, e.target.value), onNameEd: (e) => this.ov('nameOv', this.cur().id, e.target.value),
+      tokens: ['{peran}', '{nama}', '{cabang}', '{event}', '{penyelenggara}', '{lokasi}', '{tanggal}'].map((t) => ({ t: t, add: () => { const b = this.state.tBody; const nb = (b + (b && !/\s$/.test(b) ? ' ' : '') + t).slice(0, 320); this.setState({ tBody: nb }); } })),
+      resetText: () => { this.setState({ tTitle: 'SERTIFIKAT', tIntro: 'Diberikan kepada', tBody: this.defBody(), rankOv: {}, nameOv: {}, turnK: this.tg(this.state.turnK) }); this.toastMsg('Teks sertifikat kembali ke bawaan'); },
+      rSub: r.kind === 'player' ? r.team : 'beserta seluruh pemain dan ofisial',
+      body: body,
+      medal: med[0], medalDark: med[1], sealTxt: r.mark, sealFs: r.mark.length > 2 ? 26 : (r.mark.length > 1 ? 32 : 40), sealY: r.mark.length > 2 ? 63 : (r.mark.length > 1 ? 66 : 68),
+      sealOp: st === 'draf' ? 0.35 : 1,
+      certNo: cd.no, certCode: cd.code,
+      issue: () => { if ((this.props.paket || 'pass') !== 'gratis') this.issue(); }, issued: st !== 'draf', issueOff: st !== 'draf' || (this.props.paket || 'pass') === 'gratis', issueLabel: lockP ? 'Terbitkan (butuh Pass)' : st === 'draf' ? 'Terbitkan sertifikat ini' : 'Sudah terbit',
+      download: () => this.download(), sendOne: () => this.sendOne(), contact: r.contact,
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>

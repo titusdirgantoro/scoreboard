@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Papan Skor — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.sc-btn{cursor:pointer;transition:transform .18s cubic-bezier(.2,.8,.2,1),background-color .2s,border-color .2s,color .2s,box-shadow .2s}
+.sc-btn:hover{transform:translateY(-2px)}
+.sc-btn:active{transform:translateY(1px) scale(.95)}
+.sc-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.sc-tab{cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.sc-tab:hover{border-color:#5A6275!important}
+.sc-tab.is-on{background-color:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.sc-rule{cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.sc-rule:hover{color:#F2F1EC!important}
+.sc-rule.is-on{background-color:#FF7A2E!important;color:#140B05!important}
+.sc-stage{perspective:1600px}
+.sc-board{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.sc-flap{position:relative;overflow:hidden;perspective:700px}
+.sc-flap::after{content:'';position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1px;background:#0B0D12;box-shadow:0 1px 0 rgba(255,255,255,.05)}
+.sc-flap::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(4,5,7,.6) 1px,transparent 1.7px);background-size:6px 6px;pointer-events:none;z-index:1}
+.sc-num{display:inline-block;transform-origin:50% 50%}
+.sc-flip-a{animation:scFlapA .62s cubic-bezier(.2,.9,.25,1.2)}
+.sc-flip-b{animation:scFlapB .62s cubic-bezier(.2,.9,.25,1.2)}
+@keyframes scFlapA{0%{transform:rotateX(-95deg) scale(.9);opacity:.1;filter:brightness(2.4)}100%{transform:none;opacity:1;filter:none}}
+@keyframes scFlapB{0%{transform:rotateX(-95deg) scale(.9);opacity:.1;filter:brightness(2.4)}100%{transform:none;opacity:1;filter:none}}
+.sc-ban{opacity:0;pointer-events:none}
+.sc-ban-a{animation:scBanA 2.2s cubic-bezier(.2,.8,.2,1) both}
+.sc-ban-b{animation:scBanB 2.2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes scBanA{0%{opacity:0;transform:translateZ(-400px) rotateX(70deg)}18%{opacity:1;transform:translateZ(160px) rotateX(-6deg)}75%{opacity:1;transform:translateZ(140px) rotateX(0deg)}100%{opacity:0;transform:translateZ(260px) translateY(-40px)}}
+@keyframes scBanB{0%{opacity:0;transform:translateZ(-400px) rotateX(70deg)}18%{opacity:1;transform:translateZ(160px) rotateX(-6deg)}75%{opacity:1;transform:translateZ(140px) rotateX(0deg)}100%{opacity:0;transform:translateZ(260px) translateY(-40px)}}
+.sc-win{animation:scWin .9s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes scWin{from{opacity:0;transform:perspective(900px) rotateX(-80deg) translateY(-30px)}to{opacity:1;transform:none}}
+.sc-run{animation:scBlink 1s steps(2) infinite}
+@keyframes scBlink{50%{opacity:.35}}
+.sc-log{animation:scLog .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes scLog{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+.sc-set{animation:scSet .6s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes scSet{from{opacity:0;transform:perspective(500px) rotateY(-90deg)}to{opacity:1;transform:none}}
+.sc-kick-a1{animation:scKickA1 .65s cubic-bezier(.3,1.4,.4,1)}.sc-kick-a2{animation:scKickA2 .65s cubic-bezier(.3,1.4,.4,1)}
+.sc-kick-b1{animation:scKickB1 .65s cubic-bezier(.3,1.4,.4,1)}.sc-kick-b2{animation:scKickB2 .65s cubic-bezier(.3,1.4,.4,1)}
+.sc-kick-u1{animation:scKickU1 .7s cubic-bezier(.3,1.3,.4,1)}.sc-kick-u2{animation:scKickU2 .7s cubic-bezier(.3,1.3,.4,1)}
+@keyframes scKickA1{0%{transform:rotateX(3deg)}30%{transform:rotateX(5deg) rotateY(-8deg) translateZ(-46px)}100%{transform:rotateX(3deg)}}
+@keyframes scKickA2{0%{transform:rotateX(3deg)}30%{transform:rotateX(5deg) rotateY(-8deg) translateZ(-46px)}100%{transform:rotateX(3deg)}}
+@keyframes scKickB1{0%{transform:rotateX(3deg)}30%{transform:rotateX(5deg) rotateY(8deg) translateZ(-46px)}100%{transform:rotateX(3deg)}}
+@keyframes scKickB2{0%{transform:rotateX(3deg)}30%{transform:rotateX(5deg) rotateY(8deg) translateZ(-46px)}100%{transform:rotateX(3deg)}}
+@keyframes scKickU1{0%{transform:rotateX(3deg)}35%{transform:rotateX(-12deg) translateZ(-80px)}100%{transform:rotateX(3deg)}}
+@keyframes scKickU2{0%{transform:rotateX(3deg)}35%{transform:rotateX(-12deg) translateZ(-80px)}100%{transform:rotateX(3deg)}}
+.sc-swap-a{animation:scSwapA .85s cubic-bezier(.2,.9,.25,1.15)}.sc-swap-b{animation:scSwapB .85s cubic-bezier(.2,.9,.25,1.15)}
+@keyframes scSwapA{0%{transform:perspective(1600px) rotateX(-78deg) translateY(-40px) scale(.9);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes scSwapB{0%{transform:perspective(1600px) rotateX(-78deg) translateY(-40px) scale(.9);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.sc-still *,.sc-still *::before{animation:none!important}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press {{rootCls}}" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:900px;pointer-events:none;background:radial-gradient(600px 380px at 18% 30%, rgba(255,122,46,.12), transparent 70%), radial-gradient(600px 380px at 82% 30%, rgba(77,124,255,.13), transparent 70%)"></div>
+<header style="position:relative;border-bottom:1px solid #1E222C;background:rgba(13,15,20,.85)">
+<div style="max-width:1320px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="display:flex;align-items:center;gap:8px;font-size:15px;color:#C9CDD6"><sc-if value="{{hasTheme}}" hint-placeholder-val="{{ false }}"><span class="sb-display" style="flex:none;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:{{thP}};color:{{thOnP}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:12px;font-weight:900">{{thIni}}</span></sc-if><span>{{evLabel}} · <strong style="color:#F2F1EC;font-weight:600">Bara vs Samudra</strong></span></span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<a class="sc-btn" href="AturanPoin.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Aturan poin</a>
+<a class="sc-btn" href="Cup.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Mode Cup</a>
+<a class="sc-btn" href="KartuHasil.dc.html" onClick="{{shareResult}}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid rgba(242,194,48,.55);color:#F2D37A;font-size:14px;font-weight:700;text-decoration:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"></rect><path d="M10 18h4"></path></svg>Kartu hasil</a>
+<a class="sc-btn sb-mono" href="Mobile-Skor.dc.html" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:13px;text-decoration:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"></rect><path d="M11 18.5h2"></path></svg>Remote · 4821</a>
+<button class="sc-btn" onClick="{{toggleTv}}" aria-pressed="{{tv}}" style="min-height:44px;padding:0 16px;border-radius:12px;border:1px solid {{tvBorder}};background:{{tvBg}};color:{{tvColor}};font-size:14px;font-weight:700">{{tvLabel}}</button>
+</div>
+</div>
+</header>
+
+<main style="position:relative;max-width:1320px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:18px">
+<sc-if value="{{showCtrl}}" hint-placeholder-val="{{ true }}">
+<div role="group" aria-label="Pilih olahraga" style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{tabs}}" as="o" hint-placeholder-count="7">
+<button class="sc-tab {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 18px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button>
+</sc-for>
+</div>
+<sc-if value="{{hasRules}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;padding:12px 16px;border-radius:16px;border:1px solid #232834;background:#0F1218">
+<sc-for list="{{ruleGroups}}" as="rg" hint-placeholder-count="2">
+<div role="group" aria-label="{{rg.label}}" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#A3A9B6;text-transform:uppercase">{{rg.label}}</span>
+<span style="display:flex;gap:4px;padding:4px;border-radius:12px;background:#181C25;border:1px solid #2A303D;flex-wrap:wrap">
+<sc-for list="{{rg.opts}}" as="op" hint-placeholder-count="2">
+<button class="sc-rule {{op.cls}}" onClick="{{op.pick}}" aria-pressed="{{op.on}}" style="min-height:38px;padding:0 12px;border:0;border-radius:9px;background:transparent;color:#A3A9B6;font-size:13px;font-weight:700">{{op.label}}</button>
+</sc-for>
+</span>
+</div>
+</sc-for>
+<span style="font-size:13px;color:#A3A9B6">Mengganti aturan memulai laga dari 0–0.</span>
+</div>
+</sc-if>
+</sc-if>
+
+<div class="sc-stage sc-swap-{{swapK}}" onMouseMove="{{onTilt}}" onMouseLeave="{{onLeave}}" style="position:relative">
+<div class="sc-board sc-kick-{{kick}}" style="position:relative;transform:rotateX({{rx}}deg) rotateY({{ry}}deg)">
+<div aria-hidden="true" style="position:absolute;inset:0;border-radius:32px;background:#06070A;transform:translateZ(-40px) translateY(18px);box-shadow:0 60px 120px -30px rgba(0,0,0,.9)"></div>
+<div style="position:relative;transform:translateZ(10px);border-radius:32px;border:1px solid #2A303D;background:linear-gradient(180deg,#161A23,#0C0E14);padding:28px;display:flex;flex-direction:column;gap:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+<span class="sb-mono" style="font-size:13px;font-weight:700;letter-spacing:.16em;color:#A3A9B6;text-transform:uppercase">{{sportLabel}} · {{ruleLine}}</span>
+<span class="sb-mono" style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(255,122,46,.14);color:#FFB089;font-size:12px;font-weight:700;letter-spacing:.16em"><span style="width:8px;height:8px;border-radius:50%;background:#FF7A2E"></span>LIVE</span>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:24px;align-items:stretch">
+<div style="display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center">
+<span style="display:flex;align-items:center;gap:12px">
+<span class="sb-display" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:{{badgeA}};color:{{onA}};font-size:24px;font-weight:900">A</span>
+<span class="sb-display" style="font-size:{{nameSize}}px;line-height:1;font-weight:800;text-transform:uppercase">Bara</span>
+<sc-if value="{{serveA}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="padding:4px 8px;border-radius:6px;background:#FF7A2E;color:#140B05;font-size:11px;font-weight:700;letter-spacing:.1em">SERVIS</span></sc-if>
+</span>
+<div class="sc-flap" style="min-width:min(100%,300px);padding:10px 24px;border-radius:24px;background:#040507;border:1px solid #1C2029;display:flex;justify-content:center">
+<span class="sb-display sc-num sc-flip-{{fa}}" style="font-size:{{digitSize}}px;line-height:.9;font-weight:900;color:{{digA}};text-shadow:0 0 40px {{glowA}};font-variant-numeric:tabular-nums">{{mainA}}</span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+<span class="sb-mono" style="font-size:12px;letter-spacing:.12em;color:#A3A9B6;text-transform:uppercase">{{subLabel}}</span>
+<span style="display:flex;gap:5px"><sc-for list="{{dotsA}}" as="d" hint-placeholder-count="3"><span style="width:14px;height:14px;border-radius:4px;background:{{d.c}};border:1px solid #3A4150"></span></sc-for></span>
+<span class="sb-mono" style="font-size:12px;color:#FFB089">{{noteA}}</span>
+</div>
+<sc-if value="{{showCtrl}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+<sc-for list="{{ctrlA}}" as="b" hint-placeholder-count="2">
+<button class="sc-btn" data-fx="a" onClick="{{b.act}}" aria-label="{{b.aria}}" disabled="{{b.dis}}" style="min-height:56px;min-width:84px;padding:0 18px;border-radius:14px;border:1px solid {{b.border}};background:{{b.bg}};color:{{b.fg}};font-size:17px;font-weight:700">{{b.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;text-align:center;padding:16px;border-radius:24px;background:#0B0D12;border:1px solid #1C2029">
+<span class="sb-mono" style="font-size:13px;font-weight:700;letter-spacing:.2em;color:#C9CDD6">{{periodLabel}}</span>
+<sc-if value="{{hasClock}}" hint-placeholder-val="{{ true }}">
+<span class="sb-mono {{runCls}}" style="font-size:{{clockSize}}px;line-height:1;font-weight:700;font-variant-numeric:tabular-nums">{{clock}}</span>
+</sc-if>
+<sc-if value="{{isBasket}}" hint-placeholder-val="{{ false }}">
+<span style="display:flex;align-items:center;gap:10px"><span class="sb-mono" style="font-size:12px;letter-spacing:.14em;color:#A3A9B6">SHOT</span><span class="sb-display" style="font-size:44px;line-height:1;font-weight:900;color:{{shotColor}}">{{shot}}</span></span>
+</sc-if>
+<sc-if value="{{hasCenterBig}}" hint-placeholder-val="{{ false }}">
+<span class="sb-display" style="font-size:{{centerSize}}px;line-height:.95;font-weight:900">{{centerBig}}</span>
+</sc-if>
+<span style="font-size:15px;line-height:1.45;color:{{noteColor}};max-width:250px;font-weight:{{noteWeight}}">{{centerNote}}</span>
+<sc-if value="{{showCtrl}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+<sc-for list="{{ctrlMid}}" as="b" hint-placeholder-count="2">
+<button class="sc-btn" data-fx="w" onClick="{{b.act}}" disabled="{{b.dis}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:14px;font-weight:600">{{b.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center">
+<span style="display:flex;align-items:center;gap:12px">
+<sc-if value="{{serveB}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="padding:4px 8px;border-radius:6px;background:#4D7CFF;color:#0B0D12;font-size:11px;font-weight:700;letter-spacing:.1em">SERVIS</span></sc-if>
+<span class="sb-display" style="font-size:{{nameSize}}px;line-height:1;font-weight:800;text-transform:uppercase">Samudra</span>
+<span class="sb-display" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:{{badgeB}};color:{{onB}};font-size:24px;font-weight:900">B</span>
+</span>
+<div class="sc-flap" style="min-width:min(100%,300px);padding:10px 24px;border-radius:24px;background:#040507;border:1px solid #1C2029;display:flex;justify-content:center">
+<span class="sb-display sc-num sc-flip-{{fb}}" style="font-size:{{digitSize}}px;line-height:.9;font-weight:900;color:{{digB}};text-shadow:0 0 40px {{glowB}};font-variant-numeric:tabular-nums">{{mainB}}</span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+<span class="sb-mono" style="font-size:12px;letter-spacing:.12em;color:#A3A9B6;text-transform:uppercase">{{subLabel}}</span>
+<span style="display:flex;gap:5px"><sc-for list="{{dotsB}}" as="d" hint-placeholder-count="3"><span style="width:14px;height:14px;border-radius:4px;background:{{d.c}};border:1px solid #3A4150"></span></sc-for></span>
+<span class="sb-mono" style="font-size:12px;color:#9DB6FF">{{noteB}}</span>
+</div>
+<sc-if value="{{showCtrl}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+<sc-for list="{{ctrlB}}" as="b" hint-placeholder-count="2">
+<button class="sc-btn" data-fx="b" onClick="{{b.act}}" aria-label="{{b.aria}}" disabled="{{b.dis}}" style="min-height:56px;min-width:84px;padding:0 18px;border-radius:14px;border:1px solid {{b.border}};background:{{b.bg}};color:{{b.fg}};font-size:17px;font-weight:700">{{b.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{hasSets}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">{{setsTitle}}</span>
+<sc-for list="{{setChips}}" as="sc" hint-placeholder-count="2">
+<span class="sc-set sb-mono" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:#0B0D12;border:1px solid {{sc.border}};font-size:13px"><span style="color:#A3A9B6">{{sc.k}}</span><span style="font-weight:700;color:#F2F1EC">{{sc.v}}</span></span>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{hasWinner}}" hint-placeholder-val="{{ false }}">
+<div class="sc-win" role="status" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;border-radius:20px;background:#F2F1EC;color:#14161C">
+<span style="display:flex;flex-direction:column;gap:4px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.16em;color:#5A5F6B">PERTANDINGAN SELESAI</span>
+<span class="sb-display" style="font-size:44px;line-height:1;font-weight:900;text-transform:uppercase">{{winnerLine}}</span>
+</span>
+<span style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="sc-btn" onClick="{{undo}}" style="min-height:48px;padding:0 18px;border-radius:12px;border:1px solid #C9C6BC;background:transparent;color:#14161C;font-size:15px;font-weight:600">Batalkan poin terakhir</button>
+<a class="sc-btn" href="Cup.dc.html" style="display:inline-flex;align-items:center;min-height:48px;padding:0 18px;border-radius:12px;border:1px solid #C9C6BC;color:#14161C;font-size:15px;font-weight:600;text-decoration:none">Kirim ke bracket Cup</a>
+<button class="sc-btn" onClick="{{resetMatch}}" style="min-height:48px;padding:0 18px;border-radius:12px;border:0;background:#14161C;color:#F2F1EC;font-size:15px;font-weight:700">Laga baru</button>
+</span>
+</div>
+</sc-if>
+</div>
+<div class="sc-ban sc-ban-{{bk}}" aria-hidden="true" style="position:absolute;left:0;right:0;top:34%;display:flex;justify-content:center;pointer-events:none">
+<span class="sb-display" style="padding:14px 34px;border-radius:20px;background:#F2F1EC;color:#0B0D12;font-size:64px;line-height:1;font-weight:900;text-transform:uppercase;box-shadow:0 30px 80px -10px rgba(0,0,0,.7)">{{bannerTxt}}</span>
+</div>
+</div>
+</div>
+
+<sc-if value="{{showCtrl}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+<div style="flex:999 1 520px;min-width:0;padding:20px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:12px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">CATATAN LAGA</span>
+<ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column">
+<sc-for list="{{log}}" as="e" hint-placeholder-count="4">
+<li class="sc-log" style="display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0;border-bottom:1px solid #1E222C;font-size:15px"><span class="sb-mono" style="font-size:12px;color:#A3A9B6;padding-top:2px">{{e.t}}</span><span>{{e.txt}}</span></li>
+</sc-for>
+</ol>
+</div>
+<div style="flex:1 1 260px;padding:20px;border-radius:20px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:10px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">KENDALI WASIT</span>
+<button class="sc-btn" onClick="{{undo}}" disabled="{{noUndo}}" style="min-height:48px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"></path></svg>Batalkan</button>
+<button class="sc-btn" onClick="{{resetMatch}}" style="min-height:48px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:15px;font-weight:600">Mulai dari 0–0</button>
+<p style="margin:4px 0 0;font-size:13px;line-height:1.5;color:#A3A9B6">{{ruleHelp}}</p>
+</div>
+</div>
+</sc-if>
+</main>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"animasi":{"editor":"boolean","default":true},"$preview":{"width":1440,"height":1260}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      sport: 'futsal',
+      bdFmt: '21', tnDeuce: 'ad', tnFinal: 'tb10', pdDeuce: 'star', pdThird: 'set', ttBest: '5',
+      g: this.demo('futsal'), log: this.demoLog('futsal'), hist: [],
+      fa: 'n', fb: 'n', bk: 'n', bannerTxt: '', tv: false, rx: 3, ry: 0, kick: 'n', swapK: 'n', theme: this.readTheme()
+    };
+  }
+  kickOf(side) {
+    const cur = this.state.kick;
+    return side + (cur === side + '1' ? '2' : '1');
+  }
+  other(s) { return s === 'a' ? 'b' : 'a'; }
+  tog(v) { return v === 'a' ? 'b' : 'a'; }
+  nm(s) { return s === 'a' ? 'Bara' : 'Samudra'; }
+  side(o) { return Object.assign({ pts: 0, games: 0, sets: 0, fouls: 0, to: 0 }, o || {}); }
+  base(o) {
+    return Object.assign({ a: this.side(), b: this.side(), period: 1, secs: 0, shot: 0, running: false, server: 'a', winner: '', tb: false, mtb: false, tbTarget: 7, tbFirst: 'a', deuceN: 0, gFirst: 'a', done: [] }, o);
+  }
+  demo(sp) {
+    const S = (o) => this.side(o);
+    if (sp === 'badminton') {
+      const f15 = !!(this.state && this.state.bdFmt === '15');
+      return f15
+        ? this.base({ a: S({ pts: 13, games: 1 }), b: S({ pts: 12, games: 1 }), period: 3, done: [{ a: 15, b: 12 }, { a: 11, b: 15 }] })
+        : this.base({ a: S({ pts: 18, games: 1 }), b: S({ pts: 17, games: 1 }), period: 3, done: [{ a: 21, b: 19 }, { a: 17, b: 21 }] });
+    }
+    if (sp === 'tenis') return this.base({ a: S({ pts: 3, games: 5, sets: 1 }), b: S({ pts: 3, games: 4 }), period: 2, server: 'a', deuceN: 1, done: [{ a: 6, b: 4 }] });
+    if (sp === 'padel') return this.base({ a: S({ pts: 3, games: 5, sets: 1 }), b: S({ pts: 3, games: 4 }), period: 2, server: 'b', deuceN: 2, done: [{ a: 6, b: 3 }] });
+    if (sp === 'tt') return this.base({ a: S({ pts: 9, games: 2 }), b: S({ pts: 10, games: 1 }), period: 4, gFirst: 'b', done: [{ a: 11, b: 8 }, { a: 9, b: 11 }, { a: 11, b: 7 }] });
+    if (sp === 'voli') return this.base({ a: S({ pts: 12, sets: 2, to: 1 }), b: S({ pts: 10, sets: 2 }), period: 5, done: [{ a: 25, b: 22 }, { a: 20, b: 25 }, { a: 25, b: 23 }, { a: 22, b: 25 }] });
+    if (sp === 'basket') return this.base({ a: S({ pts: 78, fouls: 3 }), b: S({ pts: 81, fouls: 4 }), period: 4, secs: 134, shot: 14 });
+    return this.base({ a: S({ pts: 3, fouls: 2 }), b: S({ pts: 2, fouls: 3 }), period: 2, secs: 436 });
+  }
+  zero(sp) {
+    return this.base({ secs: sp === 'futsal' ? 1200 : (sp === 'basket' ? 600 : 0), shot: sp === 'basket' ? 24 : 0 });
+  }
+  demoLog(sp) {
+    const m = {
+      futsal: [{ t: 'B2 · 09:58', txt: 'Gol — Bara' }, { t: 'B2 · 14:20', txt: 'Foul — Samudra' }],
+      badminton: [{ t: 'Gim 2', txt: 'Gim 2 untuk Samudra' }, { t: 'Gim 1', txt: 'Gim 1 untuk Bara' }],
+      tenis: [{ t: 'Set 2 · 5–4', txt: 'Deuce' }, { t: 'Set 1', txt: 'Set 1 untuk Bara 6–4' }],
+      padel: [{ t: 'Set 2 · 5–4', txt: 'Deuce 2 — sekali lagi deuce, Star Point' }, { t: 'Set 1', txt: 'Set 1 untuk Bara 6–3' }],
+      tt: [{ t: 'Gim 3', txt: 'Gim 3 untuk Bara (11–7)' }, { t: 'Gim 2', txt: 'Gim 2 untuk Samudra (9–11)' }],
+      voli: [{ t: 'Set 4', txt: 'Set 4 untuk Samudra (22–25)' }, { t: 'Set 5', txt: 'Time-out — Bara' }],
+      basket: [{ t: 'Q4 · 02:30', txt: '+3 — Samudra' }, { t: 'Q4 · 02:51', txt: '+2 — Bara' }]
+    };
+    return m[sp] || [];
+  }
+  componentDidMount() {
+    this.watchTheme();
+    this.iv = setInterval(() => {
+      const g = this.state.g;
+      if (!g.running) return;
+      const ng = Object.assign({}, g);
+      if (ng.secs > 0) ng.secs -= 1;
+      if (this.state.sport === 'basket' && ng.shot > 0) ng.shot -= 1;
+      if (ng.secs === 0) {
+        ng.running = false;
+        this.setState({ g: ng, log: [{ t: this.stamp(this.state.sport, ng), txt: 'Waktu habis' }].concat(this.state.log).slice(0, 8) });
+        return;
+      }
+      this.setState({ g: ng });
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  mmss(v) {
+    const p = (x) => String(x).padStart(2, '0');
+    return p(Math.floor(v / 60)) + ':' + p(v % 60);
+  }
+  stamp(sp, g) {
+    if (sp === 'futsal') return 'B' + g.period + ' · ' + this.mmss(g.secs);
+    if (sp === 'basket') return 'Q' + g.period + ' · ' + this.mmss(g.secs);
+    if (sp === 'badminton' || sp === 'tt') return 'Gim ' + g.period;
+    if (sp === 'tenis' || sp === 'padel') return 'Set ' + g.period + (g.tb ? ' · TB' : ' · ' + g.a.games + '–' + g.b.games);
+    return 'Set ' + g.period;
+  }
+  deuceMode() {
+    const s = this.state;
+    if (s.sport === 'tenis') return s.tnDeuce === 'noad' ? 'golden' : 'ad';
+    return s.pdDeuce;
+  }
+  serverOf(g) {
+    const sp = this.state.sport;
+    if (sp === 'tt') {
+      const n = g.a.pts + g.b.pts;
+      const k = n < 20 ? Math.floor(n / 2) : n - 10;
+      return k % 2 === 0 ? g.gFirst : this.other(g.gFirst);
+    }
+    if ((sp === 'tenis' || sp === 'padel') && g.tb) {
+      const n = g.a.pts + g.b.pts;
+      if (n === 0) return g.tbFirst;
+      return Math.floor((n - 1) / 2) % 2 === 0 ? this.other(g.tbFirst) : g.tbFirst;
+    }
+    return g.server;
+  }
+  commit(mut, side) {
+    const st = this.state;
+    if (st.g.winner) return;
+    const g = JSON.parse(JSON.stringify(st.g));
+    const res = mut(g);
+    if (!res) return;
+    const label = this.stamp(st.sport, st.g);
+    const lines = [res.msg].concat(res.extra || []);
+    const entries = lines.map((t) => ({ t: label, txt: t })).reverse();
+    const upd = { g: g, hist: st.hist.concat([JSON.stringify({ g: st.g, log: st.log })]).slice(-50), log: entries.concat(st.log).slice(0, 8) };
+    if (res.both || side === 'a') upd.fa = this.tog(st.fa);
+    if (res.both || side === 'b') upd.fb = this.tog(st.fb);
+    if (res.banner) { upd.bk = this.tog(st.bk); upd.bannerTxt = res.banner; }
+    if (side === 'a' || side === 'b') upd.kick = this.kickOf(side);
+    this.setState(upd);
+    if (g.winner && !st.g.winner) setTimeout(() => this.celebrate('y'), 150);
+    else if (res.banner && res.both) {
+      const p = this.lastXY || { x: 300, y: 300 };
+      const c = side === 'b' ? 'b' : 'a';
+      setTimeout(() => this.burstMany([{ x: p.x, y: p.y, c: c, big: true }, { x: p.x + 90, y: p.y - 70, c: 'w' }]), 120);
+    }
+  }
+  shareResult() {
+    const st = this.state; const sp = st.sport; const g = st.g;
+    const labels = { futsal: 'Futsal', badminton: 'Bulu Tangkis', tenis: 'Tenis', padel: 'Padel', tt: 'Tenis Meja', voli: 'Bola Voli', basket: 'Basket' };
+    const setBased = sp === 'badminton' || sp === 'tt' || sp === 'voli' || sp === 'tenis' || sp === 'padel';
+    const key = (sp === 'badminton' || sp === 'tt') ? 'games' : 'sets';
+    const m = {
+      sport: sp, sportLabel: labels[sp] || sp, a: this.nm('a'), b: this.nm('b'),
+      sa: setBased ? g.a[key] : g.a.pts, sb: setBased ? g.b[key] : g.b.pts,
+      unit: setBased ? (key === 'games' ? 'gim' : 'set') : (sp === 'futsal' ? 'gol' : 'poin'),
+      sets: setBased ? (g.done || []).map((e) => this.setLabel(e)) : [], live: !g.winner, at: Date.now()
+    };
+    try { window.localStorage.setItem('sbLastMatch', JSON.stringify(m)); } catch (e) { }
+  }
+  setLabel(e) {
+    if (e.mtb) return '[' + e.ta + '–' + e.tb + ']';
+    if (e.ta !== undefined) return e.a + '–' + e.b + ' (' + Math.min(e.ta, e.tb) + ')';
+    return e.a + '–' + e.b;
+  }
+  racketSetWon(g, side, lines) {
+    const sp = this.state.sport;
+    const o = this.other(side);
+    const A = g[side];
+    const B = g[o];
+    const name = this.nm(side);
+    const entry = { a: g.a.games, b: g.b.games };
+    if (g.tb) { entry.ta = g.a.pts; entry.tb = g.b.pts; entry.mtb = g.mtb; }
+    g.done.push(entry);
+    A.sets += 1;
+    lines.push('Set ' + g.period + ' untuk ' + name + ' ' + this.setLabel(entry));
+    if (g.tb) g.server = this.other(g.tbFirst);
+    g.tb = false; g.mtb = false; g.deuceN = 0;
+    A.pts = 0; B.pts = 0; A.games = 0; B.games = 0;
+    if (A.sets >= 2) {
+      g.winner = side;
+      lines.push(name + ' menang ' + A.sets + '–' + B.sets + ' set');
+      return { msg: 'Poin — ' + name, extra: lines, banner: name + ' menang!', both: true };
+    }
+    g.period += 1;
+    if (sp === 'padel' && this.state.pdThird === 'stb' && g.a.sets === 1 && g.b.sets === 1) {
+      g.tb = true; g.mtb = true; g.tbTarget = 10; g.tbFirst = g.server;
+      lines.push('Set 3 diganti super tie-break (main ke 10, selisih 2)');
+    }
+    return { msg: 'Poin — ' + name, extra: lines, banner: 'Set untuk ' + name, both: true };
+  }
+  racketPoint(g, side) {
+    const st = this.state;
+    const sp = st.sport;
+    const o = this.other(side);
+    const A = g[side];
+    const B = g[o];
+    const name = this.nm(side);
+    if (g.tb) {
+      A.pts += 1;
+      if (A.pts >= g.tbTarget && A.pts - B.pts >= 2) {
+        if (!g.mtb) A.games += 1;
+        return this.racketSetWon(g, side, [(g.mtb ? 'Super tie-break' : 'Tie-break') + ' untuk ' + name + ' ' + g[side === 'a' ? 'a' : 'b'].pts + '–' + B.pts]);
+      }
+      return { msg: 'Poin tie-break — ' + name };
+    }
+    const mode = this.deuceMode();
+    let won = false;
+    let decisive = '';
+    if (A.pts <= 2) {
+      A.pts += 1;
+      if (A.pts === 3 && B.pts === 3) { g.deuceN = 1; return { msg: 'Poin — ' + name, extra: [mode === 'golden' ? (sp === 'tenis' ? 'Deuce — poin penentu (No-Ad)' : 'Deuce — golden point') : 'Deuce'] }; }
+    } else if (A.pts === 3) {
+      if (B.pts <= 2) won = true;
+      else if (B.pts === 3) {
+        if (mode === 'golden') { won = true; decisive = sp === 'tenis' ? ' (poin penentu)' : ' (golden point)'; }
+        else if (mode === 'star' && g.deuceN >= 3) { won = true; decisive = ' (star point)'; }
+        else { A.pts = 4; return { msg: 'Poin — ' + name, extra: ['Advantage ' + name] }; }
+      } else {
+        B.pts = 3; g.deuceN += 1;
+        const dl = mode === 'star' ? (g.deuceN >= 3 ? 'Deuce 3 — Star Point berikutnya' : 'Deuce ' + g.deuceN) : 'Kembali deuce';
+        return { msg: 'Poin — ' + name, extra: [dl] };
+      }
+    } else if (A.pts === 4) won = true;
+    if (!won) return { msg: 'Poin — ' + name };
+    A.pts = 0; B.pts = 0; g.deuceN = 0; A.games += 1;
+    g.server = this.other(g.server);
+    const lines = ['Gim untuk ' + name + decisive + ' · ' + g.a.games + '–' + g.b.games];
+    if (A.games >= 6 && A.games - B.games >= 2) return this.racketSetWon(g, side, lines);
+    if (A.games === 6 && B.games === 6) {
+      const deciding = g.a.sets === 1 && g.b.sets === 1;
+      g.tb = true; g.mtb = false; g.tbFirst = g.server;
+      g.tbTarget = (sp === 'tenis' && deciding && st.tnFinal === 'tb10') ? 10 : 7;
+      lines.push('6–6: tie-break main ke ' + g.tbTarget + ', selisih 2');
+      return { msg: 'Poin — ' + name, extra: lines, banner: g.tbTarget === 10 ? 'Super tie-break' : 'Tie-break', both: true };
+    }
+    return { msg: 'Poin — ' + name, extra: lines, banner: decisive ? 'Gim ' + name : '', both: true };
+  }
+  rallyPoint(g, side, target, cap, need, unit, key) {
+    const o = this.other(side);
+    const A = g[side];
+    const B = g[o];
+    const name = this.nm(side);
+    A.pts += 1;
+    const won = (A.pts >= target && A.pts - B.pts >= 2) || (cap > 0 && A.pts === cap);
+    if (!won) return { msg: 'Poin — ' + name };
+    A[key] += 1;
+    g.done.push({ a: g.a.pts, b: g.b.pts });
+    const line = unit + ' ' + g.period + ' untuk ' + name + ' (' + g.a.pts + '–' + g.b.pts + ')';
+    if (A[key] >= need) {
+      g.winner = side;
+      return { msg: 'Poin — ' + name, extra: [line, name + ' menang ' + A[key] + '–' + B[key]], banner: name + ' menang!', both: true };
+    }
+    g.period += 1; A.pts = 0; B.pts = 0; A.to = 0; B.to = 0;
+    return { msg: 'Poin — ' + name, extra: [line], banner: unit + ' untuk ' + name, both: true };
+  }
+  point(side, amt) {
+    const st = this.state;
+    const sp = st.sport;
+    const name = this.nm(side);
+    this.commit((g) => {
+      const A = g[side];
+      if (sp === 'futsal') { A.pts += 1; return { msg: 'Gol — ' + name, banner: 'Gol! ' + name }; }
+      if (sp === 'basket') { A.pts += amt; g.shot = 24; return { msg: '+' + amt + ' — ' + name, banner: amt === 3 ? 'Tripoin! ' + name : '' }; }
+      if (sp === 'badminton') {
+        g.server = side;
+        const f15 = st.bdFmt === '15';
+        return this.rallyPoint(g, side, f15 ? 15 : 21, f15 ? 21 : 30, 2, 'Gim', 'games');
+      }
+      if (sp === 'voli') {
+        g.server = side;
+        return this.rallyPoint(g, side, g.period === 5 ? 15 : 25, 0, 3, 'Set', 'sets');
+      }
+      if (sp === 'tt') {
+        const res = this.rallyPoint(g, side, 11, 0, st.ttBest === '7' ? 4 : 3, 'Gim', 'games');
+        if (res && res.both && !g.winner) g.gFirst = this.other(g.gFirst);
+        return res;
+      }
+      return this.racketPoint(g, side);
+    }, side);
+  }
+  foul(side) {
+    const sp = this.state.sport;
+    const name = this.nm(side);
+    this.commit((g) => {
+      const A = g[side];
+      A.fouls += 1;
+      let note = '';
+      if (sp === 'futsal' && A.fouls >= 6) note = ' · tendangan bebas 10 m untuk lawan';
+      if (sp === 'basket' && A.fouls >= 5) note = ' · lawan dapat lemparan bebas';
+      return { msg: 'Foul — ' + name + note };
+    }, side);
+  }
+  timeout(side) {
+    const name = this.nm(side);
+    this.commit((g) => {
+      if (g[side].to >= 2) return null;
+      g[side].to += 1;
+      return { msg: 'Time-out — ' + name };
+    }, side);
+  }
+  nextPeriod() {
+    const sp = this.state.sport;
+    this.commit((g) => {
+      const max = sp === 'futsal' ? 2 : 4;
+      if (g.period >= max) {
+        if (g.a.pts === g.b.pts) return { msg: 'Waktu normal selesai — skor imbang', banner: 'Imbang' };
+        const w = g.a.pts > g.b.pts ? 'a' : 'b';
+        g.winner = w; g.running = false;
+        return { msg: this.nm(w) + ' menang ' + Math.max(g.a.pts, g.b.pts) + '–' + Math.min(g.a.pts, g.b.pts), banner: this.nm(w) + ' menang!', both: true };
+      }
+      g.period += 1;
+      g.secs = sp === 'futsal' ? 1200 : 600;
+      g.shot = sp === 'basket' ? 24 : 0;
+      g.running = false;
+      g.a.fouls = 0; g.b.fouls = 0;
+      return { msg: (sp === 'futsal' ? 'Babak ' : 'Kuarter ') + g.period + ' siap dimulai', both: true };
+    }, '');
+  }
+  setRule(key, val, label) {
+    const s = this.state;
+    if (s[key] === val) return;
+    const upd = { g: this.zero(s.sport), hist: [], log: [{ t: 'Aturan', txt: 'Aturan diganti: ' + label + ' — laga dimulai dari 0–0' }], fa: this.tog(s.fa), fb: this.tog(s.fb), swapK: this.tog(s.swapK) };
+    upd[key] = val;
+    this.setState(upd);
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  readTheme() {
+    try { const t = JSON.parse(window.localStorage.getItem('sbEventTheme') || 'null'); return t && t.primary ? t : null; } catch (e) { return null; }
+  }
+  watchTheme() {
+    this.onStore = (e) => { if (e.key === 'sbEventTheme') this.setState({ theme: this.readTheme() }); };
+    try { window.addEventListener('storage', this.onStore); } catch (e) { }
+  }
+  thLum(hex) {
+    const h = (hex || '#000000').replace('#', '');
+    const v = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  thOn(hex) { const l = this.thLum(hex); return (l + 0.05) / 0.05 >= 1.05 / (l + 0.05) ? '#0B0D12' : '#FFFFFF'; }
+  thReadable(col, bg) {
+    let c = col; let i = 0;
+    const con = (a, b) => { const x = this.thLum(a); const y = this.thLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const toward = this.thLum(bg) < 0.2 ? 'FFFFFF' : '000000';
+    while (con(c, bg) < 4.5 && i < 10) {
+      const a = c.replace('#', '');
+      c = '#' + [0, 2, 4].map((k) => Math.round(parseInt(a.substr(k, 2), 16) * 0.85 + parseInt(toward.substr(k, 2), 16) * 0.15).toString(16).padStart(2, '0')).join('');
+      i++;
+    }
+    return c;
+  }
+  thIni(n) {
+    const w = (n || '').trim().split(/\s+/).filter((x) => /[A-Za-z]/.test(x));
+    return ((w[0] || 'E')[0] + (w[1] ? w[1][0] : '')).toUpperCase();
+  }
+  renderVals() {
+    const st = this.state;
+    const sp = st.sport;
+    const g = st.g;
+    const anim = this.props.animasi ?? true;
+    const isClock = sp === 'futsal' || sp === 'basket';
+    const isTn = sp === 'tenis' || sp === 'padel';
+    const PT = ['0', '15', '30', '40', 'AD'];
+    const done = !!g.winner;
+    const server = this.serverOf(g);
+    const orangeBtn = { border: 'rgba(255,122,46,.6)', bg: 'rgba(255,122,46,.14)', fg: '#FFB089' };
+    const blueBtn = { border: 'rgba(77,124,255,.65)', bg: 'rgba(77,124,255,.14)', fg: '#9DB6FF' };
+    const mk = (side) => {
+      const c = side === 'a' ? orangeBtn : blueBtn;
+      const name = this.nm(side);
+      const btn = (label, act, aria, dis) => ({ label: label, act: act, aria: aria, dis: !!dis || done, border: c.border, bg: c.bg, fg: c.fg });
+      if (sp === 'futsal') return [btn('+ Gol', () => this.point(side, 1), 'Gol untuk ' + name), btn('Foul', () => this.foul(side), 'Foul ' + name)];
+      if (sp === 'basket') return [btn('+1', () => this.point(side, 1), '1 poin untuk ' + name), btn('+2', () => this.point(side, 2), '2 poin untuk ' + name), btn('+3', () => this.point(side, 3), '3 poin untuk ' + name), btn('Foul', () => this.foul(side), 'Foul ' + name)];
+      if (sp === 'voli') return [btn('+ Poin', () => this.point(side, 1), 'Poin untuk ' + name), btn('Time-out', () => this.timeout(side), 'Time-out ' + name, g[side].to >= 2)];
+      return [btn('+ Poin', () => this.point(side, 1), 'Poin untuk ' + name)];
+    };
+    const need = sp === 'tt' ? (st.ttBest === '7' ? 4 : 3) : (sp === 'voli' ? 3 : 2);
+    const dots = (side) => {
+      const s = g[side];
+      const col = side === 'a' ? '#FF7A2E' : '#4D7CFF';
+      let n = need; let on = 0;
+      if (isClock) { n = 5; on = Math.min(5, s.fouls); }
+      else if (sp === 'badminton' || sp === 'tt') on = s.games;
+      else on = s.sets;
+      const out = [];
+      for (let i = 0; i < n; i++) out.push({ c: i < on ? col : 'transparent' });
+      return out;
+    };
+    const note = (side) => {
+      const s = g[side];
+      if (sp === 'futsal') return s.fouls >= 5 ? (s.fouls >= 6 ? 'Foul ' + s.fouls + ' · tendangan bebas' : 'Batas 5 foul') : 'Foul ' + s.fouls;
+      if (sp === 'basket') return s.fouls >= 4 ? 'Foul ' + s.fouls + ' · batas tim' : 'Foul ' + s.fouls;
+      if (sp === 'voli') return 'Time-out ' + s.to + '/2';
+      if (isTn) return g.tb ? 'TB ' + s.pts : 'Gim ' + s.games;
+      return '';
+    };
+    const subLabel = isClock ? 'Foul tim' : ((sp === 'badminton' || sp === 'tt') ? 'Gim' : 'Set');
+    let periodLabel = '';
+    let ruleLine = '';
+    let centerBig = '';
+    let centerNote = '';
+    let hot = false;
+    let ruleHelp = 'Semua perubahan tercatat dan bisa dibatalkan satu per satu.';
+    const srvName = this.nm(server);
+    if (sp === 'futsal') { periodLabel = 'BABAK ' + g.period + ' / 2'; ruleLine = '2 × 20 menit · waktu bersih'; centerNote = g.running ? 'Waktu berjalan' : 'Waktu dijeda'; ruleHelp = 'Foul ke-6 dan seterusnya dalam satu babak: tendangan bebas langsung dari titik 10 m.'; }
+    if (sp === 'basket') { periodLabel = 'KUARTER ' + g.period + ' / 4'; ruleLine = '4 × 10 menit · FIBA'; centerNote = g.running ? 'Waktu berjalan' : 'Waktu dijeda'; ruleHelp = 'Mulai foul tim ke-5 dalam satu kuarter, lawan mendapat lemparan bebas.'; }
+    if (sp === 'badminton') {
+      const f15 = st.bdFmt === '15';
+      const target = f15 ? 15 : 21;
+      const cap = f15 ? 21 : 30;
+      periodLabel = 'GIM ' + g.period + ' / 3';
+      ruleLine = 'Rally point · main ke ' + target + ' · maks ' + cap;
+      centerBig = g.a.games + ' – ' + g.b.games;
+      const lo = Math.min(g.a.pts, g.b.pts);
+      const hi = Math.max(g.a.pts, g.b.pts);
+      if (g.a.pts === cap - 1 && g.b.pts === cap - 1) { centerNote = 'Poin emas ' + (cap - 1) + '–' + (cap - 1) + ': poin berikut menang'; hot = true; }
+      else if (lo >= target - 1) { centerNote = 'Setting — butuh selisih 2 (maks ' + cap + ')'; hot = true; }
+      else if (hi >= target - 1) { centerNote = 'Game point · servis ' + srvName; hot = true; }
+      else centerNote = 'Servis: ' + srvName + ' (pemenang reli)';
+      ruleHelp = f15 ? 'BWF 3×15 berlaku mulai 4 Januari 2027: di 14–14 butuh selisih 2, di 20–20 poin berikut menang.' : '3×21: di 20–20 butuh selisih 2, di 29–29 poin berikut menang. Pemenang reli melakukan servis.';
+    }
+    if (sp === 'voli') {
+      const target = g.period === 5 ? 15 : 25;
+      periodLabel = 'SET ' + g.period + ' / 5'; ruleLine = 'Best of 5 · set ' + g.period + ' main ke ' + target;
+      centerBig = g.a.sets + ' – ' + g.b.sets;
+      if (g.a.pts >= target - 1 && g.b.pts >= target - 1) { centerNote = 'Deuce — butuh selisih 2 poin'; hot = true; }
+      else centerNote = 'Servis: ' + srvName;
+      ruleHelp = 'Set 1–4 main ke 25, set 5 main ke 15, semua dengan selisih 2 dan tanpa batas atas.';
+    }
+    if (sp === 'tt') {
+      const n = g.a.pts + g.b.pts;
+      periodLabel = 'GIM ' + g.period + ' / ' + (need * 2 - 1);
+      ruleLine = 'Best of ' + (need * 2 - 1) + ' · main ke 11, selisih 2';
+      centerBig = g.a.games + ' – ' + g.b.games;
+      if (g.a.pts >= 10 && g.b.pts >= 10) { centerNote = 'Deuce — servis bergantian tiap poin · ' + srvName; hot = true; }
+      else centerNote = 'Servis: ' + srvName + ' · ' + (n % 2 === 0 ? '2 servis' : 'servis ke-2');
+      ruleHelp = 'Servis berganti tiap 2 poin; di 10–10 berganti tiap poin. Gim berikutnya, yang menerima lebih dulu ganti melakukan servis.';
+    }
+    if (isTn) {
+      const mode = this.deuceMode();
+      const isTenis = sp === 'tenis';
+      const modeName = isTenis ? (mode === 'golden' ? 'No-Ad' : 'Advantage') : ({ star: 'Star Point', golden: 'Golden Point', ad: 'Advantage' }[mode]);
+      periodLabel = 'SET ' + g.period + ' / 3';
+      ruleLine = (isTenis ? 'Best of 3' : 'Ganda · best of 3') + ' · ' + modeName;
+      centerBig = g.tb ? (g.mtb || g.tbTarget === 10 ? 'Super tie-break' : 'Tie-break') : ('Gim ' + g.a.games + ' – ' + g.b.games);
+      if (g.tb) { centerNote = 'Main ke ' + g.tbTarget + ', selisih 2 · servis ' + srvName; hot = true; }
+      else if (g.a.pts === 3 && g.b.pts === 3) {
+        hot = true;
+        if (mode === 'golden') centerNote = isTenis ? 'Deuce No-Ad: satu poin penentu, penerima pilih sisi' : 'Golden point: satu poin penentu gim';
+        else if (mode === 'star') centerNote = g.deuceN >= 3 ? 'Star Point: satu poin penentu, penerima pilih sisi' : 'Deuce ' + g.deuceN + ' dari 3 · advantage dimainkan';
+        else centerNote = 'Deuce — butuh 2 poin beruntun';
+      } else if (g.a.pts === 4 || g.b.pts === 4) { centerNote = 'Advantage ' + (g.a.pts === 4 ? 'Bara' : 'Samudra'); hot = true; }
+      else centerNote = 'Servis: ' + srvName + ' · ganti tiap gim';
+      ruleHelp = isTenis
+        ? 'Set ke 6 gim dengan selisih 2; di 6–6 tie-break ke 7. ' + (st.tnFinal === 'tb10' ? 'Set penentu memakai tie-break ke 10 di 6–6.' : 'Set penentu memakai tie-break ke 7.')
+        : 'FIP 2026: Star Point = advantage dua kali, deuce ketiga satu poin penentu. ' + (st.pdThird === 'stb' ? 'Set 3 diganti super tie-break ke 10.' : 'Set 3 dimainkan penuh.');
+    }
+    if (done) { centerNote = 'Pertandingan selesai'; hot = false; }
+    const mid = [];
+    if (isClock) {
+      mid.push({ label: g.running ? 'Jeda' : 'Mulai', dis: done || g.secs === 0, act: () => this.setState({ g: Object.assign({}, this.state.g, { running: !this.state.g.running }) }) });
+      if (sp === 'basket') mid.push({ label: 'Reset 24', dis: done, act: () => this.setState({ g: Object.assign({}, this.state.g, { shot: 24 }) }) });
+      mid.push({ label: sp === 'futsal' ? (g.period >= 2 ? 'Akhiri laga' : 'Babak 2') : (g.period >= 4 ? 'Akhiri laga' : 'Kuarter ' + (g.period + 1)), dis: done, act: () => this.nextPeriod() });
+    }
+    const mainOf = (side) => {
+      if (isTn && !g.tb) return PT[g[side].pts];
+      return String(g[side].pts);
+    };
+    const tv = st.tv;
+    const tabsDef = [
+      { id: 'futsal', label: 'Futsal' },
+      { id: 'badminton', label: 'Bulu Tangkis' },
+      { id: 'tenis', label: 'Tenis' },
+      { id: 'padel', label: 'Padel' },
+      { id: 'tt', label: 'Tenis Meja' },
+      { id: 'voli', label: 'Bola Voli' },
+      { id: 'basket', label: 'Basket' }
+    ];
+    const opt = (key, val, label, full) => ({ label: label, on: st[key] === val, cls: st[key] === val ? 'is-on' : '', pick: () => this.setRule(key, val, full || label) });
+    let ruleGroups = [];
+    if (sp === 'badminton') ruleGroups = [{ label: 'Format', opts: [opt('bdFmt', '21', '3 × 21 klasik'), opt('bdFmt', '15', '3 × 15 · BWF 2027')] }];
+    if (sp === 'tenis') ruleGroups = [{ label: 'Deuce', opts: [opt('tnDeuce', 'ad', 'Advantage'), opt('tnDeuce', 'noad', 'No-Ad')] }, { label: 'Set penentu', opts: [opt('tnFinal', 'tb10', 'Tie-break 10', 'tie-break 10 di set penentu'), opt('tnFinal', 'tb7', 'Tie-break 7', 'tie-break 7 di set penentu')] }];
+    if (sp === 'padel') ruleGroups = [{ label: 'Deuce', opts: [opt('pdDeuce', 'star', 'Star Point'), opt('pdDeuce', 'golden', 'Golden Point'), opt('pdDeuce', 'ad', 'Advantage')] }, { label: 'Set 3', opts: [opt('pdThird', 'set', 'Set penuh', 'set 3 penuh'), opt('pdThird', 'stb', 'Super tie-break', 'super tie-break di set 3')] }];
+    if (sp === 'tt') ruleGroups = [{ label: 'Pertandingan', opts: [opt('ttBest', '5', 'Best of 5'), opt('ttBest', '7', 'Best of 7')] }];
+    const winnerSide = g.winner;
+    let winnerLine = '';
+    if (winnerSide) {
+      const ws = g[winnerSide];
+      const ls = g[this.other(winnerSide)];
+      if (sp === 'badminton' || sp === 'tt') winnerLine = this.nm(winnerSide) + ' menang ' + ws.games + '–' + ls.games + ' gim';
+      else if (sp === 'voli' || isTn) winnerLine = this.nm(winnerSide) + ' menang ' + ws.sets + '–' + ls.sets + ' set';
+      else winnerLine = this.nm(winnerSide) + ' menang ' + ws.pts + '–' + ls.pts;
+    }
+    const prefix = (sp === 'badminton' || sp === 'tt') ? 'G' : 'S';
+    const setChips = g.done.map((e, i) => {
+      const aWon = e.mtb ? e.ta > e.tb : (e.ta !== undefined ? e.a > e.b : e.a > e.b);
+      return { k: prefix + (i + 1), v: this.setLabel(e), border: aWon ? 'rgba(255,122,46,.55)' : 'rgba(77,124,255,.6)' };
+    });
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      rootCls: anim ? '' : 'sc-still',
+      tv: tv,
+      tvLabel: tv ? 'Keluar mode TV' : 'Mode TV',
+      tvBg: tv ? '#F2F1EC' : '#FF7A2E',
+      tvColor: tv ? '#0B0D12' : '#140B05',
+      tvBorder: tv ? '#F2F1EC' : '#FF7A2E',
+      shareResult: () => this.shareResult(),
+      toggleTv: () => this.setState({ tv: !this.state.tv, swapK: this.tog(this.state.swapK) }),
+      kick: st.kick,
+      hasTheme: !!st.theme,
+      thP: st.theme ? st.theme.primary : '#FF7A2E', thOnP: st.theme ? this.thOn(st.theme.primary) : '#140B05', thIni: this.thIni(st.theme ? st.theme.name : ''),
+      evLabel: st.theme ? st.theme.name : 'Jumat Malam',
+      badgeA: st.theme ? st.theme.primary : '#FF7A2E', onA: st.theme ? this.thOn(st.theme.primary) : '#140B05',
+      badgeB: st.theme ? st.theme.accent : '#4D7CFF', onB: st.theme ? this.thOn(st.theme.accent) : '#0B0D12',
+      digA: st.theme ? this.thReadable(st.theme.primary, '#040507') : '#FF7A2E', digB: st.theme ? this.thReadable(st.theme.accent, '#040507') : '#5E89FF',
+      glowA: st.theme ? st.theme.primary + '8C' : 'rgba(255,122,46,.55)', glowB: st.theme ? st.theme.accent + '99' : 'rgba(77,124,255,.6)',
+      swapK: st.swapK,
+      showCtrl: !tv,
+      nameSize: tv ? 52 : 38,
+      digitSize: tv ? 300 : 210,
+      clockSize: tv ? 88 : 64,
+      centerSize: tv ? 64 : 46,
+      tabs: tabsDef.map((o) => ({ label: o.label, on: o.id === sp, cls: o.id === sp ? 'is-on' : '', pick: () => { if (o.id !== this.state.sport) this.setState({ sport: o.id, g: this.demo(o.id), log: this.demoLog(o.id), hist: [], fa: this.tog(this.state.fa), fb: this.tog(this.state.fb), swapK: this.tog(this.state.swapK) }); } })),
+      hasRules: ruleGroups.length > 0,
+      ruleGroups: ruleGroups,
+      ruleHelp: ruleHelp,
+      sportLabel: tabsDef.find((o) => o.id === sp).label,
+      ruleLine: ruleLine,
+      periodLabel: periodLabel,
+      hasClock: isClock,
+      isBasket: sp === 'basket',
+      clock: this.mmss(g.secs),
+      runCls: g.running ? '' : 'sc-run',
+      shot: g.shot,
+      shotColor: g.shot <= 5 ? '#FF9A7A' : '#F2F1EC',
+      hasCenterBig: !isClock,
+      centerBig: centerBig,
+      centerNote: centerNote,
+      noteColor: hot ? '#F6D56E' : '#C9CDD6',
+      noteWeight: hot ? 700 : 400,
+      ctrlMid: mid,
+      mainA: mainOf('a'),
+      mainB: mainOf('b'),
+      fa: st.fa,
+      fb: st.fb,
+      serveA: !isClock && server === 'a' && !done,
+      serveB: !isClock && server === 'b' && !done,
+      subLabel: subLabel,
+      dotsA: dots('a'),
+      dotsB: dots('b'),
+      noteA: note('a'),
+      noteB: note('b'),
+      ctrlA: mk('a'),
+      ctrlB: mk('b'),
+      hasSets: !isClock && g.done.length > 0,
+      setsTitle: prefix === 'G' ? 'RIWAYAT GIM' : 'RIWAYAT SET',
+      setChips: setChips,
+      bk: st.bk,
+      bannerTxt: st.bannerTxt,
+      hasWinner: !!winnerSide,
+      winnerLine: winnerLine,
+      log: st.log,
+      noUndo: st.hist.length === 0,
+      undo: () => {
+        const h = this.state.hist;
+        if (!h.length) return;
+        const prev = JSON.parse(h[h.length - 1]);
+        this.setState({ g: prev.g, log: prev.log, hist: h.slice(0, -1), fa: this.tog(this.state.fa), fb: this.tog(this.state.fb), kick: this.kickOf('u') });
+      },
+      resetMatch: () => {
+        const s = this.state;
+        this.setState({ g: this.zero(s.sport), log: [{ t: 'Mulai', txt: 'Laga baru — skor 0–0' }], hist: s.hist.concat([JSON.stringify({ g: s.g, log: s.log })]).slice(-50), fa: this.tog(s.fa), fb: this.tog(s.fb), swapK: this.tog(s.swapK) });
+      },
+      rx: st.rx.toFixed(2),
+      ry: st.ry.toFixed(2),
+      onTilt: (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        this.setState({ ry: px * 7, rx: 3 - py * 6 });
+      },
+      onLeave: () => this.setState({ rx: 3, ry: 0 })
+    };
+  }
+}
+</script>
+</body>
+</html>

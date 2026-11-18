@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Sistem Desain & Motion — Arena Malam</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.sd-flip{display:inline-block;animation:sdFlip 2.4s cubic-bezier(.2,.9,.25,1.25) infinite;transform-origin:50% 50%}
+@keyframes sdFlip{0%,8%{transform:perspective(500px) rotateX(-100deg);opacity:.1}30%,100%{transform:none;opacity:1}}
+.sd-card{animation:sdCard 3.2s cubic-bezier(.3,1.35,.4,1) infinite;transform-style:preserve-3d}
+@keyframes sdCard{0%,35%{transform:perspective(700px) rotateY(0deg)}50%,85%{transform:perspective(700px) rotateY(180deg)}100%{transform:perspective(700px) rotateY(360deg)}}
+.sd-rise{animation:sdRise 2.6s cubic-bezier(.2,.8,.2,1) infinite}
+@keyframes sdRise{0%{opacity:0;transform:perspective(600px) translateY(30px) rotateX(42deg)}45%,100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width:1200px;height:1210px;box-sizing:border-box;padding:56px;background:#0B0D12;color:#F2F1EC;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="sb-mono" style="font-size:13px;letter-spacing:.14em;color:#FFB089">SISTEM DESAIN · SCOREBOARD.TIUSAPP.COM</span>
+<h1 class="sb-display" style="margin:0;font-size:84px;line-height:.85;font-weight:900;text-transform:uppercase">Arena Malam</h1>
+</div>
+<span style="font-size:15px;color:#A3A9B6;text-align:right">Dirancang oleh <strong style="color:#F2F1EC;font-weight:600">Titus Dirgantoro</strong></span>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">WARNA</span>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+<div style="display:flex;flex-direction:column;gap:6px"><span style="height:64px;border-radius:12px;background:#0B0D12;border:1px solid #2A303D"></span><span style="font-size:13px;font-weight:600">Malam</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#0B0D12</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span style="height:64px;border-radius:12px;background:#12151C;border:1px solid #2A303D"></span><span style="font-size:13px;font-weight:600">Panel</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#12151C</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span style="height:64px;border-radius:12px;background:#2A303D"></span><span style="font-size:13px;font-weight:600">Garis</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#2A303D</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span style="height:64px;border-radius:12px;background:#A3A9B6"></span><span style="font-size:13px;font-weight:600">Abu</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#A3A9B6</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span style="height:64px;border-radius:12px;background:#F2F1EC"></span><span style="font-size:13px;font-weight:600">Kapur</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#F2F1EC</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<div style="display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="height:64px;border-radius:12px;background:#FF7A2E;color:#140B05;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900">A</span><span style="font-size:13px;font-weight:600">Bara</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#FF7A2E · aksen utama</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="height:64px;border-radius:12px;background:#4D7CFF;color:#0B0D12;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900">B</span><span style="font-size:13px;font-weight:600">Samudra</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#4D7CFF</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="height:64px;border-radius:12px;background:#F2C230;color:#0B0D12;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900">C</span><span style="font-size:13px;font-weight:600">Kunyit</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#F2C230</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="height:64px;border-radius:12px;background:#C084FC;color:#0B0D12;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900">D</span><span style="font-size:13px;font-weight:600">Anggrek</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">#C084FC</span></div>
+</div>
+<p style="margin:0;font-size:14px;line-height:1.55;color:#A3A9B6">Tim selalu ditandai warna <strong style="color:#F2F1EC">dan</strong> huruf A–D, sehingga tetap terbaca bagi penonton buta warna. Oranye dan biru dipilih karena beda terang-gelapnya jelas.</p>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">TIPOGRAFI</span>
+<div style="display:flex;align-items:flex-end;gap:20px;padding:18px 20px;border-radius:16px;background:#12151C;border:1px solid #232834">
+<span class="sb-display" style="font-size:96px;line-height:.85;font-weight:900"><span class="sd-flip" style="color:#FF7A2E">3</span><span style="color:#3A4150"> : </span><span style="color:#5E89FF">2</span></span>
+<span style="display:flex;flex-direction:column;gap:4px;padding-bottom:6px"><span style="font-size:16px;font-weight:600">Big Shoulders 800–900</span><span style="font-size:13px;color:#A3A9B6">Judul, nama tim, angka skor. Kapital, rapat.</span></span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<div style="padding:16px 18px;border-radius:16px;background:#12151C;border:1px solid #232834;display:flex;flex-direction:column;gap:6px"><span style="font-size:22px;font-weight:600">Inter 400–700</span><span style="font-size:13px;color:#A3A9B6">Teks isi 15–19 px, tombol 15–17 px</span></div>
+<div style="padding:16px 18px;border-radius:16px;background:#12151C;border:1px solid #232834;display:flex;flex-direction:column;gap:6px"><span class="sb-mono" style="font-size:18px;font-weight:700;letter-spacing:.1em">18:42 · GIM 3</span><span style="font-size:13px;color:#A3A9B6">JetBrains Mono: waktu, label, meta</span></div>
+</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">SPESIFIKASI 3D &amp; MOTION</span>
+<div style="display:flex;flex-direction:column;border-radius:16px;overflow:hidden;border:1px solid #232834">
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#12151C;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Flip angka skor</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">rotateX −100° → 0 · 620 ms · (.2,.9,.25,1.25)</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#0F1218;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Kocok kartu tim</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">goyang 420 ms loop · bagi 850 ms + jeda 55 ms/kartu</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#12151C;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Carousel cabang</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">ring 8 × 45° · translateZ 440 px · 1100 ms</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#0F1218;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Kartu metode</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">rotateY 180° · 850 ms · (.3,1.35,.4,1)</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#12151C;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Reveal saat scroll</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">animation-timeline: view() · rotateX 42° → 0</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#0F1218;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Tilt kursor</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">hero ±16° Y / ±11° X · papan TV ±3.5° · 450 ms</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#12151C;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Perspektif</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">hero 1400 · carousel 1800 · papan 1600 · kartu 900–1100 px</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#0F1218;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Efek setiap klik</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">tombol miring ke titik sentuh maks 20°/24°, tekan −16px · 3 cincin 3D + 10 serpihan 900 ms · warna tim</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#12151C;border-bottom:1px solid #232834;font-size:13px"><span style="font-weight:600">Selebrasi</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">juara, gim/set, tim jadi: 5 ledakan berurutan tiap 110 ms, piala berputar rotateY</span></div>
+<div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:11px 16px;background:#0F1218;font-size:13px"><span style="font-weight:600">Reduced motion</span><span class="sb-mono" style="font-size:12px;color:#C9CDD6">semua animasi mati, tampilan akhir tetap utuh</span></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">KOMPONEN</span>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:18px 20px;border-radius:16px;background:#12151C;border:1px solid #232834">
+<span style="display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:12px;background:#FF7A2E;color:#140B05;font-weight:700;font-size:15px">Kocok Tim</span>
+<span style="display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:12px;border:1px solid #343B4A;color:#F2F1EC;font-weight:600;font-size:15px">Lihat Papan Skor</span>
+<span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:#F2F1EC;color:#0B0D12;font-weight:600;font-size:14px">Futsal</span>
+<span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #343B4A;color:#C9CDD6;font-weight:600;font-size:14px">Padel</span>
+<span class="sb-mono" style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(255,122,46,.14);color:#FFB089;font-size:12px;font-weight:700;letter-spacing:.16em"><span style="width:8px;height:8px;border-radius:50%;background:#FF7A2E"></span>LIVE</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<div style="height:96px;perspective:700px">
+<div class="sd-card" style="position:relative;height:100%">
+<div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;border:1px solid #FF7A2E;background:rgba(255,122,46,.12);display:flex;align-items:center;gap:12px;padding:0 16px"><span class="sb-mono" style="font-size:10px;font-weight:700;color:#A3A9B6;padding:4px 6px;border-radius:6px;background:#0B0D12">PEN</span><span style="display:flex;flex-direction:column;gap:6px"><span style="font-size:15px;font-weight:600">Rizky</span><span style="display:flex;gap:3px"><span style="width:12px;height:4px;border-radius:2px;background:#FF7A2E"></span><span style="width:12px;height:4px;border-radius:2px;background:#FF7A2E"></span><span style="width:12px;height:4px;border-radius:2px;background:#FF7A2E"></span><span style="width:12px;height:4px;border-radius:2px;background:#FF7A2E"></span><span style="width:12px;height:4px;border-radius:2px;background:#FF7A2E"></span></span></span></div>
+<div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);border-radius:14px;border:1px solid #343B4A;background:repeating-linear-gradient(135deg,#141821 0 10px,#11141B 10px 20px);display:flex;align-items:center;justify-content:center;gap:6px"><span style="width:14px;height:26px;border-radius:4px;background:#FF7A2E"></span><span style="width:14px;height:26px;border-radius:4px;background:#4D7CFF"></span></div>
+</div>
+</div>
+<div class="sd-rise" style="height:96px;border-radius:14px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 16px"><span class="sb-mono" style="font-size:11px;letter-spacing:.12em;color:#A3A9B6">REVEAL SCROLL</span><span class="sb-display" style="font-size:26px;font-weight:800;text-transform:uppercase">Kartu bagian</span></div>
+</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+<div style="padding:16px;border-radius:14px;border:1px solid #232834;display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="font-size:22px;font-weight:800;text-transform:uppercase">Satu ketukan</span><span style="font-size:13px;line-height:1.5;color:#A3A9B6">Satu sentuhan = satu poin. Tombol skor minimal 56 px.</span></div>
+<div style="padding:16px;border-radius:14px;border:1px solid #232834;display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="font-size:22px;font-weight:800;text-transform:uppercase">Selalu bisa batal</span><span style="font-size:13px;line-height:1.5;color:#A3A9B6">Setiap aksi wasit masuk riwayat dan bisa dibatalkan.</span></div>
+<div style="padding:16px;border-radius:14px;border:1px solid #232834;display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="font-size:22px;font-weight:800;text-transform:uppercase">Terbaca 10 meter</span><span style="font-size:13px;line-height:1.5;color:#A3A9B6">Mode TV: angka 300 px, kontrol disembunyikan.</span></div>
+<div style="padding:16px;border-radius:14px;border:1px solid #232834;display:flex;flex-direction:column;gap:6px"><span class="sb-display" style="font-size:22px;font-weight:800;text-transform:uppercase">Gerak bermakna</span><span style="font-size:13px;line-height:1.5;color:#A3A9B6">Animasi 3D hanya saat skor, kocok, atau pindah bagian.</span></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":1210}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

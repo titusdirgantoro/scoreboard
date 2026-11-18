@@ -1,0 +1,83 @@
+/* Token visual "Arena Malam" — sumber: docs/design/README.md dan SistemDesain.dc.html.
+   Tema event (warna utama/aksen) menimpa --sb-primary / --sb-accent di elemen pembungkus event. */
+:root {
+  --sb-bg: #0b0d12;
+  --sb-surface: #0f1218;
+  --sb-surface-2: #12151c;
+  --sb-line: #232834;
+  --sb-line-strong: #343b4a;
+  --sb-text: #f2f1ec;
+  --sb-text-2: #c9cdd6;
+  --sb-muted: #a3a9b6;
+
+  --sb-primary: #ff7a2e; /* Bara */
+  --sb-accent: #4d7cff; /* Samudra */
+  --sb-yellow: #f2c230; /* Kunyit */
+  --sb-purple: #c084fc; /* Anggrek */
+  --sb-success: #7ee2a8;
+  --sb-warning: #f6d56e;
+  --sb-danger: #ff6b6b;
+  --sb-on-primary: #140b05;
+
+  --sb-font-display: "Big Shoulders", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+  --sb-font-text: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sb-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sb-font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+
+  --sb-radius-sm: 10px;
+  --sb-radius: 14px;
+  --sb-radius-lg: 20px;
+  --sb-tap: 44px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  font-family: var(--sb-font-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: #ff9a5c;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--sb-text);
+  outline-offset: 2px;
+}
+
+.sb-display {
+  font-family: var(--sb-font-display);
+  text-transform: uppercase;
+  line-height: 0.9;
+  font-weight: 900;
+}
+
+.sb-mono {
+  font-family: var(--sb-font-mono);
+  letter-spacing: 0.12em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

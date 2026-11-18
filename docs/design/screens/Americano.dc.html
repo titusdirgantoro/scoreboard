@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Americano &amp; Mexicano Padel — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.am-btn{cursor:pointer}
+.am-btn:disabled{opacity:.4;cursor:not-allowed}
+.am-chip{cursor:pointer}
+.am-chip:hover{border-color:#5A6275!important;color:#F2F1EC!important}
+.am-chip.is-on{background-color:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.am-rd{cursor:pointer}
+.am-rd.is-on{background-color:#22B573!important;color:#0B0D12!important;border-color:#22B573!important}
+.am-row{position:absolute;left:0;right:0;transition:top .8s cubic-bezier(.3,1.25,.4,1),background-color .3s}
+.am-rnd-a{animation:amRA .7s cubic-bezier(.2,.9,.25,1.1) both}.am-rnd-b{animation:amRB .7s cubic-bezier(.2,.9,.25,1.1) both}
+@keyframes amRA{from{opacity:0;transform:perspective(1200px) rotateY(-55deg) translateX(60px)}to{opacity:1;transform:none}}
+@keyframes amRB{from{opacity:0;transform:perspective(1200px) rotateY(-55deg) translateX(60px)}to{opacity:1;transform:none}}
+.am-court{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.am-court:hover{transform:perspective(1000px) rotateX(5deg) translateZ(16px)}
+.am-n-a{display:inline-block;animation:amNA .5s cubic-bezier(.2,.9,.25,1.3)}.am-n-b{display:inline-block;animation:amNB .5s cubic-bezier(.2,.9,.25,1.3)}
+@keyframes amNA{from{transform:perspective(300px) rotateX(-100deg);opacity:.1}to{transform:none;opacity:1}}
+@keyframes amNB{from{transform:perspective(300px) rotateX(-100deg);opacity:.1}to{transform:none;opacity:1}}
+.am-pod{animation:amPod 1s cubic-bezier(.3,1.35,.4,1) both;transform-origin:50% 100%}
+@keyframes amPod{from{opacity:0;transform:perspective(800px) rotateX(-90deg)}to{opacity:1;transform:none}}
+.am-toast{opacity:0;pointer-events:none}
+.am-toast-a{animation:amToastA 2.6s ease both}.am-toast-b{animation:amToastB 2.6s ease both}
+@keyframes amToastA{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes amToastB{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;color:#C9CDD6">Padel Akhir Pekan · {{fmtName}}</span>
+</div>
+<a href="AturanPoin.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Aturan padel</a>
+</div>
+</header>
+
+<main style="max-width:1360px;margin:0 auto;padding:32px 24px 72px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+<p class="sb-mono" style="margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#7EE2A8">Padel · pasangan bergilir · poin per orang</p>
+<h1 class="sb-display" style="margin:0;font-size:clamp(52px,6vw,88px);line-height:.88;font-weight:900;text-transform:uppercase">{{fmtName}}</h1>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#A3A9B6">{{fmtDesc}}</p>
+</div>
+<div role="group" aria-label="Format" style="display:flex;gap:6px;padding:4px;border-radius:999px;border:1px solid #2A303D">
+<sc-for list="{{fmtOpts}}" as="o" hint-placeholder-count="2"><button class="am-btn am-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 18px;border-radius:999px;border:1px solid transparent;background:transparent;color:#C9CDD6;font-size:14px;font-weight:700">{{o.label}}</button></sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<aside aria-label="Pemain dan pengaturan" style="flex:1 1 300px;max-width:100%;display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:22px;border:1px solid #232834;background:#0F1218">
+<span class="sb-mono" style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6"><span>PEMAIN</span><span>{{nPlayers}} · {{courts}} LAPANGAN</span></span>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{roster}}" as="p" hint-placeholder-count="8"><span style="display:flex;align-items:center;gap:4px;min-height:38px;padding:0 4px 0 12px;border-radius:999px;background:#181C25;border:1px solid #2A303D;font-size:13px;font-weight:600">{{p.name}}<button class="am-btn" onClick="{{p.remove}}" aria-label="Hapus {{p.name}}" style="width:30px;height:30px;border-radius:50%;border:0;background:transparent;color:#A3A9B6;font-size:14px">×</button></span></sc-for>
+</div>
+<div style="display:flex;gap:6px"><label for="am-new" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Nama pemain baru</label><input id="am-new" value="{{newName}}" onChange="{{onNew}}" onKeyDown="{{onKey}}" placeholder="Tambah pemain" style="flex:1;min-width:0;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:#0B0D12;color:#F2F1EC;font-size:14px"><button class="am-btn" onClick="{{add}}" style="min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:14px;font-weight:700">Tambah</button></div>
+<sc-if value="{{badCount}}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#F6D56E">{{countMsg}}</span></sc-if>
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">POIN PER LAGA</span>
+<div role="group" aria-label="Poin per laga" style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ptOpts}}" as="o" hint-placeholder-count="4"><button class="am-btn am-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;min-width:52px;padding:0 12px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:700">{{o.label}}</button></sc-for></div>
+<span style="font-size:12px;line-height:1.5;color:#A3A9B6">Setiap laga dimainkan sampai total {{P}} poin servis. Skor kedua pasangan selalu berjumlah {{P}}, dan setiap pemain mendapat poin pasangannya.</span>
+<button class="am-btn" onClick="{{regen}}" disabled="{{badCount}}" style="min-height:52px;border-radius:14px;border:0;background:#22B573;color:#0B0D12;font-size:15px;font-weight:800">Buat ulang jadwal</button>
+</aside>
+
+<section aria-label="Ronde" style="flex:999 1 620px;min-width:0;display:flex;flex-direction:column;gap:16px">
+<div role="tablist" aria-label="Ronde" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+<sc-for list="{{roundTabs}}" as="r" hint-placeholder-count="7"><button class="am-btn am-rd {{r.cls}}" role="tab" aria-selected="{{r.on}}" onClick="{{r.pick}}" style="min-width:56px;min-height:44px;padding:0 12px;border-radius:12px;border:1px solid {{r.border}};background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">{{r.label}}</button></sc-for>
+<sc-if value="{{canNext}}" hint-placeholder-val="{{ false }}"><button class="am-btn" data-fx="g" onClick="{{nextRound}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px dashed #22B573;background:transparent;color:#7EE2A8;font-size:14px;font-weight:700">+ Ronde {{nextNo}} dari peringkat</button></sc-if>
+</div>
+<div class="am-rnd-{{rk}}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:14px">
+<sc-for list="{{matches}}" as="m" hint-placeholder-count="2">
+<article class="am-court" style="padding:18px;border-radius:22px;border:1px solid {{m.border}};background:#12151C;display:flex;flex-direction:column;gap:14px">
+<span style="display:flex;justify-content:space-between"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#7EE2A8">LAPANGAN {{m.court}}</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">{{m.state}}</span></span>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:700">{{m.a1}}</span><span style="font-size:16px;font-weight:700">{{m.a2}}</span></span>
+<span style="display:flex;align-items:center;gap:6px" data-fx="g"><button class="am-btn" onClick="{{m.dec}}" aria-label="Kurangi poin {{m.a1}} dan {{m.a2}}" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">−</button><span class="sb-display" style="width:56px;text-align:center;font-size:44px;line-height:1;font-weight:900;color:{{m.colA}}"><span class="am-n-{{m.nk}}">{{m.sa}}</span></span><button class="am-btn" onClick="{{m.inc}}" aria-label="Tambah poin {{m.a1}} dan {{m.a2}}" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">+</button></span>
+</div>
+<div style="height:1px;background:#232834;position:relative"><span class="sb-mono" style="position:absolute;left:50%;top:-9px;margin-left:-14px;padding:0 6px;background:#12151C;font-size:11px;color:#5A6275">VS</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:700">{{m.b1}}</span><span style="font-size:16px;font-weight:700">{{m.b2}}</span></span>
+<span class="sb-display" style="width:156px;text-align:center;font-size:44px;line-height:1;font-weight:900;color:{{m.colB}}"><span class="am-n-{{m.nk}}">{{m.sb}}</span></span>
+</div>
+</article>
+</sc-for>
+</div>
+<sc-if value="{{hasRest}}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:13px;color:#A3A9B6">Istirahat ronde ini: {{restNames}}</p></sc-if>
+
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+<div style="flex:1 1 380px;min-width:0;padding:18px;border-radius:22px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:10px">
+<span class="sb-mono" style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6"><span>KLASEMEN PER ORANG</span><span>{{doneCount}}/{{totalCount}} LAGA</span></span>
+<div class="sb-mono" style="display:grid;grid-template-columns:28px minmax(0,1fr) 44px 44px 60px;gap:6px;padding:0 10px;font-size:10px;letter-spacing:.1em;color:#A3A9B6"><span>#</span><span>PEMAIN</span><span style="text-align:center">M</span><span style="text-align:center">MNG</span><span style="text-align:right">POIN</span></div>
+<div style="position:relative;height:{{tableH}}px">
+<sc-for list="{{table}}" as="r" hint-placeholder-count="8">
+<div class="am-row" style="top:{{r.top}}px;height:42px;display:grid;grid-template-columns:28px minmax(0,1fr) 44px 44px 60px;gap:6px;align-items:center;padding:0 10px;border-radius:10px;background:{{r.bg}}">
+<span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{r.rank}}</span>
+<span style="font-weight:600">{{r.name}}</span>
+<span class="sb-mono" style="text-align:center;font-size:13px">{{r.m}}</span>
+<span class="sb-mono" style="text-align:center;font-size:13px">{{r.w}}</span>
+<span class="sb-display" style="text-align:right;font-size:24px;font-weight:900;color:{{r.col}}">{{r.pts}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{finished}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1 1 300px;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding:18px;border-radius:22px;background:#12151C;border:1px solid rgba(34,181,115,.4);min-height:260px">
+<sc-for list="{{podium}}" as="p" hint-placeholder-count="3">
+<div class="am-pod" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;animation-delay:{{p.delay}}ms">
+<span class="sb-display" style="font-size:22px;font-weight:900;text-transform:uppercase;text-align:center">{{p.name}}</span>
+<span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{p.pts}} poin</span>
+<span class="sb-display" style="width:100%;height:{{p.h}}px;border-radius:12px 12px 4px 4px;display:flex;align-items:flex-start;justify-content:center;padding-top:8px;background:{{p.bg}};color:#0B0D12;font-size:36px;font-weight:900">{{p.place}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</section>
+</div>
+</main>
+<div class="am-toast am-toast-{{toastK}}" role="status" style="position:fixed;left:50%;bottom:28px;margin-left:-180px;width:360px;padding:14px 18px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:14px;font-weight:600;text-align:center;box-shadow:0 20px 50px -10px rgba(0,0,0,.6)">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    const players = ['Dika', 'Sari', 'Arya', 'Maya', 'Bimo', 'Tasya', 'Raka', 'Nadia'];
+    this.state = { fmt: 'americano', players: players, P: 24, newName: '', rounds: [], cur: 0, rk: 'a', nk: {}, toast: '', toastK: 'n', celebrated: false };
+    this.state.rounds = this.buildAmericano(players.length);
+    const demo = [[15, 13], [9, 11]];
+    this.state.rounds[0] = this.state.rounds[0].map((m, i) => Object.assign({}, m, { sa: demo[i] ? demo[i][0] : null }));
+    if (this.state.rounds[0][0]) { this.state.rounds[0][0].sa = 15; }
+    if (this.state.rounds[0][1]) { this.state.rounds[0][1].sa = 11; }
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  buildAmericano(n) {
+    if (n < 4 || n % 4 !== 0) return [];
+    let arr = Array.from({ length: n }, (_, i) => i);
+    const rounds = [];
+    for (let r = 0; r < n - 1; r++) {
+      const pairs = [];
+      for (let i = 0; i < n / 2; i++) pairs.push([arr[i], arr[n - 1 - i]]);
+      const ms = [];
+      for (let k = 0; k < pairs.length; k += 2) ms.push({ a: pairs[k], b: pairs[k + 1], sa: null });
+      rounds.push(ms);
+      arr = [arr[0], arr[n - 1]].concat(arr.slice(1, n - 1));
+    }
+    return rounds;
+  }
+  mexRound(order) {
+    const ms = [];
+    for (let k = 0; k + 3 < order.length; k += 4) ms.push({ a: [order[k], order[k + 3]], b: [order[k + 1], order[k + 2]], sa: null });
+    return ms;
+  }
+  standings(rounds, n, P) {
+    const t = Array.from({ length: n }, (_, i) => ({ i: i, pts: 0, m: 0, w: 0 }));
+    rounds.forEach((ms) => ms.forEach((m) => {
+      if (m.sa == null) return;
+      const sb = P - m.sa;
+      m.a.forEach((p) => { t[p].pts += m.sa; t[p].m += 1; if (m.sa > sb) t[p].w += 1; });
+      m.b.forEach((p) => { t[p].pts += sb; t[p].m += 1; if (sb > m.sa) t[p].w += 1; });
+    }));
+    return t;
+  }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  reset(patch) {
+    const next = Object.assign({}, this.state, patch);
+    const n = next.players.length;
+    let rounds = [];
+    if (n >= 4 && n % 4 === 0) {
+      if (next.fmt === 'americano') rounds = this.buildAmericano(n);
+      else rounds = [this.mexRound(Array.from({ length: n }, (_, i) => i))];
+    }
+    this.setState(Object.assign({}, patch, { rounds: rounds, cur: 0, rk: this.tg(this.state.rk), nk: {}, celebrated: false }));
+  }
+  setScore(r, k, delta) {
+    const s = this.state;
+    const rounds = s.rounds.map((ms) => ms.slice());
+    const m = Object.assign({}, rounds[r][k]);
+    const cur = m.sa == null ? Math.floor(s.P / 2) : m.sa;
+    m.sa = Math.max(0, Math.min(s.P, m.sa == null ? cur : cur + delta));
+    rounds[r][k] = m;
+    const nk = Object.assign({}, s.nk); nk[r + '-' + k] = this.tg(nk[r + '-' + k]);
+    this.setState({ rounds: rounds, nk: nk });
+    const all = rounds.every((ms) => ms.every((x) => x.sa != null));
+    const fullLen = s.fmt === 'americano' ? rounds.length === s.players.length - 1 : rounds.length >= Math.max(3, s.players.length / 2 + 1);
+    if (all && fullLen && !s.celebrated) { this.setState({ celebrated: true }); setTimeout(() => this.celebrate('g'), 200); }
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const n = s.players.length;
+    const P = s.P;
+    const ok = n >= 4 && n % 4 === 0;
+    const isAm = s.fmt === 'americano';
+    const t = this.standings(s.rounds, n, P);
+    const order = t.slice().sort((a, b) => b.pts - a.pts || b.w - a.w || a.i - b.i);
+    const rankOf = {}; order.forEach((x, k) => { rankOf[x.i] = k; });
+    const round = s.rounds[s.cur] || [];
+    const playing = {}; round.forEach((m) => m.a.concat(m.b).forEach((p) => { playing[p] = true; }));
+    const done = s.rounds.reduce((a, ms) => a + ms.filter((m) => m.sa != null).length, 0);
+    const total = isAm ? (ok ? (n - 1) * (n / 4) : 0) : s.rounds.reduce((a, ms) => a + ms.length, 0);
+    const lastDone = s.rounds.length && s.rounds[s.rounds.length - 1].every((m) => m.sa != null);
+    const finished = ok && done > 0 && (isAm ? done === total : (s.rounds.length >= Math.max(3, n / 2 + 1) && lastDone));
+    const nm = (i) => s.players[i] || '?';
+    const medal = ['#F2C230', '#C9CDD6', '#E0965A'];
+    return {
+      fmtName: isAm ? 'Americano' : 'Mexicano',
+      fmtDesc: isAm ? 'Setiap pemain berpasangan dengan semua pemain lain tepat sekali. Jadwal lengkap dibuat di awal; juara adalah pemain dengan poin terbanyak.' : 'Ronde pertama diacak, ronde berikutnya disusun dari klasemen: peringkat 1 dan 4 melawan 2 dan 3 di tiap lapangan, jadi lawan makin seimbang.',
+      fmtOpts: [{ id: 'americano', label: 'Americano' }, { id: 'mexicano', label: 'Mexicano' }].map((o) => ({ label: o.label, on: s.fmt === o.id, cls: s.fmt === o.id ? 'is-on' : '', pick: () => { if (this.state.fmt !== o.id) this.reset({ fmt: o.id }); } })),
+      nPlayers: n + ' pemain', courts: ok ? n / 4 : 0,
+      roster: s.players.map((p, i) => ({ name: p, remove: () => { const pl = this.state.players.filter((_, j) => j !== i); this.reset({ players: pl }); } })),
+      newName: s.newName,
+      onNew: (e) => this.setState({ newName: e.target.value }),
+      onKey: (e) => { if (e.key === 'Enter') { const v = this.state.newName.trim(); if (v && this.state.players.length < 16) this.reset({ players: this.state.players.concat([v.slice(0, 14)]), newName: '' }); } },
+      add: () => { const v = this.state.newName.trim(); if (v && this.state.players.length < 16) this.reset({ players: this.state.players.concat([v.slice(0, 14)]), newName: '' }); },
+      badCount: !ok,
+      countMsg: n < 4 ? 'Butuh minimal 4 pemain.' : 'Jumlah pemain harus kelipatan 4 — tambah ' + (4 - (n % 4)) + ' atau kurangi ' + (n % 4) + ' pemain.',
+      ptOpts: [16, 21, 24, 32].map((v) => ({ label: String(v), on: P === v, cls: P === v ? 'is-on' : '', pick: () => { if (this.state.P !== v) this.reset({ P: v }); } })),
+      P: P,
+      regen: () => { this.reset({}); this.toastMsg('Jadwal baru dibuat'); },
+      roundTabs: s.rounds.map((ms, r) => { const complete = ms.every((m) => m.sa != null); return { label: 'R' + (r + 1), on: s.cur === r, cls: s.cur === r ? 'is-on' : '', border: complete ? 'rgba(34,181,115,.6)' : '#343B4A', pick: () => { if (this.state.cur !== r) this.setState({ cur: r, rk: this.tg(this.state.rk) }); } }; }),
+      canNext: !isAm && ok && lastDone && s.rounds.length < n,
+      nextNo: s.rounds.length + 1,
+      nextRound: () => { const ord = order.map((x) => x.i); const rounds = this.state.rounds.concat([this.mexRound(ord)]); this.setState({ rounds: rounds, cur: rounds.length - 1, rk: this.tg(this.state.rk) }); this.toastMsg('Ronde ' + rounds.length + ' disusun dari klasemen'); },
+      rk: s.rk,
+      matches: round.map((m, k) => {
+        const has = m.sa != null;
+        const sb = has ? P - m.sa : null;
+        return {
+          court: k + 1, a1: nm(m.a[0]), a2: nm(m.a[1]), b1: nm(m.b[0]), b2: nm(m.b[1]),
+          sa: has ? m.sa : '–', sb: has ? sb : '–', nk: s.nk[s.cur + '-' + k] || 'n',
+          colA: has && m.sa > sb ? '#7EE2A8' : '#F2F1EC', colB: has && sb > m.sa ? '#7EE2A8' : '#F2F1EC',
+          state: has ? 'TERCATAT' : 'BELUM DIMAINKAN', border: has ? 'rgba(34,181,115,.45)' : '#2A303D',
+          inc: () => this.setScore(this.state.cur, k, 1), dec: () => this.setScore(this.state.cur, k, -1)
+        };
+      }),
+      hasRest: ok && Object.keys(playing).length < n,
+      restNames: s.players.filter((_, i) => !playing[i]).join(', '),
+      doneCount: done, totalCount: total,
+      tableH: n * 46,
+      table: t.map((x) => ({ name: nm(x.i), rank: rankOf[x.i] + 1, top: rankOf[x.i] * 46, m: x.m, w: x.w, pts: x.pts, col: rankOf[x.i] < 3 && x.pts ? medal[rankOf[x.i]] : '#F2F1EC', bg: rankOf[x.i] % 2 === 0 ? '#12151C' : 'transparent' })),
+      finished: finished,
+      podium: [order[1], order[0], order[2]].filter(Boolean).map((x, k) => { const place = k === 1 ? 1 : (k === 0 ? 2 : 3); return { name: nm(x.i), pts: x.pts, place: place, h: place === 1 ? 140 : (place === 2 ? 100 : 72), bg: medal[place - 1], delay: (3 - place) * 160 }; }),
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>

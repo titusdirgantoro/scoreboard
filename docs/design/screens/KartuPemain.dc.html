@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Kartu Pemain — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input,select{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.kp-btn{cursor:pointer}
+.kp-btn:disabled{opacity:.45;cursor:not-allowed}
+.kp-chip.is-on{background:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.kp-tab{cursor:pointer;transition:transform .45s cubic-bezier(.3,1.5,.4,1),border-color .25s,background-color .25s}
+.kp-tab:hover{transform:perspective(600px) translateZ(14px) rotateX(8deg)}
+.kp-tab.is-on{background:#1A1D26!important;border-color:#F2F1EC!important}
+.kp-in-f{width:100%;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid #2A303D;background:#0D0F14;color:#F2F1EC;font-size:14px;color-scheme:dark}
+.kp-in-f:focus{border-color:#FF7A2E!important;outline:none}
+.kp-in-f.is-bad{border-color:#FF8A8A!important}
+.kp-fileIn{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.kp-fileIn:focus-visible + .kp-up{outline:2px solid #F2F1EC;outline-offset:2px}
+.kp-up{cursor:pointer;transition:border-color .25s,background-color .25s}
+.kp-up:hover{border-color:#FF7A2E!important;background:#1A1410!important}
+.kp-flip{perspective:1100px}
+.kp-in{transition:transform .85s cubic-bezier(.3,1.35,.4,1)}
+.kp-flip:hover .kp-in{transform:rotateX(7deg) rotateY(-13deg) translateZ(16px)}
+.kp-flip.is-flipped .kp-in{transform:rotateY(180deg)}
+.kp-flip.is-flipped:hover .kp-in{transform:rotateY(167deg) rotateX(7deg) translateZ(16px)}
+.kp-face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.kp-back{transform:rotateY(180deg)}
+.kp-sheen{position:absolute;top:-20%;bottom:-20%;left:-75%;width:45%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.2),rgba(255,255,255,0));transform:skewX(-14deg);transition:left 1s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.kp-flip:hover .kp-sheen{left:135%}
+.kp-draft .kp-front{box-shadow:0 0 0 2px #F2C230,0 0 40px rgba(242,194,48,.35)}
+.kp-deal-a{animation:kpDealA .85s cubic-bezier(.25,1.2,.35,1) both;animation-delay:calc(var(--i) * 55ms)}.kp-deal-b{animation:kpDealB .85s cubic-bezier(.25,1.2,.35,1) both;animation-delay:calc(var(--i) * 55ms)}
+@keyframes kpDealA{from{transform:perspective(1000px) translate3d(0,-70px,-260px) rotateX(72deg) rotateZ(-9deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes kpDealB{from{transform:perspective(1000px) translate3d(0,-70px,-260px) rotateX(72deg) rotateZ(-9deg);opacity:0}to{transform:none;opacity:1}}
+.kp-pop-a{animation:kpPopA 1.1s cubic-bezier(.3,1.45,.4,1) both}.kp-pop-b{animation:kpPopB 1.1s cubic-bezier(.3,1.45,.4,1) both}
+@keyframes kpPopA{0%{transform:perspective(900px) rotateY(-200deg) translateZ(-120px) scale(.7);opacity:.3}100%{transform:none;opacity:1}}
+@keyframes kpPopB{0%{transform:perspective(900px) rotateY(-200deg) translateZ(-120px) scale(.7);opacity:.3}100%{transform:none;opacity:1}}
+.kp-ed-a{animation:kpEdA .7s cubic-bezier(.3,1.3,.4,1) both}.kp-ed-b{animation:kpEdB .7s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes kpEdA{from{transform:perspective(900px) rotateY(28deg) translateX(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes kpEdB{from{transform:perspective(900px) rotateY(28deg) translateX(40px);opacity:0}to{transform:none;opacity:1}}
+.kp-knob{transition:transform .45s cubic-bezier(.3,1.6,.4,1)}
+.kp-toast{opacity:0;pointer-events:none}
+.kp-toast-a{animation:kpToastA 2.8s ease both}.kp-toast-b{animation:kpToastB 2.8s ease both}
+@keyframes kpToastA{0%{opacity:0;transform:translateY(16px) rotateX(-40deg)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes kpToastB{0%{opacity:0;transform:translateY(16px) rotateX(-40deg)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC;min-height:1600px">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="display:flex;align-items:center;gap:8px;font-size:15px;color:#C9CDD6"><span class="sb-display" style="flex:none;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:{{P}};color:{{onP}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:12px;font-weight:900"><sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if><sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}">{{evIni}}</sc-if></span><span>{{evName}} · <strong style="color:#F2F1EC;font-weight:600">Kartu pemain</strong></span></span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<a href="EventPage.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Halaman event</a>
+<a href="Admin.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Panel penyelenggara</a>
+<button class="kp-btn" onClick="{{printTeam}}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:0;background:#FF7A2E;color:#140B05;font-size:14px;font-weight:800"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="7"></rect></svg>Cetak kartu tim</button>
+</div>
+</div>
+</header>
+
+<main style="max-width:1360px;margin:0 auto;padding:32px 24px 72px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+<p class="sb-mono" style="margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#FFB089">Kartu pemain · ukuran kartu ATM 54 × 85,6 mm</p>
+<h1 class="sb-display" style="margin:0;font-size:clamp(52px,6vw,88px);line-height:.88;font-weight:900;text-transform:uppercase">Satu kartu untuk tiap pemain</h1>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#A3A9B6">Wasit mencocokkan wajah dengan foto, nomor punggung, dan status boleh main sebelum laga dimulai. Klik kartu untuk melihat sisi belakang: data lengkap, kontak darurat, dan catatan kartu kuning.</p>
+</div>
+<div role="list" aria-label="Ringkasan" style="display:flex;flex-wrap:wrap;gap:10px">
+<sc-for list="{{summary}}" as="k" hint-placeholder-count="4"><span role="listitem" style="display:flex;flex-direction:column;gap:2px;min-width:110px;padding:10px 14px;border-radius:14px;background:#12151C;border:1px solid #232834"><span class="sb-display" style="font-size:30px;line-height:1;font-weight:900;color:{{k.c}}">{{k.v}}</span><span style="font-size:12px;color:#A3A9B6">{{k.l}}</span></span></sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px">
+<div role="group" aria-label="Cabang olahraga" style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{sports}}" as="o" hint-placeholder-count="4"><button class="kp-btn kp-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button></sc-for>
+</div>
+<label style="position:relative;display:flex;align-items:center;flex:0 1 340px;min-width:220px">
+<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Cari pemain</span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A3A9B6" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:14px"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<input class="kp-in-f" type="search" value="{{search}}" onChange="{{onSearch}}" placeholder="Cari nama atau nomor punggung" style="padding-left:42px;min-height:48px;border-radius:999px">
+</label>
+</div>
+
+<div role="tablist" aria-label="Tim" style="display:flex;flex-wrap:wrap;gap:10px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+<button class="kp-tab {{t.cls}}" role="tab" aria-selected="{{t.on}}" onClick="{{t.pick}}" style="display:flex;align-items:center;gap:10px;min-height:52px;padding:0 16px 0 10px;border-radius:14px;border:1px solid #232834;background:#12151C;color:#F2F1EC;font-size:15px;font-weight:700">
+<span class="sb-display" style="width:32px;height:32px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:{{t.color}};color:{{t.on2}};font-size:14px;font-weight:900">{{t.ini}}</span>
+<span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px"><span>{{t.name}}</span><span class="sb-mono" style="font-size:10px;font-weight:500;color:#A3A9B6">{{t.meta}}</span></span>
+</button>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<section aria-label="Daftar kartu" style="flex:3 1 640px;min-width:0;display:flex;flex-direction:column;gap:14px">
+<p class="sb-mono" style="margin:0;font-size:12px;color:#A3A9B6">{{listNote}}</p>
+<div style="display:flex;flex-wrap:wrap;gap:16px 14px">
+<sc-for list="{{cards}}" as="p" hint-placeholder-count="8">
+<div class="kp-deal-{{dealK}} {{p.popCls}}" style="--i:{{p.i}};display:flex;flex-direction:column;gap:6px;width:230px">
+<button class="kp-flip {{p.flipCls}} {{p.draftCls}}" onClick="{{p.flip}}" aria-pressed="{{p.flipped}}" aria-label="Kartu {{p.full}}, nomor {{p.no}}, {{p.statusLabel}}. Klik untuk membalik." style="display:block;position:relative;width:230px;height:364px;padding:0;border:0;background:transparent;cursor:pointer;text-align:left;color:inherit">
+<span class="kp-in" style="display:block;position:relative;width:100%;height:100%;transform-style:preserve-3d">
+<span class="kp-face kp-front" style="display:block;position:absolute;inset:0;border-radius:16px;overflow:hidden;background:#12151C;border:1px solid #2A303D;color:#F2F1EC">
+<span style="position:absolute;left:0;right:0;top:0;height:40px;display:flex;align-items:center;gap:8px;padding:0 12px;background:#0B0D12">
+<span class="sb-display" style="flex:none;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:{{P}};color:{{onP}};clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:10px;font-weight:900"><sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if><sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}">{{evIni}}</sc-if></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span class="sb-display" style="font-size:13px;line-height:1;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{evName}}</span><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#A3A9B6;white-space:nowrap">KARTU PEMAIN · {{sportUp}}</span></span>
+</span>
+<span style="position:absolute;left:0;right:0;top:40px;height:170px;overflow:hidden;background:{{p.tc}}">
+<span class="sb-display" aria-hidden="true" style="position:absolute;right:-4px;top:-26px;font-size:176px;line-height:1;font-weight:900;color:{{p.onT}};opacity:.17">{{p.no}}</span>
+<sc-if value="{{p.noPhoto}}" hint-placeholder-val="{{ true }}">
+<svg viewBox="0 0 240 186" width="230" height="170" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="position:absolute;left:0;bottom:0">
+<path d="M84 82C80 42 104 30 120 30c20 0 40 12 36 52l4 52c-10 4-20 2-24-6h-32c-4 8-14 10-24 6z" fill="{{p.hair}}" opacity="{{p.o3}}"></path>
+<rect x="106" y="100" width="28" height="32" rx="9" fill="{{p.skinD}}" opacity="{{p.oNeck}}"></rect>
+<path d="M36 186c6-40 38-60 84-60s78 20 84 60z" fill="#0B0D12"></path>
+<path d="M100 128l20 22 20-22" fill="none" stroke="{{p.tc}}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="{{p.oNeck}}"></path>
+<text x="168" y="176" text-anchor="middle" font-family="Big Shoulders, Impact, sans-serif" font-size="26" font-weight="900" fill="{{p.tc}}">{{p.no}}</text>
+<path d="M74 186c-6-36-4-66 8-94 4-36 18-54 38-54s34 18 38 54c12 28 14 58 8 94z" fill="{{p.hijab}}" opacity="{{p.o2}}"></path>
+<ellipse cx="120" cy="{{p.hcy}}" rx="{{p.hrx}}" ry="{{p.hry}}" fill="{{p.skin}}"></ellipse>
+<path d="M88 74c-2-30 16-40 32-40 20 0 36 10 32 40-4-14-16-20-32-20s-28 6-32 20z" fill="{{p.hair}}" opacity="{{p.o0}}"></path>
+<path d="M88 78c-6-36 18-46 36-44 22 2 34 18 28 46-6-18-20-28-40-22-12 4-20 10-24 20z" fill="{{p.hair}}" opacity="{{p.o1}}"></path>
+<path d="M90 70c2-26 16-36 32-36 18 0 32 12 30 36-8-10-20-16-32-14-12 2-22 6-30 14z" fill="{{p.hair}}" opacity="{{p.o3}}"></path>
+</svg>
+</sc-if>
+<sc-if value="{{p.hasPhoto}}" hint-placeholder-val="{{ false }}"><img src="{{p.photo}}" alt="Foto {{p.full}}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></sc-if>
+</span>
+<span class="sb-display" style="position:absolute;left:12px;top:184px;width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#0B0D12;border:3px solid {{p.tc}};font-size:28px;font-weight:900">{{p.no}}</span>
+<span style="position:absolute;left:72px;right:10px;top:215px;display:flex;flex-direction:column;gap:3px">
+<span class="sb-display" style="font-size:21px;line-height:1;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{p.name}}</span>
+<span class="sb-mono" style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:{{p.tcInk}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{p.pos}}</span>
+</span>
+<span style="position:absolute;left:12px;right:12px;top:250px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px 10px">
+<span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#A3A9B6">LAHIR</span><span style="font-size:12px;font-weight:600;white-space:nowrap">{{p.dob}}</span></span>
+<span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#A3A9B6">USIA · KATEGORI</span><span style="font-size:12px;font-weight:600;white-space:nowrap;color:{{p.ageColor}}">{{p.age}} · {{p.cat}}</span></span>
+<span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#A3A9B6">TIM</span><span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{p.team}}</span></span>
+<span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#A3A9B6">ID PEMAIN</span><span class="sb-mono" style="font-size:11px;font-weight:700;white-space:nowrap">{{p.idc}}</span></span>
+</span>
+<span style="position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px 0 12px;border-top:1px solid #232834;background:#0D0F14">
+<span class="sb-mono" style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:999px;border:1px solid {{p.stBd}};color:{{p.stC}};font-size:9px;font-weight:700;white-space:nowrap"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:{{p.stC}}"></span>{{p.statusLabel}}</span>
+<span class="sb-mono" style="font-size:8px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">s.d. {{evEnd}}</span>
+</span>
+<sc-if value="{{p.isDraft}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="position:absolute;right:10px;top:50px;padding:3px 8px;border-radius:6px;background:#F2C230;color:#14161C;font-size:9px;font-weight:700">PRATINJAU</span></sc-if>
+<span aria-hidden="true" class="kp-sheen"></span>
+</span>
+<span class="kp-face kp-back" style="display:block;position:absolute;inset:0;border-radius:16px;overflow:hidden;background:#F2F1EC;color:#14161C;border:1px solid #D6D3CA">
+<span style="position:absolute;left:0;right:0;top:0;height:6px;background:{{p.tc}}"></span>
+<span style="position:absolute;left:14px;right:14px;top:16px;display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span class="sb-display" style="font-size:17px;font-weight:900;text-transform:uppercase">Data pemain</span><span class="sb-mono" style="font-size:9px;color:#4A4F5B">{{p.idc}}</span></span>
+<span style="position:absolute;left:14px;right:14px;top:44px;display:flex;flex-direction:column;gap:7px">
+<span style="display:flex;flex-direction:column;gap:1px"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#4A4F5B">NAMA LENGKAP</span><span style="font-size:12px;font-weight:700">{{p.full}}</span></span>
+<span style="display:flex;flex-direction:column;gap:1px"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#4A4F5B">TANGGAL LAHIR</span><span style="font-size:12px;font-weight:600">{{p.dobLong}} · {{p.age}}</span></span>
+<span style="display:flex;flex-direction:column;gap:1px"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#4A4F5B">TIM · MANAJER</span><span style="font-size:12px;font-weight:600">{{p.team}} · {{p.mgr}}</span></span>
+<span style="display:flex;flex-direction:column;gap:1px"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#4A4F5B">KONTAK DARURAT</span><span style="font-size:12px;font-weight:600">{{p.contact}}</span></span>
+<span style="display:flex;flex-direction:column;gap:1px"><span class="sb-mono" style="font-size:8px;letter-spacing:.12em;color:#4A4F5B">{{p.docLabel}}</span><span style="font-size:12px;font-weight:600">{{p.docLine}}</span></span>
+</span>
+<span style="position:absolute;left:14px;right:14px;top:222px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px">
+<sc-for list="{{p.stats}}" as="x" hint-placeholder-count="4"><span style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 2px;border-radius:8px;background:#E3E0D7"><span class="sb-display" style="font-size:19px;line-height:1;font-weight:900;color:{{x.c}}">{{x.v}}</span><span class="sb-mono" style="font-size:7.5px;letter-spacing:.06em;color:#4A4F5B;text-transform:uppercase">{{x.l}}</span></span></sc-for>
+</span>
+<span style="position:absolute;left:14px;right:14px;top:270px;padding:7px 9px;border-radius:9px;background:{{p.stBgL}};color:{{p.stInkL}};font-size:11px;line-height:1.35;font-weight:700">{{p.note}}</span>
+<span style="position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px">
+<span style="display:flex;flex-direction:column;gap:1px;min-width:0"><svg aria-hidden="true" viewBox="0 0 160 50" width="64" height="20"><path d="M8 36c10-22 18-26 20-14s-6 20 2 12 14-26 20-18-4 22 6 14 10-18 18-12 4 14 14 8 16-14 24-10 10 8 20 4 14-6 20-6" fill="none" stroke="#14161C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="font-size:9px;color:#4A4F5B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Panitia {{evName}}</span></span>
+<span class="sb-mono" style="flex:none;font-size:8px;line-height:1.3;color:#4A4F5B;text-align:right">Tunjukkan ke<br>wasit sebelum laga</span>
+</span>
+</span>
+</span>
+</button>
+<span style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span style="font-size:12px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{p.sub}}</span>
+<button class="kp-btn" onClick="{{p.edit}}" aria-label="Ubah data {{p.full}}" style="flex:none;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:13px;font-weight:700">Ubah</button>
+</span>
+</div>
+</sc-for>
+<sc-if value="{{noCards}}" hint-placeholder-val="{{ false }}">
+<p style="margin:0;padding:24px;border-radius:16px;border:1px dashed #343B4A;color:#A3A9B6;font-size:15px">Tidak ada pemain dengan nama atau nomor itu.</p>
+</sc-if>
+</div>
+</section>
+
+<aside aria-label="Panel kartu" style="flex:1 1 300px;max-width:360px;min-width:0">
+<sc-if value="{{edOpen}}" hint-placeholder-val="{{ false }}">
+<section class="kp-ed-{{edK}}" aria-labelledby="kp-ed" style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:20px;background:#12151C;border:1px solid #2A303D">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+<h2 id="kp-ed" class="sb-display" style="margin:0;font-size:26px;font-weight:800;text-transform:uppercase">{{edTitle}}</h2>
+<button class="kp-btn" onClick="{{cancelEdit}}" aria-label="Tutup formulir" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="display:flex;gap:14px;align-items:center">
+<span style="position:relative;flex:none;width:76px;height:96px;border-radius:12px;overflow:hidden;background:{{edTc}}">
+<sc-if value="{{edHasPhoto}}" hint-placeholder-val="{{ false }}"><img src="{{edPhoto}}" alt="Foto yang dipilih" style="width:100%;height:100%;object-fit:cover"></sc-if>
+<sc-if value="{{edNoPhoto}}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 76 96" width="76" height="96" aria-hidden="true"><circle cx="38" cy="38" r="16" fill="#0B0D12" opacity=".55"></circle><path d="M8 96c2-22 14-34 30-34s28 12 30 34z" fill="#0B0D12" opacity=".55"></path></svg></sc-if>
+</span>
+<span style="display:flex;flex-direction:column;gap:6px;min-width:0">
+<input id="kp-file" class="kp-fileIn" type="file" accept="image/*" onChange="{{onFile}}">
+<label for="kp-file" class="kp-up" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;border:1px dashed #4A5263;background:#0D0F14;font-size:14px;font-weight:700"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3v13H4z"></path><circle cx="12" cy="13" r="4"></circle></svg>{{photoBtn}}</label>
+<span style="font-size:12px;line-height:1.4;color:#A3A9B6">JPG atau PNG, wajah terlihat jelas, maks. 5 MB.</span>
+<sc-if value="{{edHasPhoto}}" hint-placeholder-val="{{ false }}"><button class="kp-btn" onClick="{{clearPhoto}}" style="align-self:flex-start;min-height:36px;padding:0;border:0;background:transparent;color:#FFB089;font-size:13px;font-weight:700;text-decoration:underline">Hapus foto</button></sc-if>
+</span>
+</div>
+<label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#C9CDD6">Nama lengkap<input class="kp-in-f {{fullBad}}" value="{{edFull}}" onChange="{{onFull}}" maxlength="40" placeholder="sesuai kartu identitas"></label>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:10px">
+<label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#C9CDD6">{{shortLabel}}<input class="kp-in-f" value="{{edShort}}" onChange="{{onShort}}" maxlength="14"></label>
+<label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#C9CDD6">No. punggung<input class="kp-in-f {{noBad}}" type="number" min="1" max="99" value="{{edNo}}" onChange="{{onNo}}"></label>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px">
+<label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#C9CDD6">Posisi<select class="kp-in-f" value="{{edPos}}" onChange="{{onPos}}"><sc-for list="{{posOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
+<label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#C9CDD6">Tanggal lahir<input class="kp-in-f" type="date" value="{{edDob}}" onChange="{{onDob}}"></label>
+</div>
+<label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#C9CDD6">Tim<select class="kp-in-f" value="{{edTeam}}" onChange="{{onTeam}}"><sc-for list="{{teamOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
+<label style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:#C9CDD6">Kontak darurat<input class="kp-in-f" value="{{edContact}}" onChange="{{onContact}}" maxlength="40" placeholder="nama · nomor HP"></label>
+<button class="kp-btn" role="switch" aria-checked="{{edDoc}}" onClick="{{tDoc}}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:52px;padding:6px 14px;border-radius:12px;border:1px solid #232834;background:#0D0F14;color:#F2F1EC;text-align:left">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Kartu identitas sudah dicek</span><span style="font-size:12px;color:#A3A9B6">KTP, kartu pelajar, atau akta</span></span>
+<span aria-hidden="true" style="flex:none;width:44px;height:26px;border-radius:13px;background:{{docTrack}};padding:3px"><span class="kp-knob" style="display:block;width:20px;height:20px;border-radius:50%;background:#F2F1EC;transform:translateX({{docKx}}px)"></span></span>
+</button>
+<sc-for list="{{msgs}}" as="mg" hint-placeholder-count="1"><p role="alert" style="margin:0;padding:9px 12px;border-radius:10px;background:{{mg.bg}};color:{{mg.c}};font-size:13px;font-weight:600;line-height:1.4">{{mg.t}}</p></sc-for>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<button class="kp-btn" data-fx="y" onClick="{{save}}" disabled="{{cantSave}}" style="flex:1;min-height:50px;padding:0 18px;border-radius:12px;border:0;background:#FF7A2E;color:#140B05;font-size:15px;font-weight:800">{{saveLabel}}</button>
+<sc-if value="{{isEditMode}}" hint-placeholder-val="{{ false }}"><button class="kp-btn" onClick="{{remove}}" style="min-height:50px;padding:0 16px;border-radius:12px;border:1px solid #6B3434;background:transparent;color:#FF9C9C;font-size:14px;font-weight:700">Hapus</button></sc-if>
+</div>
+</section>
+</sc-if>
+<sc-if value="{{edClosed}}" hint-placeholder-val="{{ true }}">
+<section aria-labelledby="kp-meja" style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:20px;background:#12151C;border:1px solid #2A303D">
+<h2 id="kp-meja" class="sb-display" style="margin:0;font-size:26px;font-weight:800;text-transform:uppercase">Meja verifikasi</h2>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#A3A9B6">Sebelum kick-off, wasit mengetik nama atau nomor, lalu mencocokkan wajah pemain dengan foto di kartu. Kartu merah berarti pemain absen di laga itu.</p>
+<ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px">
+<li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5"><span class="sb-mono" style="flex:none;width:24px;height:24px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;background:#1E222C;font-size:11px;font-weight:700">1</span>Manajer tim mengisi data dan foto saat pendaftaran.</li>
+<li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5"><span class="sb-mono" style="flex:none;width:24px;height:24px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;background:#1E222C;font-size:11px;font-weight:700">2</span>Panitia mengecek kartu identitas, status jadi Boleh main.</li>
+<li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5"><span class="sb-mono" style="flex:none;width:24px;height:24px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;background:#1E222C;font-size:11px;font-weight:700">3</span>Kartu kuning dari papan skor wasit tercatat otomatis di sisi belakang.</li>
+</ol>
+<button class="kp-btn" data-fx="y" onClick="{{startNew}}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 18px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:15px;font-weight:800"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Tambah pemain ke {{teamName}}</button>
+<button class="kp-btn" onClick="{{downloadAll}}" style="min-height:48px;padding:0 18px;border-radius:14px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Unduh semua kartu (PDF)</button>
+</section>
+</sc-if>
+</aside>
+</div>
+</main>
+<div style="position:fixed;left:0;right:0;bottom:28px;display:flex;justify-content:center;pointer-events:none;perspective:600px;z-index:50">
+<div role="status" aria-live="polite" class="kp-toast kp-toast-{{toastK}}" style="max-width:min(560px,92vw);padding:14px 20px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:15px;font-weight:700;box-shadow:0 20px 50px rgba(0,0,0,.5)">{{toast}}</div>
+</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"warnaUtama":{"editor":"color","default":"#FF7A2E"},"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    const teams = [
+      { id: 'raj', name: 'Tim Rajawali', code: 'RAJ', color: '#FF7A2E', mgr: 'Rizky Pratama', cat: 'Putra' },
+      { id: 'ela', name: 'Tim Elang', code: 'ELA', color: '#4D7CFF', mgr: 'Hasan Basri', cat: 'Putra' },
+      { id: 'gar', name: 'Tim Garuda', code: 'GAR', color: '#F2C230', mgr: 'Joko Susilo', cat: 'Putra' },
+      { id: 'ken', name: 'Tim Kenanga', code: 'KEN', color: '#C084FC', mgr: 'Rina Marlina', cat: 'Putri' }
+    ];
+    // nama lengkap, nama di kartu, nomor, posisi, lahir, rambut (0 cepak,1 poni,2 hijab,3 panjang), kulit, statistik [laga, a, b, c], dokumen
+    const raw = {
+      raj: [['Andi Saputra', 'Andi', 1, 0, '2001-07-21', 0, 1, [4, 0, 0, 0], 1], ['Rizky Pratama', 'Rizky', 10, 3, '2003-03-12', 1, 0, [4, 7, 1, 0], 1], ['Dimas Ardiansyah', 'Dimas', 4, 1, '2002-11-02', 0, 2, [4, 1, 2, 0], 1], ['Fajar Nugroho', 'Fajar', 7, 2, '2004-01-30', 1, 1, [4, 3, 0, 0], 1],
+        ['Yoga Permana', 'Yoga', 8, 2, '2005-05-18', 0, 3, [3, 2, 0, 0], 1], ['Bagas Kurniawan', 'Bagas', 11, 3, '2006-09-09', 1, 2, [3, 1, 0, 0], 1], ['Ilham Maulana', 'Ilham', 5, 1, '2003-12-25', 0, 0, [2, 0, 1, 0], 1], ['Tegar Saputro', 'Tegar', 12, 0, '2008-02-14', 1, 1, [1, 0, 0, 0], 0]],
+      ela: [['Galih Setiawan', 'Galih', 1, 0, '2000-04-08', 0, 2, [4, 0, 0, 0], 1], ['Wahyu Hidayat', 'Wahyu', 9, 3, '2002-08-17', 1, 1, [4, 9, 0, 0], 1], ['Reza Firmansyah', 'Reza', 3, 1, '2001-10-05', 0, 0, [4, 0, 1, 0], 1], ['Bayu Aji', 'Bayu', 7, 2, '2004-06-22', 1, 3, [4, 2, 0, 0], 1],
+        ['Arif Rahman', 'Arif', 10, 2, '2003-02-11', 0, 1, [4, 2, 0, 1], 1], ['Doni Kusuma', 'Doni', 6, 1, '2005-11-30', 1, 2, [3, 0, 0, 0], 1], ['Eko Prasetyo', 'Eko', 11, 3, '1999-01-19', 0, 1, [2, 1, 0, 0], 1], ['Gilang Ramadhan', 'Gilang', 2, 0, '2006-07-03', 1, 0, [1, 0, 0, 0], 1]],
+      gar: [['Putra Wijaya', 'Putra', 1, 0, '2002-05-27', 0, 3, [4, 0, 0, 0], 1], ['Hendra Gunawan', 'Hendra', 5, 1, '2000-09-14', 1, 1, [4, 1, 1, 0], 1], ['Agus Salim', 'Agus', 7, 2, '2003-03-03', 0, 2, [4, 3, 0, 0], 1], ['Rangga Pratama', 'Rangga', 9, 3, '2004-12-12', 1, 0, [4, 5, 0, 0], 1],
+        ['Fikri Hakim', 'Fikri', 8, 2, '2005-08-08', 0, 1, [3, 1, 0, 0], 1], ['Naufal Akbar', 'Naufal', 4, 1, '2006-01-21', 1, 2, [3, 0, 1, 0], 1], ['Rendi Saputra', 'Rendi', 10, 3, '2002-10-10', 0, 0, [3, 2, 0, 0], 1], ['Kevin Wijaya', 'Kevin', 12, 0, '2007-04-16', 1, 1, [1, 0, 0, 0], 1]],
+      ken: [['Laras Ayuningtyas', 'Laras', 1, 0, '2002-02-02', 2, 1, [4, 0, 0, 0], 1], ['Sari Indah Permata', 'Sari', 7, 2, '2003-07-07', 3, 0, [4, 4, 0, 0], 1], ['Nadia Putri', 'Nadia', 10, 3, '2004-04-24', 2, 2, [4, 6, 1, 0], 1], ['Ayu Lestari', 'Ayu', 4, 1, '2001-09-19', 3, 1, [4, 1, 0, 0], 1],
+        ['Dewi Anggraini', 'Dewi', 8, 2, '2005-03-15', 2, 3, [3, 2, 0, 0], 1], ['Putri Maharani', 'Putri', 9, 3, '2006-06-06', 3, 2, [3, 3, 0, 0], 1], ['Tika Rahmawati', 'Tika', 5, 1, '2004-11-11', 2, 0, [2, 0, 0, 0], 0], ['Nina Kartika', 'Nina', 12, 0, '2007-08-28', 3, 1, [1, 0, 0, 0], 1]]
+    };
+    const fam = ['Ibu', 'Bapak', 'Kakak', 'Istri', 'Suami'];
+    const players = [];
+    teams.forEach((t) => raw[t.id].forEach((r, i) => {
+      const tail = String((r[2] * 1373 + i * 911 + t.code.charCodeAt(0) * 37) % 10000).padStart(4, '0');
+      players.push({ id: t.id + '-' + r[2], team: t.id, full: r[0], short: r[1], no: r[2], pos: r[3], dob: r[4], hair: r[5], skin: r[6], stats: r[7], doc: !!r[8], contact: fam[(i + r[2]) % (t.cat === 'Putri' ? 3 : 4)] + ' · 0812-••••-' + tail, photo: '' });
+    }));
+    this.state = {
+      theme: this.readTheme(), teams: teams, players: players, sport: 'futsal', team: 'raj', flipped: { 'raj-4': true },
+      dealK: 'a', search: '', edit: null, edK: 'n', saveK: 'n', savedId: '', toast: '', toastK: 'n'
+    };
+  }
+  readTheme() {
+    try { const t = JSON.parse(window.localStorage.getItem('sbEventTheme') || 'null'); return t && t.primary ? t : null; } catch (e) { return null; }
+  }
+  watchTheme() {
+    this.onStore = (e) => { if (e.key === 'sbEventTheme') this.setState({ theme: this.readTheme() }); };
+    try { window.addEventListener('storage', this.onStore); } catch (e) { }
+  }
+  componentDidMount() { this.watchTheme(); }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.onStore); } catch (e) { } }
+  thLum(hex) {
+    const h = (hex || '#000000').replace('#', '');
+    const v = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  thOn(hex) { const l = this.thLum(hex); return (l + 0.05) / 0.05 >= 1.05 / (l + 0.05) ? '#0B0D12' : '#FFFFFF'; }
+  thReadable(col, bg) {
+    let c = col; let i = 0;
+    const con = (a, b) => { const x = this.thLum(a); const y = this.thLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const toward = this.thLum(bg) < 0.2 ? 'FFFFFF' : '000000';
+    while (con(c, bg) < 4.5 && i < 14) {
+      const a = c.replace('#', '');
+      c = '#' + [0, 2, 4].map((k) => Math.round(parseInt(a.substr(k, 2), 16) * 0.85 + parseInt(toward.substr(k, 2), 16) * 0.15).toString(16).padStart(2, '0')).join('');
+      i++;
+    }
+    return c;
+  }
+  thIni(n) {
+    const w = (n || '').trim().split(/\s+/).filter((x) => /[A-Za-z]/.test(x) && !/^(tim|team)$/i.test(x));
+    return ((w[0] || 'E')[0] + (w[1] ? w[1][0] : '')).toUpperCase();
+  }
+  mix(hex, to, k) {
+    const a = hex.replace('#', ''); const b = to.replace('#', '');
+    return '#' + [0, 2, 4].map((i) => Math.round(parseInt(a.substr(i, 2), 16) * (1 - k) + parseInt(b.substr(i, 2), 16) * k).toString(16).padStart(2, '0')).join('');
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  sportDef() {
+    return {
+      futsal: { label: 'Futsal', pos: ['Kiper', 'Anchor', 'Flank', 'Pivot'], stats: ['Laga', 'Gol', 'Kuning', 'Merah'], ban: true },
+      voli: { label: 'Bola Voli', pos: ['Tosser', 'Middle blocker', 'Outside hitter', 'Opposite', 'Libero'], stats: ['Laga', 'Poin', 'Ace', 'Blok'], ban: false },
+      basket: { label: 'Basket', pos: ['Point guard', 'Shooting guard', 'Small forward', 'Power forward', 'Center'], stats: ['Laga', 'Poin', 'Rebound', 'Assist'], ban: false },
+      esports: { label: 'Mobile Legends', pos: ['Roamer', 'EXP lane', 'Mid lane', 'Gold lane', 'Jungler'], stats: ['Laga', 'Kill', 'Death', 'Assist'], ban: false }
+    };
+  }
+  age(dob) {
+    const d = new Date(dob + 'T00:00:00'); const e = new Date('2026-12-05T00:00:00');
+    if (isNaN(d.getTime())) return NaN;
+    let a = e.getFullYear() - d.getFullYear();
+    const m = e.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && e.getDate() < d.getDate())) a--;
+    return a;
+  }
+  fmt(dob, long) {
+    const d = new Date(dob + 'T00:00:00');
+    if (isNaN(d.getTime())) return '—';
+    const S = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    const L = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    return d.getDate() + ' ' + (long ? L : S)[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  evCode() {
+    const th = this.state.theme;
+    const name = th && th.name ? th.name : 'Piala Jumat Malam 2026';
+    const words = name.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w));
+    const ym = name.match(/20(\d\d)/);
+    return (words.map((w) => w[0]).join('').toUpperCase() || 'EV').slice(0, 4) + (ym ? ym[1] : '26');
+  }
+  statusOf(p, def) {
+    if (!p.doc) return { k: 'doc', label: 'DOKUMEN KURANG', note: 'Kartu identitas belum dicek panitia — belum boleh main' };
+    if (def.ban && p.stats[3] >= 1) return { k: 'ban', label: 'LARANGAN 1 LAGA', note: 'Kartu merah di laga sebelumnya — absen 1 laga' };
+    if (def.ban && p.stats[2] >= 2) return { k: 'ban', label: 'LARANGAN 1 LAGA', note: 'Akumulasi 2 kartu kuning — absen 1 laga, lalu catatan direset' };
+    return { k: 'ok', label: 'BOLEH MAIN', note: def.ban && p.stats[2] === 1 ? '1 kartu kuning — satu lagi berarti absen 1 laga' : 'Terverifikasi · boleh main di laga berikutnya' };
+  }
+  startNew() {
+    const s = this.state;
+    const used = s.players.filter((p) => p.team === s.team).map((p) => p.no);
+    let no = 13; while (used.indexOf(no) >= 0 && no < 99) no++;
+    this.setState({ edit: { mode: 'new', id: 'draft', team: s.team, full: '', short: '', no: no, pos: 1, dob: '2004-01-01', contact: '', doc: false, photo: '', hair: 0, skin: 1 }, edK: this.tg(s.edK), search: '' });
+  }
+  startEdit(id) {
+    const p = this.state.players.find((x) => x.id === id);
+    if (!p) return;
+    const f = Object.assign({}, this.state.flipped); f[id] = false;
+    this.setState({ edit: Object.assign({ mode: 'edit' }, p), edK: this.tg(this.state.edK), flipped: f });
+  }
+  setEdit(o) { this.setState({ edit: Object.assign({}, this.state.edit, o) }); }
+  problems(ed) {
+    const out = [];
+    if (!ed) return out;
+    if ((ed.full || '').trim().length < 3) out.push({ t: 'Isi nama lengkap sesuai kartu identitas.', bad: true, f: 'full' });
+    const n = parseInt(ed.no, 10);
+    if (!(n >= 1 && n <= 99)) out.push({ t: 'Nomor punggung harus 1–99.', bad: true, f: 'no' });
+    else {
+      const dup = this.state.players.find((x) => x.team === ed.team && x.no === n && x.id !== ed.id);
+      if (dup) out.push({ t: 'Nomor ' + n + ' sudah dipakai ' + dup.short + ' di tim ini.', bad: true, f: 'no' });
+    }
+    const a = this.age(ed.dob);
+    if (!isNaN(a) && a < 15) out.push({ t: 'Usia ' + a + ' tahun — di bawah batas 15 tahun. Pastikan aturan event mengizinkan.', bad: false });
+    if (!ed.doc) out.push({ t: 'Status kartu akan "Dokumen kurang" sampai identitas dicek.', bad: false });
+    return out;
+  }
+  save() {
+    const s = this.state; const ed = s.edit;
+    if (!ed || this.problems(ed).some((x) => x.bad)) return;
+    const clean = { team: ed.team, full: ed.full.trim(), short: (ed.short || '').trim() || ed.full.trim().split(/\s+/)[0], no: parseInt(ed.no, 10), pos: parseInt(ed.pos, 10) || 0, dob: ed.dob, contact: ed.contact || '—', doc: !!ed.doc, photo: ed.photo || '' };
+    let players; let id;
+    if (ed.mode === 'new') {
+      id = ed.team + '-' + clean.no;
+      players = s.players.concat([Object.assign({ id: id, hair: ed.hair || 0, skin: ed.skin || 1, stats: [0, 0, 0, 0] }, clean)]);
+    } else {
+      id = ed.id;
+      players = s.players.map((x) => (x.id === ed.id ? Object.assign({}, x, clean) : x));
+    }
+    this.setState({ players: players, edit: null, team: ed.team, savedId: id, saveK: this.tg(s.saveK) });
+    this.toastMsg((ed.mode === 'new' ? 'Kartu baru: ' : 'Kartu diperbarui: ') + clean.short + ' · #' + clean.no);
+    setTimeout(() => this.celebrate('a'), 300);
+  }
+  remove() {
+    const s = this.state; const ed = s.edit;
+    if (!ed || ed.mode !== 'edit') return;
+    this.setState({ players: s.players.filter((x) => x.id !== ed.id), edit: null });
+    this.toastMsg('Kartu ' + ed.short + ' dihapus dari ' + this.teamOf(ed.team).name);
+  }
+  teamOf(id) { return this.state.teams.find((t) => t.id === id) || this.state.teams[0]; }
+  onFile(e) {
+    const f = e.target && e.target.files ? e.target.files[0] : null;
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { this.toastMsg('Pilih file gambar (JPG atau PNG)'); return; }
+    if (f.size > 5 * 1024 * 1024) { this.toastMsg('Foto lebih dari 5 MB — kecilkan dulu'); return; }
+    try {
+      const rd = new FileReader();
+      rd.onload = () => { if (this.state.edit) { this.setEdit({ photo: String(rd.result) }); this.toastMsg('Foto terpasang di kartu'); } };
+      rd.onerror = () => this.toastMsg('Foto tidak bisa dibaca, coba file lain');
+      rd.readAsDataURL(f);
+    } catch (err) { this.toastMsg('Foto tidak bisa dibaca, coba file lain'); }
+    try { e.target.value = ''; } catch (err) { }
+  }
+  card(p, i, def, isDraft) {
+    const s = this.state;
+    const t = this.teamOf(p.team);
+    const tc = t.color;
+    const a = this.age(p.dob);
+    const st = this.statusOf(p, def);
+    const SK = ['#E0AC82', '#C68E64', '#A9704A', '#8D5A3B'];
+    const HJ = ['#2A303D', '#5B3A8C', '#1F5F4A', '#7A4424'];
+    const skin = SK[(p.skin || 0) % 4];
+    const hj = p.hair === 2;
+    const FRONT = { ok: ['#7EE2A8', 'rgba(126,226,168,.45)'], ban: ['#FF9C9C', 'rgba(255,140,140,.5)'], doc: ['#F2C230', 'rgba(242,194,48,.5)'] }[st.k];
+    const BACK = { ok: ['#D7F0E1', '#14532D'], ban: ['#F7DADA', '#7F1D1D'], doc: ['#F6ECC8', '#5C4300'] }[st.k];
+    const es = s.sport === 'esports';
+    const gid = String(100000000 + ((p.no * 7919 + t.code.charCodeAt(1) * 104729 + (p.full || '').length * 31337) % 899999999));
+    const flipped = !!s.flipped[p.id];
+    const statCols = ['#14161C', '#14161C', def.ban ? '#8A6A00' : '#14161C', def.ban ? '#9B1C1C' : '#14161C'];
+    return {
+      i: i, full: p.full || 'Nama pemain', name: es ? t.code + '.' + (p.short || 'Pemain') : (p.short || (p.full || 'Pemain').split(/\s+/)[0]), no: p.no || '–',
+      pos: def.pos[(p.pos || 0) % def.pos.length], tc: tc, onT: this.thOn(tc), tcInk: this.thReadable(tc, '#12151C'),
+      team: t.name, mgr: t.mgr, cat: t.cat,
+      dob: this.fmt(p.dob, false), dobLong: this.fmt(p.dob, true), age: isNaN(a) ? '—' : a + ' th', ageColor: !isNaN(a) && a < 15 ? '#F2C230' : '#F2F1EC',
+      idc: this.evCode() + '-' + t.code + '-' + String(p.no || 0).padStart(2, '0'),
+      hasPhoto: !!p.photo, noPhoto: !p.photo, photo: p.photo || '',
+      skin: skin, skinD: this.mix(skin, '#000000', 0.18), hair: '#1B1410', hijab: HJ[(p.no || 0) % 4],
+      o0: p.hair === 0 ? 1 : 0, o1: p.hair === 1 ? 1 : 0, o2: hj ? 1 : 0, o3: p.hair === 3 ? 1 : 0, oNeck: hj ? 0 : 1,
+      hcy: hj ? 84 : 80, hrx: hj ? 23 : 30, hry: hj ? 28 : 35,
+      statusLabel: st.label, stC: FRONT[0], stBd: FRONT[1], stBgL: BACK[0], stInkL: BACK[1], note: st.note,
+      contact: p.contact || '—',
+      docLabel: es ? 'ID GAME (SERVER)' : 'DOKUMEN',
+      docLine: es ? gid.slice(0, 4) + ' ' + gid.slice(4, 8) + ' (' + gid.slice(-4) + ')' : (p.doc ? 'Kartu identitas dicek panitia' : 'Belum dicek panitia'),
+      stats: def.stats.map((l, k) => ({ l: l, v: (p.stats || [0, 0, 0, 0])[k], c: statCols[k] })),
+      sub: isDraft ? 'Belum disimpan' : t.name + ' · ' + def.pos[(p.pos || 0) % def.pos.length],
+      flipped: flipped, flipCls: flipped ? 'is-flipped' : '', draftCls: isDraft ? 'kp-draft' : '', isDraft: isDraft,
+      popCls: !isDraft && p.id === s.savedId ? 'kp-pop-' + s.saveK : '',
+      flip: () => { const f = Object.assign({}, this.state.flipped); f[p.id] = !f[p.id]; this.setState({ flipped: f }); },
+      edit: () => (isDraft ? null : this.startEdit(p.id))
+    };
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const th = s.theme;
+    const P = th ? th.primary : (this.props.warnaUtama ?? '#FF7A2E');
+    const evName = th && th.name ? th.name : 'Piala Jumat Malam 2026';
+    const dateLine = th && th.dateLine ? th.dateLine : '5–6 Desember 2026';
+    const DEF = this.sportDef();
+    const def = DEF[s.sport];
+    const ed = s.edit;
+    const q = s.search.trim().toLowerCase();
+    let src;
+    if (q) src = s.players.filter((p) => p.full.toLowerCase().indexOf(q) >= 0 || p.short.toLowerCase().indexOf(q) >= 0 || String(p.no) === q);
+    else src = s.players.filter((p) => p.team === s.team);
+    src = src.slice().sort((x, y) => x.no - y.no);
+    let cards = src.map((p, i) => this.card(ed && ed.mode === 'edit' && ed.id === p.id ? Object.assign({}, p, ed) : p, i, def, false));
+    if (ed && ed.mode === 'new' && !q && ed.team === s.team) cards = [this.card(ed, 0, def, true)].concat(cards);
+    const stAll = s.players.map((p) => this.statusOf(p, def).k);
+    const tm = this.teamOf(s.team);
+    const probs = this.problems(ed);
+    const edTeam = ed ? this.teamOf(ed.team) : tm;
+    const edAge = ed ? this.age(ed.dob) : NaN;
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      P: P, onP: this.thOn(P), evName: evName, evIni: this.thIni(evName),
+      hasLogo: !!(th && th.logoUrl), noLogo: !(th && th.logoUrl), logoUrl: th && th.logoUrl ? th.logoUrl : '',
+      evEnd: dateLine, sportUp: def.label.toUpperCase(),
+      summary: [
+        { v: s.players.length, l: 'pemain terdaftar', c: '#F2F1EC' },
+        { v: stAll.filter((k) => k === 'ok').length, l: 'boleh main', c: '#7EE2A8' },
+        { v: stAll.filter((k) => k === 'ban').length, l: 'larangan main', c: '#FF9C9C' },
+        { v: stAll.filter((k) => k === 'doc').length, l: 'dokumen kurang', c: '#F2C230' }
+      ],
+      sports: Object.keys(DEF).map((k) => ({ label: DEF[k].label, on: s.sport === k, cls: s.sport === k ? 'is-on' : '', pick: () => { if (this.state.sport !== k) this.setState({ sport: k, dealK: this.tg(this.state.dealK) }); } })),
+      search: s.search, onSearch: (e) => this.setState({ search: e.target.value }),
+      tabs: s.teams.map((t) => {
+        const n = s.players.filter((p) => p.team === t.id).length;
+        const on = !q && s.team === t.id;
+        return { name: t.name, ini: this.thIni(t.name), color: t.color, on2: this.thOn(t.color), meta: n + ' pemain · ' + t.cat, on: on, cls: on ? 'is-on' : '', pick: () => { if (this.state.team !== t.id || this.state.search) this.setState({ team: t.id, search: '', dealK: this.tg(this.state.dealK) }); } };
+      }),
+      listNote: q ? cards.length + ' hasil untuk "' + s.search.trim() + '" di semua tim' : tm.name + ' · ' + src.length + ' kartu · manajer ' + tm.mgr + ' · klik kartu untuk membalik',
+      cards: cards, noCards: cards.length === 0, dealK: s.dealK,
+      edOpen: !!ed, edClosed: !ed, edK: s.edK, teamName: tm.name,
+      edTitle: ed ? (ed.mode === 'new' ? 'Pemain baru' : 'Ubah ' + (ed.short || 'pemain')) : '',
+      edTc: edTeam.color, edHasPhoto: !!(ed && ed.photo), edNoPhoto: !(ed && ed.photo), edPhoto: ed && ed.photo ? ed.photo : '',
+      photoBtn: ed && ed.photo ? 'Ganti foto' : 'Unggah foto',
+      edFull: ed ? ed.full : '', edShort: ed ? ed.short : '', edNo: ed ? String(ed.no) : '', edPos: ed ? String(ed.pos) : '0',
+      edDob: ed ? ed.dob : '', edTeam: ed ? ed.team : s.team, edContact: ed ? ed.contact : '', edDoc: !!(ed && ed.doc),
+      shortLabel: s.sport === 'esports' ? 'Nickname' : 'Nama di kartu',
+      fullBad: probs.some((x) => x.f === 'full') && ed && ed.full !== '' ? 'is-bad' : '', noBad: probs.some((x) => x.f === 'no') ? 'is-bad' : '',
+      posOpts: def.pos.map((l, i) => ({ v: String(i), l: l })),
+      teamOpts: s.teams.map((t) => ({ v: t.id, l: t.name + ' (' + t.cat + ')' })),
+      onFull: (e) => this.setEdit({ full: e.target.value }), onShort: (e) => this.setEdit({ short: e.target.value }),
+      onNo: (e) => this.setEdit({ no: e.target.value === '' ? '' : parseInt(e.target.value, 10) }),
+      onPos: (e) => this.setEdit({ pos: parseInt(e.target.value, 10) || 0 }), onDob: (e) => this.setEdit({ dob: e.target.value }),
+      onTeam: (e) => { const v = e.target.value; this.setEdit({ team: v }); if (this.state.edit && this.state.edit.mode === 'new') this.setState({ team: v }); },
+      onContact: (e) => this.setEdit({ contact: e.target.value }),
+      tDoc: () => this.setEdit({ doc: !this.state.edit.doc }), docTrack: ed && ed.doc ? '#7EE2A8' : '#343B4A', docKx: ed && ed.doc ? 18 : 0,
+      onFile: (e) => this.onFile(e), clearPhoto: () => this.setEdit({ photo: '' }),
+      msgs: probs.map((x) => ({ t: x.t, c: x.bad ? '#FFB4B4' : '#F2D37A', bg: x.bad ? 'rgba(255,120,120,.1)' : 'rgba(242,194,48,.1)' })),
+      cantSave: probs.some((x) => x.bad), saveLabel: ed && ed.mode === 'new' ? 'Simpan & cetak kartu' : 'Simpan perubahan',
+      isEditMode: !!(ed && ed.mode === 'edit'),
+      save: () => this.save(), remove: () => this.remove(), cancelEdit: () => this.setState({ edit: null }),
+      startNew: () => this.startNew(),
+      printTeam: () => this.toastMsg('PDF siap: ' + s.players.filter((p) => p.team === s.team).length + ' kartu ' + tm.name + ' di 1 lembar A4, lengkap dengan garis potong'),
+      downloadAll: () => this.toastMsg('Mengunduh ' + s.players.length + ' kartu dari ' + s.teams.length + ' tim (PDF, 8 kartu per A4)'),
+      toast: s.toast, toastK: s.toastK,
+      edAgeNote: isNaN(edAge) ? '' : edAge + ' th'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Jadwal Otomatis — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input,select{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.jd-btn{cursor:pointer}
+.jd-btn:disabled{opacity:.45;cursor:not-allowed}
+.jd-chip{cursor:pointer}
+.jd-chip:hover{border-color:#5A6275!important;color:#F2F1EC!important}
+.jd-chip.is-on{background-color:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.jd-in{min-height:44px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:#0B0D12;color:#F2F1EC;font-size:14px}
+.jd-grid{perspective:1600px}
+.jd-cell{transition:transform .35s cubic-bezier(.3,1.4,.4,1),box-shadow .3s,border-color .3s,opacity .3s;cursor:pointer}
+.jd-cell:hover{border-color:#5A6275!important}
+.jd-cell.is-sel{transform:perspective(700px) translateZ(46px) rotateX(-8deg);box-shadow:0 26px 50px -18px rgba(255,122,46,.75);border-color:#FF7A2E}
+.jd-cell.is-bad{border-color:#FF6B6B}
+.jd-cell.is-warn{border-color:#F6D56E}
+.jd-cell.is-dim{opacity:.28}
+.jd-in-a{animation:jdInA .75s cubic-bezier(.3,1.3,.4,1) backwards}.jd-in-b{animation:jdInB .75s cubic-bezier(.3,1.3,.4,1) backwards}
+@keyframes jdInA{from{opacity:0;transform:perspective(800px) translateY(-60px) translateZ(120px) rotateX(70deg)}to{opacity:1;transform:none}}
+@keyframes jdInB{from{opacity:0;transform:perspective(800px) translateY(-60px) translateZ(120px) rotateX(70deg)}to{opacity:1;transform:none}}
+.jd-shake{animation:jdShake .5s ease-in-out}
+@keyframes jdShake{0%,100%{transform:none}25%{transform:translateX(-5px) rotateZ(-1deg)}75%{transform:translateX(5px) rotateZ(1deg)}}
+.jd-sw-a{animation:jdSwA .6s cubic-bezier(.3,1.4,.4,1)}.jd-sw-b{animation:jdSwB .6s cubic-bezier(.3,1.4,.4,1)}
+@keyframes jdSwA{from{transform:perspective(600px) rotateY(180deg) scale(.9)}to{transform:none}}
+@keyframes jdSwB{from{transform:perspective(600px) rotateY(180deg) scale(.9)}to{transform:none}}
+.jd-toast{opacity:0;pointer-events:none}
+.jd-toast-a{animation:jdToastA 2.6s ease both}.jd-toast-b{animation:jdToastB 2.6s ease both}
+@keyframes jdToastA{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes jdToastB{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Admin.dc.html" aria-label="Kembali ke panel penyelenggara" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;color:#C9CDD6">Panel penyelenggara · Jadwal otomatis</span>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<a href="EventPage.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Lihat di halaman event</a>
+<a href="{{waLink}}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;background:#1F7A45;color:#FFFFFF;font-size:14px;font-weight:700;text-decoration:none">Kirim ke kapten</a>
+<button class="jd-btn" onClick="{{publish}}" disabled="{{hasBad}}" style="min-height:44px;padding:0 16px;border-radius:12px;border:0;background:#FF7A2E;color:#140B05;font-size:14px;font-weight:800">Terbitkan ke halaman event</button>
+</div>
+</div>
+</header>
+
+<main style="max-width:1360px;margin:0 auto;padding:28px 24px 72px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<aside aria-label="Pengaturan jadwal" style="flex:1 1 300px;max-width:100%;display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:22px;border:1px solid #232834;background:#0F1218">
+<h1 class="sb-display" style="margin:0;font-size:40px;line-height:.9;font-weight:900;text-transform:uppercase">Susun jadwal</h1>
+<div style="display:flex;flex-direction:column;gap:8px"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">PESERTA</span>
+<div role="group" aria-label="Peserta" style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{groupOpts}}" as="o" hint-placeholder-count="2"><button class="jd-btn jd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div></div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">LAPANGAN</span>
+<span style="display:flex;align-items:center;gap:6px"><button class="jd-btn" onClick="{{courtDown}}" aria-label="Kurangi lapangan" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">−</button><span class="sb-display" style="width:36px;text-align:center;font-size:30px;font-weight:900">{{C}}</span><button class="jd-btn" onClick="{{courtUp}}" aria-label="Tambah lapangan" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">+</button></span></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">DURASI LAGA</span>
+<div role="group" aria-label="Durasi" style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{durOpts}}" as="o" hint-placeholder-count="4"><button class="jd-btn jd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 12px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">JEDA ANTAR LAGA</span>
+<div role="group" aria-label="Jeda" style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{gapOpts}}" as="o" hint-placeholder-count="3"><button class="jd-btn jd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 12px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div></div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><label for="jd-start" class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">JAM MULAI</label><input id="jd-start" type="time" class="jd-in" value="{{start}}" onChange="{{onStart}}" style="color-scheme:dark"></div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Istirahat siang</span><span style="font-size:12px;color:#A3A9B6">12.00–13.00, tidak ada laga</span></span>
+<button class="jd-btn" role="switch" aria-checked="{{lunch}}" aria-label="Istirahat siang" onClick="{{toggleLunch}}" style="flex:none;width:52px;height:30px;padding:3px;border-radius:999px;border:1px solid #343B4A;background:{{lunchBg}};display:flex;align-items:center"><span style="display:block;width:22px;height:22px;border-radius:50%;background:#F2F1EC;transform:translateX({{lunchX}}px);transition:transform .3s cubic-bezier(.3,1.4,.4,1)"></span></button></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">ISTIRAHAT MINIMAL TIM</span>
+<div role="group" aria-label="Istirahat tim" style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{restOpts}}" as="o" hint-placeholder-count="2"><button class="jd-btn jd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 12px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div></div>
+<button class="jd-btn" onClick="{{build}}" style="min-height:54px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>Susun ulang otomatis</button>
+<p style="margin:0;font-size:12px;line-height:1.5;color:#A3A9B6">Ketuk satu laga, lalu ketuk laga lain untuk menukar, atau ketuk sel kosong untuk memindahkannya.</p>
+</aside>
+
+<section aria-label="Jadwal" style="flex:999 1 720px;min-width:0;display:flex;flex-direction:column;gap:16px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:10px">
+<sc-for list="{{stats}}" as="k" hint-placeholder-count="4"><div style="padding:14px 16px;border-radius:16px;border:1px solid {{k.border}};background:#0F1218;display:flex;flex-direction:column;gap:4px"><span class="sb-mono" style="font-size:10px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">{{k.label}}</span><span class="sb-display" style="font-size:34px;line-height:1;font-weight:900;color:{{k.col}}">{{k.v}}</span></div></sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center">
+<span style="display:flex;gap:10px;flex-wrap:wrap"><sc-for list="{{legend}}" as="l" hint-placeholder-count="4"><span style="display:flex;align-items:center;gap:6px;font-size:13px"><span style="width:12px;height:12px;border-radius:3px;background:{{l.c}}"></span>{{l.label}}</span></sc-for></span>
+<span style="display:flex;align-items:center;gap:8px"><label for="jd-team" class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">SOROT TIM</label><select id="jd-team" class="jd-in" value="{{focus}}" onChange="{{onFocus}}"><sc-for list="{{teamOpts}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.label}}</option></sc-for></select></span>
+</div>
+<sc-if value="{{hasIssues}}" hint-placeholder-val="{{ false }}"><p role="status" style="margin:0;padding:12px 14px;border-radius:12px;background:{{issueBg}};color:{{issueFg}};font-size:14px;font-weight:600">{{issueLine}}</p></sc-if>
+<div class="jd-grid" style="overflow-x:auto;padding:4px 2px 12px">
+<div style="min-width:{{gridMin}}px;display:flex;flex-direction:column;gap:6px">
+<div class="sb-mono" style="display:grid;grid-template-columns:70px repeat({{C}},minmax(0,1fr));gap:6px;font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6"><span>JAM</span><sc-for list="{{courtHeads}}" as="h" hint-placeholder-count="2"><span>{{h.label}}</span></sc-for></div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<sc-if value="{{r.lunch}}" hint-placeholder-val="{{ false }}"><div class="sb-mono" style="padding:10px 14px;border-radius:12px;border:1px dashed #3A4150;color:#A3A9B6;font-size:12px;text-align:center;letter-spacing:.1em">ISTIRAHAT SIANG · 12.00–13.00</div></sc-if>
+<div style="display:grid;grid-template-columns:70px repeat({{C}},minmax(0,1fr));gap:6px;align-items:stretch">
+<span class="sb-mono" style="display:flex;flex-direction:column;justify-content:center;font-size:13px;font-weight:700">{{r.time}}<span style="font-size:10px;font-weight:500;color:#7C8394">{{r.end}}</span></span>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="2">
+<button class="jd-btn jd-cell jd-in-{{genK}} {{c.cls}}" onClick="{{c.pick}}" aria-pressed="{{c.sel}}" aria-label="{{c.aria}}" style="min-height:64px;padding:8px 10px;border-radius:12px;border:1px solid {{c.border}};background:{{c.bg}};color:#F2F1EC;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px;animation-delay:{{c.delay}}ms">
+<sc-if value="{{c.has}}" hint-placeholder-val="{{ true }}">
+<span class="jd-sw-{{c.sk}}" style="display:flex;flex-direction:column;gap:3px">
+<span class="sb-mono" style="display:flex;justify-content:space-between;gap:6px;font-size:10px;font-weight:700;letter-spacing:.08em;color:{{c.gc}}"><span>{{c.code}}</span><span style="color:{{c.flagCol}}">{{c.flag}}</span></span>
+<span style="font-size:13px;font-weight:600;line-height:1.3">{{c.a}} <span style="color:#A3A9B6;font-weight:400">vs</span> {{c.b}}</span>
+</span>
+</sc-if>
+<sc-if value="{{c.empty}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="font-size:11px;color:#5A6275">{{c.emptyLabel}}</span></sc-if>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+</main>
+<div class="jd-toast jd-toast-{{toastK}}" role="status" style="position:fixed;left:50%;bottom:28px;margin-left:-180px;width:360px;padding:14px 18px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:14px;font-weight:600;text-align:center;box-shadow:0 20px 50px -10px rgba(0,0,0,.6)">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { G: 4, C: 2, dur: 30, gap: 10, start: '08:00', lunch: true, rest: 1, sched: [], sel: null, genK: 'a', sk: {}, focus: '', toast: '', toastK: 'n', bumpBad: 0 };
+    this.state.sched = this.schedule(this.state);
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  groups(G) {
+    const names = [['Tim Elang', 'Tim Kancil', 'Tim Banteng', 'Tim Garuda'], ['Tim Rajawali', 'Tim Merapi', 'Tim Naga', 'Tim Kenanga'], ['Tim Cempaka', 'Tim Melati', 'Tim Pandan', 'Tim Rinjani'], ['Tim Bara', 'Tim Samudra', 'Tim Kunyit', 'Tim Anggrek']];
+    return names.slice(0, G);
+  }
+  matches(G) {
+    const pairs = [[0, 1], [2, 3], [0, 2], [1, 3], [0, 3], [1, 2]];
+    const gs = this.groups(G);
+    const out = [];
+    for (let md = 0; md < 3; md++) gs.forEach((g, gi) => { [pairs[md * 2], pairs[md * 2 + 1]].forEach((p, k) => out.push({ id: out.length, g: gi, code: 'ABCD'[gi] + (md * 2 + k + 1), a: g[p[0]], b: g[p[1]] })); });
+    return out;
+  }
+  toMin(t) { const p = (t || '08:00').split(':').map(Number); return (p[0] || 0) * 60 + (p[1] || 0); }
+  fmt(m) { return String(Math.floor(m / 60)).padStart(2, '0') + '.' + String(m % 60).padStart(2, '0'); }
+  slotTimes(st, n) {
+    const out = [];
+    let t = this.toMin(st.start);
+    const len = st.dur + st.gap;
+    for (let i = 0; i < n; i++) {
+      if (st.lunch && t < 13 * 60 && t + st.dur > 12 * 60) t = 13 * 60;
+      out.push(t);
+      t += len;
+    }
+    return out;
+  }
+  schedule(st) {
+    const pool = this.matches(st.G).slice();
+    const last = {};
+    const out = [];
+    let t = 0;
+    while (pool.length && t < 80) {
+      const busy = {};
+      for (let c = 0; c < st.C; c++) {
+        let pick = -1;
+        for (let i = 0; i < pool.length; i++) {
+          const m = pool[i];
+          const ok = (x) => !busy[x] && (last[x] === undefined || t - last[x] > st.rest);
+          if (ok(m.a) && ok(m.b)) { pick = i; break; }
+        }
+        if (pick < 0) continue;
+        const m = pool.splice(pick, 1)[0];
+        busy[m.a] = true; busy[m.b] = true; last[m.a] = t; last[m.b] = t;
+        out.push({ slot: t, court: c, mid: m.id });
+      }
+      t += 1;
+    }
+    return out;
+  }
+  rebuild(patch) {
+    const next = Object.assign({}, this.state, patch);
+    this.setState(Object.assign({}, patch, { sched: this.schedule(next), sel: null, genK: this.tg(this.state.genK) }));
+  }
+  analyze(sched, ms, rest) {
+    const bySlot = {};
+    const teamSlots = {};
+    sched.forEach((x) => { const m = ms[x.mid]; [m.a, m.b].forEach((tm) => { const k = x.slot + '|' + tm; bySlot[k] = (bySlot[k] || 0) + 1; (teamSlots[tm] = teamSlots[tm] || []).push(x.slot); }); });
+    const issues = {};
+    sched.forEach((x) => {
+      const m = ms[x.mid];
+      let bad = false; let warn = false;
+      [m.a, m.b].forEach((tm) => {
+        if (bySlot[x.slot + '|' + tm] > 1) bad = true;
+        if ((teamSlots[tm] || []).some((sl) => sl !== x.slot && Math.abs(sl - x.slot) <= rest)) warn = true;
+      });
+      issues[x.slot + '-' + x.court] = bad ? 'bad' : (warn ? 'warn' : '');
+    });
+    let minGap = 99;
+    Object.keys(teamSlots).forEach((tm) => { const s = teamSlots[tm].slice().sort((a, b) => a - b); for (let i = 1; i < s.length; i++) minGap = Math.min(minGap, s[i] - s[i - 1] - 1); });
+    return { issues: issues, minGap: minGap === 99 ? 0 : minGap };
+  }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  clickCell(slot, court) {
+    const s = this.state;
+    const here = s.sched.find((x) => x.slot === slot && x.court === court);
+    if (!s.sel) { if (here) this.setState({ sel: { slot: slot, court: court } }); return; }
+    if (s.sel.slot === slot && s.sel.court === court) { this.setState({ sel: null }); return; }
+    const from = s.sched.find((x) => x.slot === s.sel.slot && x.court === s.sel.court);
+    if (!from) { this.setState({ sel: null }); return; }
+    const sk = Object.assign({}, s.sk);
+    const sched = s.sched.map((x) => {
+      if (x === from) { sk[slot + '-' + court] = this.tg(sk[slot + '-' + court]); return { slot: slot, court: court, mid: x.mid }; }
+      if (here && x === here) { sk[s.sel.slot + '-' + s.sel.court] = this.tg(sk[s.sel.slot + '-' + s.sel.court]); return { slot: s.sel.slot, court: s.sel.court, mid: x.mid }; }
+      return x;
+    });
+    this.setState({ sched: sched, sel: null, sk: sk });
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const ms = this.matches(s.G);
+    const gCol = ['#FF7A2E', '#4D7CFF', '#F2C230', '#C084FC'];
+    const gBg = ['rgba(255,122,46,.12)', 'rgba(77,124,255,.14)', 'rgba(242,194,48,.12)', 'rgba(192,132,252,.14)'];
+    const nSlots = s.sched.reduce((mx, x) => Math.max(mx, x.slot + 1), 0);
+    const times = this.slotTimes(s, Math.max(1, nSlots));
+    const an = this.analyze(s.sched, ms, s.rest);
+    const bad = Object.keys(an.issues).filter((k) => an.issues[k] === 'bad').length;
+    const warn = Object.keys(an.issues).filter((k) => an.issues[k] === 'warn').length;
+    const rows = [];
+    let lunchShown = false;
+    for (let t = 0; t < nSlots; t++) {
+      const lunchRow = s.lunch && !lunchShown && t > 0 && times[t] >= 13 * 60 && times[t - 1] < 13 * 60;
+      if (lunchRow) lunchShown = true;
+      const cells = [];
+      for (let c = 0; c < s.C; c++) {
+        const x = s.sched.find((q) => q.slot === t && q.court === c);
+        const key = t + '-' + c;
+        const sel = !!(s.sel && s.sel.slot === t && s.sel.court === c);
+        if (x) {
+          const m = ms[x.mid];
+          const iss = an.issues[key];
+          const dim = s.focus && m.a !== s.focus && m.b !== s.focus;
+          cells.push({ has: true, empty: false, code: 'GRUP ' + m.code, a: m.a, b: m.b, gc: gCol[m.g], bg: gBg[m.g], border: '#2A303D', sel: sel, sk: s.sk[key] || 'n', delay: (t * s.C + c) * 35,
+            cls: (sel ? 'is-sel ' : '') + (iss === 'bad' ? 'is-bad jd-shake ' : (iss === 'warn' ? 'is-warn ' : '')) + (dim ? 'is-dim' : ''),
+            flag: iss === 'bad' ? 'BENTROK' : (iss === 'warn' ? 'BERUNTUN' : ''), flagCol: iss === 'bad' ? '#FF8A8A' : '#F6D56E',
+            aria: m.code + ' ' + m.a + ' lawan ' + m.b + ', pukul ' + this.fmt(times[t]) + ', lapangan ' + (c + 1),
+            pick: () => this.clickCell(t, c) });
+        } else {
+          cells.push({ has: false, empty: true, emptyLabel: s.sel ? 'Pindah ke sini' : 'Kosong', bg: s.sel ? 'rgba(255,122,46,.06)' : 'transparent', border: s.sel ? 'rgba(255,122,46,.4)' : '#1E222C', sel: false, sk: 'n', delay: 0, cls: '', flag: '', flagCol: '', code: '', a: '', b: '', gc: '', aria: 'Sel kosong pukul ' + this.fmt(times[t]) + ', lapangan ' + (c + 1), pick: () => this.clickCell(t, c) });
+        }
+      }
+      rows.push({ time: this.fmt(times[t]), end: '–' + this.fmt(times[t] + s.dur), lunch: lunchRow, cells: cells });
+    }
+    const finish = nSlots ? this.fmt(times[nSlots - 1] + s.dur) : '—';
+    const allTeams = [].concat.apply([], this.groups(s.G));
+    const chip = (list, key, fmtL) => list.map((v) => ({ label: fmtL(v), on: s[key] === v, cls: s[key] === v ? 'is-on' : '', pick: () => { const p = {}; p[key] = v; this.rebuild(p); } }));
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      C: s.C, start: s.start, lunch: s.lunch, lunchBg: s.lunch ? '#FF7A2E' : '#2A303D', lunchX: s.lunch ? 22 : 0,
+      groupOpts: chip([2, 4], 'G', (v) => v + ' grup · ' + (v * 6) + ' laga'),
+      durOpts: chip([20, 30, 40, 50], 'dur', (v) => v + ' mnt'),
+      gapOpts: chip([5, 10, 15], 'gap', (v) => v + ' mnt'),
+      restOpts: chip([1, 2], 'rest', (v) => (v === 1 ? 'Jeda 1 laga' : 'Jeda 2 laga')),
+      courtDown: () => { if (this.state.C > 1) this.rebuild({ C: this.state.C - 1 }); },
+      courtUp: () => { if (this.state.C < 4) this.rebuild({ C: this.state.C + 1 }); },
+      onStart: (e) => this.rebuild({ start: e.target.value || '08:00' }),
+      toggleLunch: () => this.rebuild({ lunch: !this.state.lunch }),
+      build: () => { this.rebuild({}); this.toastMsg('Jadwal disusun ulang — tidak ada tim main beruntun'); },
+      stats: [
+        { label: 'TOTAL LAGA', v: String(ms.length), col: '#F2F1EC', border: '#232834' },
+        { label: 'SELESAI PUKUL', v: finish, col: '#F2F1EC', border: '#232834' },
+        { label: 'ISTIRAHAT MIN. TIM', v: an.minGap + ' laga', col: an.minGap >= s.rest ? '#7EE2A8' : '#F6D56E', border: '#232834' },
+        { label: 'BENTROK', v: String(bad), col: bad ? '#FF8A8A' : '#7EE2A8', border: bad ? 'rgba(255,107,107,.5)' : '#232834' }
+      ],
+      legend: this.groups(s.G).map((g, i) => ({ label: 'Grup ' + 'ABCD'[i], c: gCol[i] })),
+      teamOpts: [{ v: '', label: 'Semua tim' }].concat(allTeams.map((t) => ({ v: t, label: t }))),
+      focus: s.focus, onFocus: (e) => this.setState({ focus: e.target.value }),
+      hasIssues: bad + warn > 0,
+      issueLine: bad ? bad + ' laga bentrok: ada tim yang dijadwalkan di dua lapangan sekaligus. Pindahkan salah satunya.' : warn + ' laga membuat tim main beruntun tanpa istirahat. Masih boleh, tapi kurang ideal.',
+      issueBg: bad ? 'rgba(255,107,107,.12)' : 'rgba(246,213,110,.12)', issueFg: bad ? '#FFB0B0' : '#F6D56E',
+      hasBad: bad > 0,
+      courtHeads: Array.from({ length: s.C }, (_, i) => ({ label: 'LAPANGAN ' + (i + 1) })),
+      gridMin: 90 + s.C * 210,
+      rows: rows, genK: s.genK,
+      publish: () => { this.toastMsg('Jadwal tampil di halaman event dan dikirim ke panel wasit'); setTimeout(() => this.celebrate('a'), 250); },
+      waLink: (() => { let t = null; try { t = JSON.parse(window.localStorage.getItem('sbEventTheme') || 'null'); } catch (e) { } const nm = (t && t.name) || 'Piala Jumat Malam 2026'; const sl = (t && t.slug) || 'piala-jumat-malam-2026'; return 'https://wa.me/?text=' + encodeURIComponent('Jadwal ' + nm + ' sudah terbit: https://scoreboard.tiusapp.com/e/' + sl + '#jadwal'); })(),
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>

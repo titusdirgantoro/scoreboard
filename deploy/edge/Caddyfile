@@ -1,0 +1,31 @@
+# Caddy edge untuk scoreboard.tiusapp.com (satu lingkungan: produksi).
+# Wildcard DNS *.tiusapp.com sudah mengarah ke VPS, jadi sertifikat diambil
+# otomatis lewat HTTP-01. Wildcard *.scoreboard.tiusapp.com (paket Pro)
+# butuh DNS-01 dan image Caddy dengan modul DNS — lihat T-136.
+{
+	email {$ACME_EMAIL}
+}
+
+(security_headers) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(self), microphone=(), geolocation=()"
+		-Server
+	}
+}
+
+scoreboard.tiusapp.com {
+	import security_headers
+	encode zstd gzip
+
+	handle_path /img/* {
+		reverse_proxy 127.0.0.1:8090
+	}
+
+	# api menyajikan API, WebSocket (/ws/*), dan SPA.
+	handle {
+		reverse_proxy 127.0.0.1:8080
+	}
+}

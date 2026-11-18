@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Cup E-sports — Upper &amp; Lower Bracket</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ce-btn{cursor:pointer;transition:transform .18s cubic-bezier(.2,.8,.2,1),background-color .2s,border-color .2s,color .2s}
+.ce-btn:hover{transform:translateY(-1px)}
+.ce-btn:active{transform:scale(.96)}
+.ce-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.ce-chip{cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.ce-chip:hover{border-color:#6E5A9E!important;color:#F2F1EC!important}
+.ce-chip.is-on{background-color:#C084FC!important;color:#140B1F!important;border-color:#C084FC!important}
+.ce-stage{perspective:1900px}
+.ce-rig{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.ce-up{transform:translateZ(24px);transform-style:preserve-3d}
+.ce-low{transform:translateZ(-36px);transform-style:preserve-3d}
+.ce-card{transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s}
+.ce-card:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 30px 60px -24px rgba(0,0,0,.95)!important}
+.ce-slot{cursor:pointer;transition:background-color .25s,color .25s}
+.ce-slot:hover{background-color:#1F2430!important}
+.ce-slot:disabled{cursor:default}
+.ce-slot:disabled:hover{background-color:transparent!important}
+.ce-slot.is-win{background-color:rgba(192,132,252,.16)!important;color:#F2F1EC!important}
+.ce-slot.is-win:hover{background-color:rgba(192,132,252,.16)!important}
+.ce-slot.is-lose{color:#7C8394!important}
+.ce-in{animation:ceIn .7s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes ceIn{from{opacity:0;transform:perspective(600px) rotateX(-90deg)}to{opacity:1;transform:none}}
+.ce-drop{animation:ceDrop .9s cubic-bezier(.3,1.25,.4,1) both}
+@keyframes ceDrop{0%{opacity:0;transform:perspective(700px) translateY(-140px) rotateX(70deg) scale(.9)}60%{opacity:1}100%{opacity:1;transform:none}}
+.ce-g{display:inline-block;animation:ceG .45s cubic-bezier(.3,1.5,.4,1)}
+@keyframes ceG{from{transform:scale(1.6);opacity:.3}to{transform:none;opacity:1}}
+.ce-champ{animation:ceChamp 1.1s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes ceChamp{from{opacity:0;transform:perspective(1000px) rotateY(90deg) scale(.8)}to{opacity:1;transform:none}}
+.ce-status{transition:background-color .4s,color .4s,border-color .4s}
+.ce-gnum{display:inline-block}
+.ce-gk-a{animation:ceGA .5s cubic-bezier(.3,1.5,.4,1)}
+.ce-gk-b{animation:ceGB .5s cubic-bezier(.3,1.5,.4,1)}
+@keyframes ceGA{0%{transform:perspective(300px) rotateX(-120deg) scale(1.6);opacity:.2;filter:brightness(2.4)}100%{transform:none;opacity:1;filter:none}}
+@keyframes ceGB{0%{transform:perspective(300px) rotateX(-120deg) scale(1.6);opacity:.2;filter:brightness(2.4)}100%{transform:none;opacity:1;filter:none}}
+.ce-slot.is-win{animation:ceWin .85s cubic-bezier(.3,1.5,.4,1)}
+@keyframes ceWin{0%{transform:none}35%{transform:perspective(500px) translateZ(70px) rotateX(-14deg) scale(1.06);box-shadow:0 20px 44px -14px rgba(192,132,252,.75)}100%{transform:none;box-shadow:none}}
+.ce-slot.ce-fall{animation:ceFall 1s cubic-bezier(.3,1.2,.4,1)}
+@keyframes ceFall{0%{transform:none}35%{transform:perspective(500px) rotateX(-62deg) translateY(20px) translateZ(-30px);opacity:.45}70%{transform:perspective(500px) rotateX(8deg) translateY(4px)}100%{transform:none}}
+.ce-slot.ce-out{animation:ceOut .9s ease-out}
+@keyframes ceOut{0%{transform:none;filter:none}18%{transform:translateX(-7px) rotateZ(-1.5deg)}36%{transform:translateX(7px) rotateZ(1.5deg)}62%{transform:perspective(500px) rotateX(34deg) translateZ(-46px);filter:grayscale(1) brightness(.55)}100%{transform:none;filter:none}}
+.ce-rw-a{animation:ceRwA .75s cubic-bezier(.3,1.2,.4,1)}
+.ce-rw-b{animation:ceRwB .75s cubic-bezier(.3,1.2,.4,1)}
+@keyframes ceRwA{0%{transform:rotateX(8deg) rotateY(-3deg)}40%{transform:rotateX(16deg) rotateY(12deg) translateZ(-70px)}100%{transform:rotateX(8deg) rotateY(-3deg)}}
+@keyframes ceRwB{0%{transform:rotateX(8deg) rotateY(-3deg)}40%{transform:rotateX(16deg) rotateY(12deg) translateZ(-70px)}100%{transform:rotateX(8deg) rotateY(-3deg)}}
+.ce-trophy{animation:ceTrophy 3.6s linear infinite;transform-origin:50% 50%}
+@keyframes ceTrophy{from{transform:perspective(400px) rotateY(0deg)}to{transform:perspective(400px) rotateY(360deg)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="c" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:800px;pointer-events:none;background:radial-gradient(640px 380px at 80% 12%, rgba(192,132,252,.14), transparent 70%), radial-gradient(600px 360px at 12% 40%, rgba(255,122,46,.1), transparent 70%)"></div>
+<header style="position:relative;border-bottom:1px solid #1E222C;background:rgba(13,15,20,.85)">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<nav aria-label="Halaman" style="display:flex;gap:10px;flex-wrap:wrap">
+<a href="Cup.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Cup grup + gugur</a>
+<a href="AturanPoin.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Aturan Poin</a>
+</nav>
+</div>
+</header>
+
+<main style="position:relative;max-width:1360px;margin:0 auto;padding:40px 24px 80px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p class="sb-mono" style="margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#D7B0FD">Mode Cup · E-sports 5v5 · Double elimination</p>
+<h1 class="sb-display" style="margin:0;font-size:clamp(52px,6vw,92px);line-height:.88;font-weight:900;text-transform:uppercase">Liga Kampus Online</h1>
+<p style="margin:0;max-width:640px;font-size:16px;line-height:1.6;color:#A3A9B6">Kalah sekali turun ke lower bracket, kalah dua kali gugur. Klik nama tim untuk menambah satu gim — pemenang seri naik, yang kalah jatuh ke lower bracket otomatis.</p>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="ce-btn" onClick="{{undo}}" disabled="{{noUndo}}" style="min-height:48px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:#12151C;color:#F2F1EC;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"></path></svg>Batalkan gim</button>
+<button class="ce-btn" onClick="{{simulate}}" style="min-height:48px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:#12151C;color:#F2F1EC;font-size:14px;font-weight:600">Isi sisa (acak)</button>
+<button class="ce-btn" onClick="{{resetAll}}" style="min-height:48px;padding:0 16px;border-radius:12px;border:0;background:#C084FC;color:#140B1F;font-size:14px;font-weight:700">Mulai ulang</button>
+</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;padding:14px 18px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<div role="group" aria-label="Format LB ronde 1" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">LB RONDE 1</span>
+<sc-for list="{{boOpts}}" as="o" hint-placeholder-count="2">
+<button class="ce-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button>
+</sc-for>
+</div>
+<div role="group" aria-label="Bracket reset" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">GRAND FINAL</span>
+<sc-for list="{{resetOpts}}" as="o" hint-placeholder-count="2">
+<button class="ce-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button>
+</sc-for>
+</div>
+<span class="sb-mono" style="font-size:12px;color:#A3A9B6">UB/LB ronde: Bo3 · UB Final, LB Final, Grand Final: Bo5</span>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{statusList}}" as="t" hint-placeholder-count="8">
+<span class="ce-status" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;border:1px solid {{t.border}};background:{{t.bg}};font-size:13px">
+<span class="sb-mono" style="font-size:10px;color:#A3A9B6">#{{t.seed}}</span>
+<span style="font-weight:600;color:{{t.fg}}">{{t.name}}</span>
+<span class="sb-mono" style="padding:2px 6px;border-radius:5px;background:{{t.tagBg}};color:{{t.tagFg}};font-size:9px;font-weight:700;letter-spacing:.08em">{{t.tag}}</span>
+</span>
+</sc-for>
+</div>
+
+<div class="ce-stage" onMouseMove="{{onTilt}}" onMouseLeave="{{onLeave}}" style="overflow-x:auto;padding:12px 4px 28px">
+<div class="ce-rig ce-rw-{{rwK}}" style="min-width:1240px;display:flex;gap:32px;align-items:stretch;transform:rotateX({{rx}}deg) rotateY({{ry}}deg)">
+<div style="flex:999 1 900px;min-width:0;display:flex;flex-direction:column;gap:28px;transform-style:preserve-3d">
+<section class="ce-up" aria-label="Upper bracket" style="padding:18px;border-radius:22px;border:1px solid rgba(255,122,46,.28);background:rgba(18,21,28,.9)">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+<span class="sb-display" style="font-size:26px;font-weight:900;text-transform:uppercase;color:#FFB089">Upper bracket</span>
+<span class="sb-mono" style="font-size:11px;color:#A3A9B6">kalah = turun ke lower</span>
+</div>
+<div style="display:flex;gap:32px;height:524px">
+<sc-for list="{{upperCols}}" as="cl" hint-placeholder-count="3">
+<div style="flex:1 1 200px;min-width:190px;display:flex;flex-direction:column">
+<span class="sb-mono" style="height:28px;font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6;text-transform:uppercase">{{cl.name}}</span>
+<div style="flex:1;display:flex;flex-direction:column">
+<sc-for list="{{cl.groups}}" as="gr" hint-placeholder-count="2">
+<div style="position:relative;flex:1;display:flex;flex-direction:column">
+<sc-if value="{{gr.isPair}}" hint-placeholder-val="{{ true }}">
+<span aria-hidden="true" style="position:absolute;right:-17px;top:25%;bottom:25%;width:16px;border:2px solid #4A3A2E;border-left:0;border-radius:0 10px 10px 0"></span>
+<span aria-hidden="true" style="position:absolute;right:-33px;top:50%;width:16px;height:2px;background:#4A3A2E"></span>
+</sc-if>
+<sc-if value="{{gr.isStraight}}" hint-placeholder-val="{{ false }}">
+<span aria-hidden="true" style="position:absolute;right:-33px;top:50%;width:32px;height:2px;background:#4A3A2E"></span>
+</sc-if>
+<sc-for list="{{gr.matches}}" as="m" hint-placeholder-count="2">
+<div style="flex:1;display:flex;align-items:center">
+<div class="ce-card" style="width:100%;border-radius:14px;border:1px solid {{m.border}};background:#12151C;overflow:hidden">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#0F1218;border-bottom:1px solid #1E222C">
+<span class="sb-mono" style="font-size:10px;font-weight:700;letter-spacing:.1em;color:#A3A9B6">{{m.label}}</span>
+<span class="sb-mono" style="font-size:10px;color:{{m.boColor}}">{{m.bo}}</span>
+</div>
+<sc-for list="{{m.slots}}" as="sl" hint-placeholder-count="2">
+<sc-if value="{{sl.known}}" hint-placeholder-val="{{ true }}">
+<button class="ce-slot {{sl.anim}} {{sl.cls}}" onClick="{{sl.pick}}" disabled="{{sl.locked}}" aria-label="{{sl.aria}}" style="width:100%;min-height:44px;display:flex;align-items:center;gap:8px;padding:0 10px;border:0;border-top:{{sl.sep}};background:transparent;color:#E3E2DC;font-size:14px;font-weight:600;text-align:left">
+<span class="sb-mono" style="flex:none;width:20px;font-size:10px;color:#A3A9B6">{{sl.seed}}</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{sl.name}}</span><sc-if value="{{sl.hasNote}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="font-size:9px;letter-spacing:.06em;color:{{sl.noteColor}}">{{sl.note}}</span></sc-if></span>
+<span class="sb-display ce-gnum ce-gk-{{sl.gk}}" style="flex:none;min-width:22px;text-align:right;font-size:24px;font-weight:900;color:{{sl.gColor}}">{{sl.games}}</span>
+</button>
+</sc-if>
+<sc-if value="{{sl.unknown}}" hint-placeholder-val="{{ false }}">
+<div style="min-height:44px;display:flex;align-items:center;padding:0 10px;border-top:{{sl.sep}};color:#7C8394;font-size:12px;font-style:italic">{{sl.placeholder}}</div>
+</sc-if>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section class="ce-low" aria-label="Lower bracket" style="padding:18px;border-radius:22px;border:1px solid rgba(192,132,252,.32);background:rgba(18,21,28,.9)">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+<span class="sb-display" style="font-size:26px;font-weight:900;text-transform:uppercase;color:#D7B0FD">Lower bracket</span>
+<span class="sb-mono" style="font-size:11px;color:#A3A9B6">kalah = gugur</span>
+</div>
+<div style="display:flex;gap:32px;height:276px">
+<sc-for list="{{lowerCols}}" as="cl" hint-placeholder-count="4">
+<div style="flex:1 1 180px;min-width:170px;display:flex;flex-direction:column">
+<span class="sb-mono" style="height:28px;font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6;text-transform:uppercase">{{cl.name}}</span>
+<div style="flex:1;display:flex;flex-direction:column">
+<sc-for list="{{cl.groups}}" as="gr" hint-placeholder-count="2">
+<div style="position:relative;flex:1;display:flex;flex-direction:column">
+<sc-if value="{{gr.isPair}}" hint-placeholder-val="{{ false }}">
+<span aria-hidden="true" style="position:absolute;right:-17px;top:25%;bottom:25%;width:16px;border:2px solid #4A3A66;border-left:0;border-radius:0 10px 10px 0"></span>
+<span aria-hidden="true" style="position:absolute;right:-33px;top:50%;width:16px;height:2px;background:#4A3A66"></span>
+</sc-if>
+<sc-if value="{{gr.isStraight}}" hint-placeholder-val="{{ true }}">
+<span aria-hidden="true" style="position:absolute;right:-33px;top:50%;width:32px;height:2px;background:#4A3A66"></span>
+</sc-if>
+<sc-for list="{{gr.matches}}" as="m" hint-placeholder-count="1">
+<div style="flex:1;display:flex;align-items:center">
+<div class="ce-card" style="width:100%;border-radius:14px;border:1px solid {{m.border}};background:#12151C;overflow:hidden">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#0F1218;border-bottom:1px solid #1E222C">
+<span class="sb-mono" style="font-size:10px;font-weight:700;letter-spacing:.1em;color:#A3A9B6">{{m.label}}</span>
+<span class="sb-mono" style="font-size:10px;color:{{m.boColor}}">{{m.bo}}</span>
+</div>
+<sc-for list="{{m.slots}}" as="sl" hint-placeholder-count="2">
+<sc-if value="{{sl.known}}" hint-placeholder-val="{{ true }}">
+<button class="ce-slot {{sl.anim}} {{sl.cls}}" onClick="{{sl.pick}}" disabled="{{sl.locked}}" aria-label="{{sl.aria}}" style="width:100%;min-height:44px;display:flex;align-items:center;gap:8px;padding:0 10px;border:0;border-top:{{sl.sep}};background:transparent;color:#E3E2DC;font-size:14px;font-weight:600;text-align:left">
+<span class="sb-mono" style="flex:none;width:20px;font-size:10px;color:#A3A9B6">{{sl.seed}}</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{sl.name}}</span><sc-if value="{{sl.hasNote}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="font-size:9px;letter-spacing:.06em;color:{{sl.noteColor}}">{{sl.note}}</span></sc-if></span>
+<span class="sb-display ce-gnum ce-gk-{{sl.gk}}" style="flex:none;min-width:22px;text-align:right;font-size:24px;font-weight:900;color:{{sl.gColor}}">{{sl.games}}</span>
+</button>
+</sc-if>
+<sc-if value="{{sl.unknown}}" hint-placeholder-val="{{ false }}">
+<div style="min-height:44px;display:flex;align-items:center;padding:0 10px;border-top:{{sl.sep}};color:#7C8394;font-size:12px;font-style:italic">{{sl.placeholder}}</div>
+</sc-if>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+</div>
+
+<div style="flex:1 1 260px;min-width:250px;display:flex;flex-direction:column;justify-content:center;gap:16px">
+<span class="sb-display" style="font-size:26px;font-weight:900;text-transform:uppercase">Grand Final</span>
+<sc-for list="{{finals}}" as="m" hint-placeholder-count="1">
+<div class="ce-card" style="border-radius:18px;border:1px solid {{m.border}};background:#12151C;overflow:hidden;box-shadow:0 30px 70px -30px rgba(192,132,252,.45)">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#0F1218;border-bottom:1px solid #1E222C">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#D7B0FD">{{m.label}}</span>
+<span class="sb-mono" style="font-size:11px;color:{{m.boColor}}">{{m.bo}}</span>
+</div>
+<sc-for list="{{m.slots}}" as="sl" hint-placeholder-count="2">
+<sc-if value="{{sl.known}}" hint-placeholder-val="{{ true }}">
+<button class="ce-slot {{sl.anim}} {{sl.cls}}" onClick="{{sl.pick}}" disabled="{{sl.locked}}" aria-label="{{sl.aria}}" style="width:100%;min-height:56px;display:flex;align-items:center;gap:10px;padding:0 14px;border:0;border-top:{{sl.sep}};background:transparent;color:#E3E2DC;font-size:16px;font-weight:700;text-align:left">
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{sl.name}}</span><span class="sb-mono" style="font-size:10px;letter-spacing:.06em;color:#A3A9B6">{{sl.from}}</span></span>
+<span class="sb-display ce-gnum ce-gk-{{sl.gk}}" style="flex:none;font-size:34px;font-weight:900;color:{{sl.gColor}}">{{sl.games}}</span>
+</button>
+</sc-if>
+<sc-if value="{{sl.unknown}}" hint-placeholder-val="{{ false }}">
+<div style="min-height:56px;display:flex;align-items:center;padding:0 14px;border-top:{{sl.sep}};color:#7C8394;font-size:13px;font-style:italic">{{sl.placeholder}}</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-for>
+<sc-if value="{{showResetNote}}" hint-placeholder-val="{{ false }}">
+<p style="margin:0;font-size:13px;line-height:1.5;color:#F6D56E">Juara lower menang Grand Final — bracket reset: seri Bo5 diulang karena juara upper baru kalah sekali.</p>
+</sc-if>
+<sc-if value="{{hasChamp}}" hint-placeholder-val="{{ false }}">
+<div class="ce-champ" role="status" style="padding:20px;border-radius:20px;background:#F2F1EC;color:#14161C;display:flex;flex-direction:column;gap:8px;box-shadow:0 40px 90px -30px rgba(192,132,252,.8)">
+<svg class="ce-trophy" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7A3FBF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"></path><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"></path></svg>
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#5A5F6B">JUARA</span>
+<span class="sb-display" style="font-size:40px;line-height:.9;font-weight:900;text-transform:uppercase">{{champ}}</span>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+
+<sc-if value="{{hasChamp}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="akhir" style="display:flex;flex-direction:column;gap:12px">
+<h2 id="akhir" class="sb-display" style="margin:0;font-size:40px;line-height:1;font-weight:900;text-transform:uppercase">Peringkat akhir</h2>
+<ol style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:10px">
+<sc-for list="{{finalRank}}" as="fr" hint-placeholder-count="8">
+<li class="ce-champ" style="animation-delay:{{fr.delay}}ms;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;border:1px solid #232834;background:#0F1218">
+<span class="sb-display" style="width:56px;font-size:28px;font-weight:900;color:{{fr.color}}">{{fr.place}}</span>
+<span style="font-weight:600">{{fr.name}}</span>
+</li>
+</sc-for>
+</ol>
+</section>
+</sc-if>
+</main>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { games: { U1: [2, 0], U2: [1, 2], U3: [2, 1], U4: [0, 1], L1: [1, 0] }, hist: [], lbBo1: false, reset: true, last: '', rx: 8, ry: -3, gk: {}, rwK: 'n' };
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  champOf(r) {
+    const gf = r.GF;
+    if (gf.w === null) return null;
+    if (gf.w === 0) return gf.teams[0];
+    if (this.state.reset) return r.GF2.w !== null ? r.GF2.teams[r.GF2.w] : null;
+    return gf.teams[1];
+  }
+  teams() { return ['Garuda Esports', 'Naga Merah', 'Komodo Five', 'Rajawali GG', 'Harimau Biru', 'Elang Malam', 'Banteng Muda', 'Kancil Squad']; }
+  defs() {
+    return [
+      { id: 'U1', s: [{ seed: 0 }, { seed: 7 }] }, { id: 'U2', s: [{ seed: 3 }, { seed: 4 }] },
+      { id: 'U3', s: [{ seed: 1 }, { seed: 6 }] }, { id: 'U4', s: [{ seed: 2 }, { seed: 5 }] },
+      { id: 'U5', s: [{ w: 'U1' }, { w: 'U2' }] }, { id: 'U6', s: [{ w: 'U3' }, { w: 'U4' }] },
+      { id: 'L1', s: [{ l: 'U1' }, { l: 'U2' }] }, { id: 'L2', s: [{ l: 'U3' }, { l: 'U4' }] },
+      { id: 'L3', s: [{ w: 'L1' }, { l: 'U6' }] }, { id: 'L4', s: [{ w: 'L2' }, { l: 'U5' }] },
+      { id: 'U7', s: [{ w: 'U5' }, { w: 'U6' }] },
+      { id: 'L5', s: [{ w: 'L3' }, { w: 'L4' }] },
+      { id: 'L6', s: [{ w: 'L5' }, { l: 'U7' }] },
+      { id: 'GF', s: [{ w: 'U7' }, { w: 'L6' }] },
+      { id: 'GF2', s: [{ w: 'U7' }, { w: 'L6' }] }
+    ];
+  }
+  label(id) {
+    return { U1: 'UB QF 1', U2: 'UB QF 2', U3: 'UB QF 3', U4: 'UB QF 4', U5: 'UB SF 1', U6: 'UB SF 2', U7: 'UB Final', L1: 'LB R1 1', L2: 'LB R1 2', L3: 'LB R2 1', L4: 'LB R2 2', L5: 'LB SF', L6: 'LB Final', GF: 'Grand Final', GF2: 'Grand Final · reset' }[id];
+  }
+  bo(id) {
+    if ((id === 'L1' || id === 'L2') && this.state.lbBo1) return 1;
+    if (id === 'U7' || id === 'L6' || id === 'GF' || id === 'GF2') return 5;
+    return 3;
+  }
+  resolve(games) {
+    const st = this.state;
+    const out = {};
+    this.defs().forEach((d) => {
+      const slots = d.s.map((src) => {
+        let t = null;
+        if (src.seed !== undefined) t = src.seed;
+        else if (src.w) t = out[src.w] && out[src.w].w !== null ? out[src.w].teams[out[src.w].w] : null;
+        else if (src.l) t = out[src.l] && out[src.l].w !== null ? out[src.l].teams[1 - out[src.l].w] : null;
+        return t;
+      });
+      let active = true;
+      if (d.id === 'GF2') active = !!(st.reset && out.GF && out.GF.w === 1);
+      const g = games[d.id] || [0, 0];
+      const need = Math.ceil(this.bo(d.id) / 2);
+      const w = g[0] >= need ? 0 : (g[1] >= need ? 1 : null);
+      out[d.id] = { teams: active ? slots : [null, null], g: g, w: active && slots[0] !== null && slots[1] !== null ? w : null, active: active, need: need, src: d.s };
+    });
+    return out;
+  }
+  addGame(id, side) {
+    const st = this.state;
+    const r = this.resolve(st.games);
+    const m = r[id];
+    if (!m || !m.active || m.w !== null || m.teams[0] === null || m.teams[1] === null) return;
+    const games = Object.assign({}, st.games);
+    const g = (games[id] || [0, 0]).slice();
+    g[side] += 1;
+    games[id] = g;
+    const gk = Object.assign({}, st.gk);
+    gk[id + side] = this.tg(gk[id + side]);
+    this.setState({ games: games, hist: st.hist.concat([JSON.stringify(st.games)]).slice(-80), last: id + side + g[side], gk: gk });
+    if (this.champOf(r) === null && this.champOf(this.resolve(games)) !== null) setTimeout(() => this.celebrate('c'), 140);
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const st = this.state;
+    const names = this.teams();
+    const r = this.resolve(st.games);
+    const champSide = this.champOf(r);
+    const isUpper = (id) => id[0] === 'U';
+    const srcLabel = (src) => (src.w ? 'Pemenang ' + this.label(src.w) : (src.l ? 'Kalah ' + this.label(src.l) : ''));
+    const view = (id) => {
+      const m = r[id];
+      const bo = this.bo(id);
+      return {
+        label: this.label(id),
+        bo: 'Bo' + bo,
+        boColor: bo === 5 ? '#D7B0FD' : '#A3A9B6',
+        border: m.w !== null ? 'rgba(192,132,252,.5)' : (m.teams[0] !== null && m.teams[1] !== null ? '#3A4150' : '#232834'),
+        slots: [0, 1].map((i) => {
+          const t = m.teams[i];
+          const src = m.src[i];
+          const won = m.w === i;
+          const lost = m.w !== null && m.w !== i;
+          let note = '';
+          let noteColor = '#A3A9B6';
+          if (src.l) { note = '↓ dari ' + this.label(src.l); noteColor = '#D7B0FD'; }
+          if (lost) {
+            if (isUpper(id)) { note = 'turun ke lower bracket'; noteColor = '#D7B0FD'; }
+            else if (id === 'GF' && st.reset && i === 0) { note = 'kalah pertama — bracket reset'; noteColor = '#F6D56E'; }
+            else { note = 'gugur'; noteColor = '#FF9A7A'; }
+          }
+          return {
+            known: t !== null, unknown: t === null,
+            name: t !== null ? names[t] : '', seed: t !== null ? '#' + (t + 1) : '',
+            games: m.g[i],
+            gColor: won ? '#D7B0FD' : (lost ? '#5A6275' : '#F2F1EC'),
+            cls: won ? 'is-win' : (lost ? 'is-lose ' + ((isUpper(id) || (id === 'GF' && st.reset && i === 0)) ? 'ce-fall' : 'ce-out') : ''),
+            gk: st.gk[id + i] || 'n',
+            anim: src.l ? 'ce-drop' : 'ce-in',
+            hasNote: !!note, note: note, noteColor: noteColor,
+            from: id === 'GF' || id === 'GF2' ? (i === 0 ? 'Juara upper bracket' : 'Juara lower bracket') : '',
+            locked: t === null || m.teams[1 - i] === null || m.w !== null,
+            sep: i === 0 ? '0' : '1px solid #1E222C',
+            aria: t !== null ? 'Tambah satu gim untuk ' + names[t] + ' di ' + this.label(id) : '',
+            placeholder: srcLabel(src),
+            pick: () => this.addGame(id, i)
+          };
+        })
+      };
+    };
+    const grp = (ids, kind) => ({ isPair: kind === 'pair', isStraight: kind === 'straight', matches: ids.map(view) });
+    const losses = names.map(() => 0);
+    const elimAt = {};
+    ['U1', 'U2', 'U3', 'U4', 'U5', 'U6', 'U7', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'GF', 'GF2'].forEach((id) => {
+      const m = r[id];
+      if (!m.active || m.w === null) return;
+      const loser = m.teams[1 - m.w];
+      losses[loser] += 1;
+      if (id[0] === 'L' || id === 'GF2' || (id === 'GF' && (!st.reset || m.w === 0))) elimAt[loser] = id;
+      if (id === 'GF' && st.reset && m.w === 1) { /* juara upper kalah pertama */ }
+    });
+    const statusList = names.map((n, t) => {
+      let tag = 'UPPER'; let tagBg = 'rgba(255,122,46,.16)'; let tagFg = '#FFB089'; let border = '#2A303D'; let bg = '#0F1218'; let fg = '#F2F1EC';
+      if (champSide === t) { tag = 'JUARA'; tagBg = 'rgba(126,226,168,.18)'; tagFg = '#7EE2A8'; border = 'rgba(126,226,168,.45)'; }
+      else if (elimAt[t]) { tag = 'GUGUR'; tagBg = '#1C212B'; tagFg = '#A3A9B6'; fg = '#A3A9B6'; }
+      else if (losses[t] >= 1) { tag = 'LOWER'; tagBg = 'rgba(192,132,252,.18)'; tagFg = '#D7B0FD'; border = 'rgba(192,132,252,.35)'; }
+      return { seed: t + 1, name: n, tag: tag, tagBg: tagBg, tagFg: tagFg, border: border, bg: bg, fg: fg };
+    });
+    const finals = [view('GF')];
+    if (r.GF2.active) finals.push(view('GF2'));
+    let finalRank = [];
+    if (champSide !== null) {
+      const L = (id) => { const m = r[id]; return m.w === null ? null : m.teams[1 - m.w]; };
+      const runner = r.GF2.active ? L('GF2') : L('GF');
+      const rows = [
+        { place: '1', t: champSide, color: '#7EE2A8' }, { place: '2', t: runner, color: '#D7B0FD' },
+        { place: '3', t: L('L6'), color: '#FFB089' }, { place: '4', t: L('L5'), color: '#F2F1EC' },
+        { place: '5–6', t: L('L3'), color: '#A3A9B6' }, { place: '5–6', t: L('L4'), color: '#A3A9B6' },
+        { place: '7–8', t: L('L1'), color: '#A3A9B6' }, { place: '7–8', t: L('L2'), color: '#A3A9B6' }
+      ];
+      finalRank = rows.filter((x) => x.t !== null).map((x, i) => ({ place: x.place, name: names[x.t], color: x.color, delay: i * 90 }));
+    }
+    const order = ['U1', 'U2', 'U3', 'U4', 'U5', 'U6', 'L1', 'L2', 'L3', 'L4', 'U7', 'L5', 'L6', 'GF', 'GF2'];
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      upperCols: [
+        { name: 'UB Perempat Final', groups: [grp(['U1', 'U2'], 'pair'), grp(['U3', 'U4'], 'pair')] },
+        { name: 'UB Semifinal', groups: [grp(['U5', 'U6'], 'pair')] },
+        { name: 'UB Final', groups: [grp(['U7'], 'straight')] }
+      ],
+      lowerCols: [
+        { name: 'LB Ronde 1', groups: [grp(['L1'], 'straight'), grp(['L2'], 'straight')] },
+        { name: 'LB Ronde 2', groups: [grp(['L3', 'L4'], 'pair')] },
+        { name: 'LB Semifinal', groups: [grp(['L5'], 'straight')] },
+        { name: 'LB Final', groups: [grp(['L6'], 'straight')] }
+      ],
+      finals: finals,
+      showResetNote: r.GF2.active && r.GF2.w === null,
+      hasChamp: champSide !== null,
+      champ: champSide !== null ? names[champSide] : '',
+      finalRank: finalRank,
+      statusList: statusList,
+      noUndo: st.hist.length === 0,
+      undo: () => {
+        const h = this.state.hist;
+        if (!h.length) return;
+        this.setState({ games: JSON.parse(h[h.length - 1]), hist: h.slice(0, -1), rwK: this.tg(this.state.rwK) });
+      },
+      rwK: st.rwK,
+      simulate: () => {
+        let games = Object.assign({}, this.state.games);
+        const hadChamp = this.champOf(this.resolve(games)) !== null;
+        const gk = Object.assign({}, this.state.gk);
+        const hist = this.state.hist.concat([JSON.stringify(this.state.games)]).slice(-80);
+        for (let pass = 0; pass < 3; pass++) {
+          order.forEach((id) => {
+            let guard = 0;
+            let rr = this.resolve(games);
+            while (rr[id].active && rr[id].w === null && rr[id].teams[0] !== null && rr[id].teams[1] !== null && guard < 12) {
+              const g = (games[id] || [0, 0]).slice();
+              const t = rr[id].teams;
+              const pA = 0.5 + (t[1] - t[0]) * 0.04;
+              const sd = Math.random() < pA ? 0 : 1;
+              g[sd] += 1;
+              gk[id + sd] = this.tg(gk[id + sd]);
+              games = Object.assign({}, games);
+              games[id] = g;
+              rr = this.resolve(games);
+              guard += 1;
+            }
+          });
+        }
+        this.setState({ games: games, hist: hist, gk: gk });
+        if (!hadChamp && this.champOf(this.resolve(games)) !== null) setTimeout(() => this.celebrate('c'), 200);
+      },
+      resetAll: () => this.setState({ games: {}, hist: this.state.hist.concat([JSON.stringify(this.state.games)]).slice(-80), rwK: this.tg(this.state.rwK) }),
+      boOpts: [{ v: false, label: 'Bo3' }, { v: true, label: 'Bo1 (cepat)' }].map((o) => ({ label: o.label, on: st.lbBo1 === o.v, cls: st.lbBo1 === o.v ? 'is-on' : '', pick: () => { if (this.state.lbBo1 !== o.v) this.setState({ lbBo1: o.v, games: {}, hist: [] }); } })),
+      resetOpts: [{ v: true, label: 'Bracket reset aktif' }, { v: false, label: 'Tanpa reset' }].map((o) => ({ label: o.label, on: st.reset === o.v, cls: st.reset === o.v ? 'is-on' : '', pick: () => { if (this.state.reset !== o.v) { const g = Object.assign({}, this.state.games); delete g.GF2; this.setState({ reset: o.v, games: g }); } } })),
+      rx: st.rx.toFixed(2),
+      ry: st.ry.toFixed(2),
+      onTilt: (e) => {
+        const b = e.currentTarget.getBoundingClientRect();
+        const px = (e.clientX - b.left) / b.width - 0.5;
+        const py = (e.clientY - b.top) / b.height - 0.5;
+        this.setState({ ry: -3 + px * 8, rx: 8 - py * 8 });
+      },
+      onLeave: () => this.setState({ rx: 8, ry: -3 })
+    };
+  }
+}
+</script>
+</body>
+</html>

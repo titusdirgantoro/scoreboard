@@ -1,0 +1,73 @@
+{
+  "sport": "badminton",
+  "notes": "Fixture bersama Go (internal/sportrules) dan TypeScript (packages/sportrules). Notasi reli: token dipisah spasi, huruf sisi (A/B) + jumlah reli berturut-turut, mis. \"A20 B20 A1\". Ubah fixture lebih dulu sebelum mengubah aturan.",
+  "formats": {
+    "3x21": { "target": 21, "cap": 30, "bestOf": 3 },
+    "3x15": { "target": 15, "cap": 21, "bestOf": 3 }
+  },
+  "cases": [
+    {
+      "name": "gim biasa 21-19",
+      "format": "3x21",
+      "firstServer": "A",
+      "rallies": "B19 A21",
+      "expect": { "games": [[21, 19]], "gamesWon": { "a": 1, "b": 0 }, "current": { "a": 0, "b": 0 }, "server": "A", "finished": false, "winner": "" }
+    },
+    {
+      "name": "deuce 20-20 butuh selisih 2 (23-21)",
+      "format": "3x21",
+      "firstServer": "A",
+      "rallies": "A20 B20 A1 B1 A2",
+      "expect": { "games": [[23, 21]], "gamesWon": { "a": 1, "b": 0 }, "current": { "a": 0, "b": 0 }, "server": "A", "finished": false, "winner": "" }
+    },
+    {
+      "name": "29-29 poin berikut menang (29-30)",
+      "format": "3x21",
+      "firstServer": "A",
+      "rallies": "A20 B20 A1 B1 A1 B1 A1 B1 A1 B1 A1 B1 A1 B1 A1 B1 A1 B1 A1 B1 B1",
+      "expect": { "games": [[29, 30]], "gamesWon": { "a": 0, "b": 1 }, "current": { "a": 0, "b": 0 }, "server": "B", "finished": false, "winner": "" }
+    },
+    {
+      "name": "3x15: 14-14 butuh selisih 2 (16-14)",
+      "format": "3x15",
+      "firstServer": "A",
+      "rallies": "A14 B14 A2",
+      "expect": { "games": [[16, 14]], "gamesWon": { "a": 1, "b": 0 }, "current": { "a": 0, "b": 0 }, "server": "A", "finished": false, "winner": "" }
+    },
+    {
+      "name": "3x15: 20-20 poin berikut menang (21-20)",
+      "format": "3x15",
+      "firstServer": "B",
+      "rallies": "A14 B14 A1 B1 A1 B1 A1 B1 A1 B1 A1 B1 A1 B1 A1",
+      "expect": { "games": [[21, 20]], "gamesWon": { "a": 1, "b": 0 }, "current": { "a": 0, "b": 0 }, "server": "A", "finished": false, "winner": "" }
+    },
+    {
+      "name": "pertandingan rubber 2-1",
+      "format": "3x21",
+      "firstServer": "A",
+      "rallies": "B10 A21 B21 A21",
+      "expect": { "games": [[21, 10], [0, 21], [21, 0]], "gamesWon": { "a": 2, "b": 1 }, "current": { "a": 0, "b": 0 }, "server": "A", "finished": true, "winner": "A" }
+    },
+    {
+      "name": "reli setelah laga selesai diabaikan",
+      "format": "3x21",
+      "firstServer": "A",
+      "rallies": "A21 A21 B5",
+      "expect": { "games": [[21, 0], [21, 0]], "gamesWon": { "a": 2, "b": 0 }, "current": { "a": 0, "b": 0 }, "server": "A", "finished": true, "winner": "A" }
+    },
+    {
+      "name": "servis pindah ke pemenang reli",
+      "format": "3x21",
+      "firstServer": "A",
+      "rallies": "B1",
+      "expect": { "games": [], "gamesWon": { "a": 0, "b": 0 }, "current": { "a": 0, "b": 1 }, "server": "B", "finished": false, "winner": "" }
+    },
+    {
+      "name": "skor berjalan di tengah gim",
+      "format": "3x21",
+      "firstServer": "B",
+      "rallies": "A5 B3 A1",
+      "expect": { "games": [], "gamesWon": { "a": 0, "b": 0 }, "current": { "a": 6, "b": 3 }, "server": "A", "finished": false, "winner": "" }
+    }
+  ]
+}

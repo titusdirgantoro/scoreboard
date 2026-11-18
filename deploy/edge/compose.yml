@@ -1,0 +1,19 @@
+# Caddy edge: satu-satunya proses yang membuka port 80/443.
+# Memakai network host supaya bisa meneruskan ke port 127.0.0.1 milik aplikasi.
+# Jangan jalankan bila server sudah punya nginx/Apache di 80/443 (lihat docs/RUNBOOK.md §1).
+name: scoreboard-edge
+
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    network_mode: host
+    env_file: .env
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

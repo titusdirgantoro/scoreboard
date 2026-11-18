@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Harga — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.hg-btn{cursor:pointer}
+.hg-chip.is-on{background:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.hg-seg.is-on{background:#FF7A2E!important;color:#140B05!important;border-color:#FF7A2E!important}
+.hg-stage{perspective:1600px}
+.hg-card{position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,1.35,.4,1),box-shadow .4s,border-color .3s}
+.hg-card:hover{transform:translateZ(26px) rotateX(5deg) rotateY(-4deg)}
+.hg-card.is-pick{transform:translateZ(60px) rotateX(6deg);border-color:#F2C230!important;box-shadow:0 40px 80px -30px rgba(242,194,48,.45)}
+.hg-num-a{display:inline-block;animation:hgNumA .7s cubic-bezier(.2,.9,.25,1.3)}.hg-num-b{display:inline-block;animation:hgNumB .7s cubic-bezier(.2,.9,.25,1.3)}
+@keyframes hgNumA{from{transform:perspective(300px) rotateX(-110deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes hgNumB{from{transform:perspective(300px) rotateX(-110deg);opacity:0}to{transform:none;opacity:1}}
+.hg-rec-a{animation:hgRecA .9s cubic-bezier(.25,1.25,.35,1) both}.hg-rec-b{animation:hgRecB .9s cubic-bezier(.25,1.25,.35,1) both}
+@keyframes hgRecA{from{transform:perspective(1000px) rotateY(-100deg) translateZ(-100px);opacity:0}to{transform:none;opacity:1}}
+@keyframes hgRecB{from{transform:perspective(1000px) rotateY(-100deg) translateZ(-100px);opacity:0}to{transform:none;opacity:1}}
+.hg-faq{cursor:pointer;transition:background-color .25s}
+.hg-faq:hover{background:#151922!important}
+.hg-ans-a{animation:hgAnsA .55s cubic-bezier(.3,1.3,.4,1) both;transform-origin:top}.hg-ans-b{animation:hgAnsB .55s cubic-bezier(.3,1.3,.4,1) both;transform-origin:top}
+@keyframes hgAnsA{from{transform:perspective(600px) rotateX(-70deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes hgAnsB{from{transform:perspective(600px) rotateX(-70deg);opacity:0}to{transform:none;opacity:1}}
+.hg-chev{transition:transform .45s cubic-bezier(.3,1.5,.4,1)}
+.hg-knob{transition:transform .45s cubic-bezier(.3,1.6,.4,1)}
+.hg-row{display:grid;grid-template-columns:minmax(180px,1.6fr) repeat(4,minmax(96px,1fr));align-items:center;border-bottom:1px solid #1E222C}
+input[type=range]{accent-color:#FF7A2E}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC;min-height:2400px">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1320px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<nav aria-label="Utama" style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;font-size:15px;font-weight:500">
+<a href="Main.dc.html" style="color:#C9CDD6;text-decoration:none">Beranda</a>
+<a href="EventBuilder.dc.html" style="color:#C9CDD6;text-decoration:none">Buat Event</a>
+<a href="Absen.dc.html" style="color:#C9CDD6;text-decoration:none">Main Bareng</a>
+<a href="Harga.dc.html" aria-current="page" style="color:#F2F1EC;text-decoration:none;font-weight:700">Harga</a>
+<a href="Masuk.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;color:#F2F1EC;font-weight:700;text-decoration:none">Masuk</a>
+</nav>
+</div>
+</header>
+
+<main style="max-width:1320px;margin:0 auto;padding:48px 24px 96px;display:flex;flex-direction:column;gap:56px">
+<section aria-labelledby="hg-h1" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px">
+<div style="display:flex;flex-direction:column;gap:14px;max-width:760px">
+<p class="sb-mono" style="margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#FFB089">Harga</p>
+<h1 id="hg-h1" class="sb-display" style="margin:0;font-size:clamp(56px,6.5vw,104px);line-height:.86;font-weight:900;text-transform:uppercase">Main gratis. Bayar saat turnamenmu membesar.</h1>
+<p style="margin:0;font-size:17px;line-height:1.6;color:#A3A9B6">Pemain, penonton, dan wasit tidak pernah bayar. Penyelenggara bayar sekali per event, atau berlangganan kalau rutin.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;padding:16px 18px;border-radius:16px;background:#12151C;border:1px solid #232834;max-width:340px">
+<span class="sb-mono" style="font-size:11px;letter-spacing:.12em;color:#7EE2A8">SELALU GRATIS</span>
+<span style="font-size:15px;line-height:1.5">Menonton skor live, input skor wasit, absen pemain, dan cek keaslian sertifikat.</span>
+</div>
+</section>
+
+<section aria-labelledby="hg-cocok" style="display:flex;flex-direction:column;gap:18px;padding:26px;border-radius:24px;background:#0F1218;border:1px solid #232834">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px">
+<h2 id="hg-cocok" class="sb-display" style="margin:0;font-size:34px;font-weight:900;text-transform:uppercase">Paket mana yang cocok?</h2>
+<span style="font-size:14px;color:#A3A9B6">Jawab sampai 2 pertanyaan.</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="flex:2 1 520px;display:flex;flex-direction:column;gap:16px;min-width:0">
+<div role="group" aria-labelledby="hg-q1" style="display:flex;flex-direction:column;gap:8px">
+<span id="hg-q1" style="font-size:15px;font-weight:700">1. Kamu mau…</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{q1}}" as="o" hint-placeholder-count="3"><button class="hg-btn hg-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:46px;padding:0 16px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button></sc-for></div>
+</div>
+<sc-if value="{{showQ2}}" hint-placeholder-val="{{ true }}">
+<div role="group" aria-labelledby="hg-q2" style="display:flex;flex-direction:column;gap:8px">
+<span id="hg-q2" style="font-size:15px;font-weight:700">2. Berapa tim yang ikut?</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{q2}}" as="o" hint-placeholder-count="4"><button class="hg-btn hg-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:46px;padding:0 16px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button></sc-for></div>
+</div>
+</sc-if>
+<sc-if value="{{showQ3}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-labelledby="hg-q3" style="display:flex;flex-direction:column;gap:8px">
+<span id="hg-q3" style="font-size:15px;font-weight:700">2. Butuh rating dan statistik pemain?</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{q3}}" as="o" hint-placeholder-count="2"><button class="hg-btn hg-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:46px;padding:0 16px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button></sc-for></div>
+</div>
+</sc-if>
+</div>
+<div style="flex:1 1 320px;min-width:0">
+<sc-if value="{{hasRec}}" hint-placeholder-val="{{ true }}">
+<div class="hg-rec-{{recK}}" role="status" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:18px;background:#F2F1EC;color:#14161C">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#5A5F6B">SARAN KAMI</span>
+<span class="sb-display" style="font-size:36px;line-height:.9;font-weight:900;text-transform:uppercase">{{rec.title}}</span>
+<span class="sb-display" style="font-size:26px;line-height:1;font-weight:900;color:#B8501A">{{rec.price}}</span>
+<span style="font-size:14px;line-height:1.55;color:#3A3F4B">{{rec.why}}</span>
+</div>
+</sc-if>
+<sc-if value="{{noRec}}" hint-placeholder-val="{{ false }}">
+<div style="padding:20px;border-radius:18px;border:1px dashed #343B4A;color:#A3A9B6;font-size:14px;line-height:1.55">Pilih jawaban di kiri, saran paket muncul di sini dan kartunya terangkat di bawah.</div>
+</sc-if>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="hg-paket" class="hg-stage" style="display:flex;flex-direction:column;gap:20px">
+<h2 id="hg-paket" class="sb-display" style="margin:0;font-size:40px;font-weight:900;text-transform:uppercase">Empat paket</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(270px,100%),1fr));gap:18px;align-items:stretch">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="4">
+<article class="hg-card {{c.cls}}" aria-labelledby="{{c.hid}}" style="display:flex;flex-direction:column;gap:16px;padding:24px 22px;border-radius:22px;background:{{c.bg}};border:1px solid {{c.bd}};color:#F2F1EC">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:26px">
+<span class="sb-mono" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:{{c.ink}}">{{c.tag}}</span>
+<sc-if value="{{c.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="padding:4px 9px;border-radius:999px;background:#FF7A2E;color:#140B05;font-size:10px;font-weight:700">{{c.badge}}</span></sc-if>
+<sc-if value="{{c.picked}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="padding:4px 9px;border-radius:999px;background:#F2C230;color:#14161C;font-size:10px;font-weight:700">COCOK UNTUKMU</span></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<h3 id="{{c.hid}}" class="sb-display" style="margin:0;font-size:40px;line-height:.9;font-weight:900;text-transform:uppercase">{{c.name}}</h3>
+<p style="margin:0;font-size:14px;line-height:1.5;color:#A3A9B6">{{c.forWho}}</p>
+</div>
+<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+<span class="sb-display hg-num-{{c.k}}" style="font-size:52px;line-height:.9;font-weight:900">{{c.price}}</span>
+<span style="font-size:14px;color:#A3A9B6">{{c.per}}</span>
+</div>
+<sc-if value="{{c.isPass}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Ukuran event" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+<sc-for list="{{sizes}}" as="z" hint-placeholder-count="3"><button class="hg-btn hg-seg {{z.cls}}" onClick="{{z.pick}}" aria-pressed="{{z.on}}" style="min-height:44px;border-radius:10px;border:1px solid #343B4A;background:#0D0F14;color:#C9CDD6;font-size:13px;font-weight:700">≤{{z.n}} tim</button></sc-for>
+</div>
+</sc-if>
+<a href="{{c.href}}" style="display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 18px;border-radius:14px;background:{{c.ctaBg}};color:{{c.ctaFg}};border:1px solid {{c.ctaBd}};font-size:15px;font-weight:800;text-decoration:none">{{c.cta}}</a>
+<ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px">
+<sc-for list="{{c.feats}}" as="f" hint-placeholder-count="5"><li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.45;color:#D5D7DD"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{c.ink}}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin-top:1px"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>{{f.t}}</li></sc-for>
+</ul>
+</article>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="hg-banding" style="display:flex;flex-direction:column;gap:16px">
+<h2 id="hg-banding" class="sb-display" style="margin:0;font-size:40px;font-weight:900;text-transform:uppercase">Bandingkan lengkap</h2>
+<div style="overflow-x:auto;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<div role="table" aria-label="Perbandingan paket" style="min-width:760px">
+<div role="row" class="hg-row" style="position:sticky;top:0;background:#12151C">
+<span role="columnheader" style="padding:14px 18px;font-size:13px;color:#A3A9B6">Fitur</span>
+<sc-for list="{{heads}}" as="h" hint-placeholder-count="4"><span role="columnheader" class="sb-display" style="padding:14px 10px;text-align:center;font-size:20px;font-weight:900;text-transform:uppercase;color:{{h.c}}">{{h.t}}</span></sc-for>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+<sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><div role="row" style="padding:18px 18px 8px;border-bottom:1px solid #1E222C"><span role="rowheader" class="sb-mono" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#FFB089">{{r.t}}</span></div></sc-if>
+<sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}">
+<div role="row" class="hg-row">
+<span role="rowheader" style="padding:12px 18px;font-size:14px;color:#D5D7DD">{{r.t}}</span>
+<sc-for list="{{r.cells}}" as="x" hint-placeholder-count="4"><span role="cell" style="padding:12px 10px;display:flex;justify-content:center;align-items:center;text-align:center;font-size:13px;font-weight:600;color:#F2F1EC"><sc-if value="{{x.yes}}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7EE2A8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Ya"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if><sc-if value="{{x.no}}" hint-placeholder-val="{{ false }}"><span aria-label="Tidak" style="color:#5A6272">—</span></sc-if><sc-if value="{{x.isTxt}}" hint-placeholder-val="{{ false }}">{{x.t}}</sc-if></span></sc-for>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="hg-hitung" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-direction:column;gap:8px;max-width:760px">
+<h2 id="hg-hitung" class="sb-display" style="margin:0;font-size:40px;font-weight:900;text-transform:uppercase">Hitung biaya eventmu</h2>
+<p style="margin:0;font-size:15px;line-height:1.6;color:#A3A9B6">Dua biaya ini bukan paket: biaya pembayaran online, dan pesan WhatsApp otomatis. Keduanya hanya muncul kalau kamu memakainya.</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="flex:3 1 520px;min-width:0;display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:20px;background:#12151C;border:1px solid #232834">
+<label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600">
+<span style="display:flex;justify-content:space-between"><span>Jumlah tim</span><span class="sb-mono" style="color:#FFB089">{{cTeams}} tim</span></span>
+<input type="range" min="2" max="64" value="{{cTeams}}" onChange="{{onTeams}}" style="width:100%">
+</label>
+<label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600">
+<span style="display:flex;justify-content:space-between"><span>Biaya pendaftaran per tim</span><span class="sb-mono" style="color:#FFB089">{{cFeeTxt}}</span></span>
+<input type="range" min="0" max="1000000" step="25000" value="{{cFee}}" onChange="{{onFee}}" style="width:100%">
+</label>
+<sc-for list="{{calcSw}}" as="w" hint-placeholder-count="2">
+<button class="hg-btn" role="switch" aria-checked="{{w.on}}" onClick="{{w.toggle}}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:8px 14px;border-radius:12px;border:1px solid #2A303D;background:#0D0F14;color:#F2F1EC;text-align:left">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">{{w.label}}</span><span style="font-size:12px;color:#A3A9B6">{{w.sub}}</span></span>
+<span aria-hidden="true" style="flex:none;width:44px;height:26px;border-radius:13px;background:{{w.track}};padding:3px"><span class="hg-knob" style="display:block;width:20px;height:20px;border-radius:50%;background:#F2F1EC;transform:translateX({{w.kx}}px)"></span></span>
+</button>
+</sc-for>
+<sc-if value="{{cOnline}}" hint-placeholder-val="{{ true }}">
+<div role="group" aria-label="Siapa yang menanggung biaya transaksi" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+<span style="font-size:13px;color:#A3A9B6">Biaya Rp2.000 ditanggung:</span>
+<sc-for list="{{payer}}" as="o" hint-placeholder-count="2"><button class="hg-btn hg-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{cWa}}" hint-placeholder-val="{{ false }}">
+<label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600">
+<span style="display:flex;justify-content:space-between"><span>Pesan otomatis per tim</span><span class="sb-mono" style="color:#FFB089">{{cWaPer}} pesan</span></span>
+<input type="range" min="1" max="10" value="{{cWaPer}}" onChange="{{onWaPer}}" style="width:100%">
+</label>
+</sc-if>
+</div>
+<div style="flex:2 1 340px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:20px;background:#F2F1EC;color:#14161C">
+<span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.14em;color:#5A5F6B">RINCIAN</span>
+<sc-for list="{{lines}}" as="l" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #D6D3CA"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{l.t}}</span><span style="font-size:12px;color:#5A5F6B">{{l.sub}}</span></span><span class="sb-mono hg-num-{{calcK}}" style="font-size:14px;font-weight:700;white-space:nowrap">{{l.v}}</span></div></sc-for>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:6px"><span style="font-size:15px;font-weight:800">Biaya penyelenggara</span><span class="sb-display hg-num-{{calcK}}" style="font-size:40px;line-height:1;font-weight:900;color:#B8501A">{{cTotal}}</span></div>
+<span style="font-size:13px;color:#3A3F4B">Uang pendaftaran yang kamu terima: <strong class="sb-mono" style="color:#14161C">{{cNet}}</strong></span>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:14px">
+<div style="display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:16px;border:1px solid #232834;background:#0F1218">
+<span class="sb-display" style="font-size:22px;font-weight:900;text-transform:uppercase">Pembayaran online · Rp2.000 per bayar</span>
+<span style="font-size:14px;line-height:1.55;color:#A3A9B6">Muncul hanya kalau biaya pendaftaran atau patungan dibayar lewat aplikasi dan langsung terverifikasi. Pakai QRIS atau rekening sendiri lalu tandai lunas manual? Tidak ada biaya ini.</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:16px;border:1px solid #232834;background:#0F1218">
+<span class="sb-display" style="font-size:22px;font-weight:900;text-transform:uppercase">WhatsApp otomatis · Rp50.000 / 100 pesan</span>
+<span style="font-size:14px;line-height:1.55;color:#A3A9B6">Untuk pengingat jadwal atau sertifikat yang terkirim sendiri ke semua orang. Tombol "Bagikan ke WhatsApp" dari HP kamu sendiri tetap gratis di semua paket.</span>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="hg-faq" style="display:flex;flex-direction:column;gap:14px;max-width:900px">
+<h2 id="hg-faq" class="sb-display" style="margin:0;font-size:40px;font-weight:900;text-transform:uppercase">Pertanyaan</h2>
+<sc-for list="{{faqs}}" as="q" hint-placeholder-count="6">
+<div style="border-radius:14px;border:1px solid #232834;background:#0F1218;overflow:hidden">
+<button class="hg-faq" onClick="{{q.toggle}}" aria-expanded="{{q.open}}" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:58px;padding:12px 18px;border:0;background:transparent;color:#F2F1EC;font-size:16px;font-weight:700;text-align:left">{{q.q}}<svg class="hg-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;transform:rotate({{q.rot}}deg)"><path d="M6 9l6 6 6-6"></path></svg></button>
+<sc-if value="{{q.open}}" hint-placeholder-val="{{ false }}"><p class="hg-ans-{{q.k}}" style="margin:0;padding:0 18px 16px;font-size:15px;line-height:1.6;color:#A3A9B6">{{q.a}}</p></sc-if>
+</div>
+</sc-for>
+</section>
+</main>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2400}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      size: 16, q1: '', q2: '', q3: '', recK: 'n', priceK: 'a',
+      cTeams: 16, cFee: 250000, cOnline: true, cPayer: 'pembayar', cWa: false, cWaPer: 3, calcK: 'a',
+      faq: { 0: true }, faqK: {}
+    };
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  rp(n) { return 'Rp' + Math.round(n).toLocaleString('id-ID'); }
+  passPrice(n) { return { 16: 49000, 32: 99000, 64: 199000 }[n]; }
+  tierFor(teams) { return teams <= 8 ? 0 : (teams <= 16 ? 16 : (teams <= 32 ? 32 : 64)); }
+  recalc(o) { this.setState(Object.assign({ calcK: this.tg(this.state.calcK) }, o)); }
+  answer(key, val) {
+    const o = { recK: this.tg(this.state.recK) };
+    o[key] = val;
+    if (key === 'q1') { o.q2 = ''; o.q3 = ''; }
+    if (key === 'q2' && val !== '8') { o.size = parseInt(val, 10); o.priceK = this.tg(this.state.priceK); }
+    this.setState(o);
+    if (key !== 'q1') setTimeout(() => this.celebrate('y'), 250);
+  }
+  rec() {
+    const s = this.state;
+    const free = { pkg: 'free', title: 'Gratis', price: 'Rp0', why: 'Bagi tim, papan skor, absen, patungan, dan event sampai 8 tim di 1 lapangan sudah cukup untuk kebutuhanmu.' };
+    if (s.q1 === 'bulanan') return { pkg: 'pro', title: 'Pro', price: 'Rp299.000 / bulan', why: 'Event tanpa batas tiap bulan, ditambah slot sponsor, alamat sendiri, dan 5 admin. Lebih hemat dari beli Pass Event mulai 3 event sebulan.' };
+    if (s.q1 === 'rutin') {
+      if (!s.q3) return null;
+      return s.q3 === 'ya' ? { pkg: 'kom', title: 'Komunitas', price: 'Rp39.000 / bulan', why: 'Rating pemain otomatis, statistik, dan grup main bareng tanpa batas. Bintang di Bagi Tim terisi sendiri.' } : free;
+    }
+    if (s.q1 === 'turnamen') {
+      if (!s.q2) return null;
+      if (s.q2 === '8') return free;
+      const n = parseInt(s.q2, 10);
+      return { pkg: 'pass', title: 'Pass Event · ≤' + n + ' tim', price: this.rp(this.passPrice(n)) + ' sekali', why: 'Sekali bayar untuk satu turnamen: jadwal otomatis, pendaftaran online, kartu pemain, e-sertifikat, dan story tanpa watermark.' };
+    }
+    return null;
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const r = this.rec();
+    const pick = r ? r.pkg : '';
+    const ch = (list, key) => list.map((o) => ({ label: o[1], on: s[key] === o[0], cls: s[key] === o[0] ? 'is-on' : '', pick: () => this.answer(key, o[0]) }));
+    const C = {
+      free: { tag: 'Untuk semua', name: 'Gratis', forWho: 'Main santai atau turnamen kecil.', price: 'Rp0', per: 'selamanya', cta: 'Mulai gratis', href: 'BagiTim.dc.html',
+        feats: ['Bagi Tim & papan skor semua cabang', '1 grup main bareng: absen, daftar tunggu, patungan', 'Event sampai 8 tim di 1 lapangan', 'Link event, skor live, klasemen, bracket', 'Story & mode TV dengan watermark'], ink: '#7EE2A8' },
+      pass: { tag: 'Turnamen sesekali', name: 'Pass Event', forWho: 'Karang taruna, class meeting, turnamen kantor.', price: this.rp(this.passPrice(s.size)), per: 'sekali untuk 1 event', cta: 'Beli untuk event', href: 'Upgrade.dc.html', badge: 'PALING SERING DIPILIH',
+        feats: ['Semua fitur Gratis', 'Sampai ' + s.size + ' tim, lapangan & wasit tanpa batas', 'Jadwal otomatis', 'Pendaftaran tim online + Panel Penyelenggara', 'Kartu pemain & meja verifikasi', 'E-sertifikat juara', 'Story otomatis tanpa watermark, termasuk Potong latar', 'Event privat + PIN', 'Aktif sampai 30 hari setelah event'], ink: '#FFB089' },
+      kom: { tag: 'Main rutin', name: 'Komunitas', forWho: 'Grup futsal tiap Jumat, padel tiap Minggu.', price: 'Rp39rb', per: 'per bulan', cta: 'Coba untuk grup', href: 'Masuk.dc.html',
+        feats: ['Semua fitur Gratis', 'Grup main bareng tanpa batas', 'Rating pemain otomatis + profil', 'Top skor, MVP, riwayat laga', 'Bintang Bagi Tim terisi otomatis', 'Americano & liga rutin tersimpan'], ink: '#9DB6FF' },
+      pro: { tag: 'Event terus-menerus', name: 'Pro', forWho: 'EO, pengelola GOR & lapangan, sekolah, kampus.', price: 'Rp299rb', per: 'per bulan', cta: 'Mulai Pro', href: 'Masuk.dc.html',
+        feats: ['Semua fitur Pass untuk event tanpa batas (≤64 tim/event)', 'Semua fitur Komunitas', 'Sampai 5 admin', 'Alamat sendiri: nama.scoreboard.tiusapp.com', 'Slot sponsor di papan TV, story, halaman event', 'Ekspor Excel & bantuan prioritas'], ink: '#D7B0FD' }
+    };
+    const cards = ['free', 'pass', 'kom', 'pro'].map((id) => {
+      const c = C[id]; const picked = pick === id; const isPass = id === 'pass';
+      return {
+        hid: 'hg-c-' + id, tag: c.tag, name: c.name, forWho: c.forWho, price: c.price, per: c.per, cta: c.cta, href: c.href, ink: c.ink,
+        hasBadge: !!c.badge && !picked, badge: c.badge || '', picked: picked, isPass: isPass,
+        feats: c.feats.map((t) => ({ t: t })), k: isPass ? s.priceK : 'n',
+        cls: picked ? 'is-pick' : '', bg: isPass ? '#16130F' : '#12151C', bd: isPass ? 'rgba(255,122,46,.45)' : '#232834',
+        ctaBg: isPass ? '#FF7A2E' : 'transparent', ctaFg: isPass ? '#140B05' : '#F2F1EC', ctaBd: isPass ? '#FF7A2E' : '#343B4A'
+      };
+    });
+    const Y = true; const N = false;
+    const R = [
+      ['g', 'Turnamen'], ['Tim per event', '8', 'Sampai 16 / 32 / 64', '8', 'Sampai 64'], ['Lapangan & wasit', '1', 'Tanpa batas', '1', 'Tanpa batas'], ['Jumlah event', 'Tanpa batas', '1 per Pass', 'Tanpa batas', 'Tanpa batas'],
+      ['Jadwal otomatis', N, Y, N, Y], ['Pendaftaran tim online', N, Y, N, Y], ['Kartu pemain & meja verifikasi', N, Y, N, Y], ['E-sertifikat', N, Y, N, Y], ['Event privat + PIN', N, Y, N, Y],
+      ['g', 'Main bareng'], ['Grup main bareng', '1', '1', 'Tanpa batas', 'Tanpa batas'], ['Rating & statistik pemain', N, N, Y, Y], ['Americano & liga tersimpan', N, N, Y, Y],
+      ['g', 'Konten'], ['Story kartu hasil', Y, Y, Y, Y], ['Tanpa watermark', N, Y, N, Y], ['Story otomatis tiap laga', N, Y, N, Y], ['Gaya Potong latar', N, Y, N, Y],
+      ['g', 'Bisnis'], ['Admin', '1', '1', '1', 'Sampai 5'], ['Alamat sendiri', N, N, N, Y], ['Slot sponsor', N, N, N, Y], ['Ekspor Excel', N, N, N, Y]
+    ];
+    const rows = R.map((x) => {
+      if (x[0] === 'g') return { isGroup: true, isRow: false, t: x[1], cells: [] };
+      return { isGroup: false, isRow: true, t: x[0], cells: x.slice(1).map((v) => ({ yes: v === true, no: v === false, isTxt: typeof v === 'string', t: typeof v === 'string' ? v : '' })) };
+    });
+    const tier = this.tierFor(s.cTeams);
+    const pkgCost = tier ? this.passPrice(tier) : 0;
+    const trx = s.cOnline && s.cFee > 0 ? s.cTeams * 2000 : 0;
+    const trxOrg = s.cPayer === 'penyelenggara' ? trx : 0;
+    const msgs = s.cWa ? s.cTeams * s.cWaPer : 0;
+    const packs = Math.ceil(msgs / 100);
+    const waCost = packs * 50000;
+    const total = pkgCost + trxOrg + waCost;
+    const lines = [
+      { t: tier ? 'Pass Event · ≤' + tier + ' tim' : 'Paket Gratis', sub: tier ? 'sekali bayar untuk event ini' : 'cukup untuk sampai 8 tim', v: this.rp(pkgCost) },
+      { t: 'Pembayaran online', sub: s.cOnline && s.cFee > 0 ? s.cTeams + ' × Rp2.000 · ditanggung ' + s.cPayer : 'tidak dipakai', v: this.rp(trxOrg) },
+      { t: 'WhatsApp otomatis', sub: s.cWa ? msgs + ' pesan → ' + packs + ' × 100 pesan' : 'tidak dipakai, pakai tombol bagikan', v: this.rp(waCost) }
+    ];
+    const FAQ = [
+      ['Apakah pemain dan penonton harus bayar?', 'Tidak. Menonton skor, absen main bareng, input skor wasit, dan cek sertifikat selalu gratis. Yang membayar hanya penyelenggara atau pengurus grup.'],
+      ['Pass Event berlaku berapa lama?', 'Satu Pass untuk satu event, aktif sejak dibeli sampai 30 hari setelah event selesai. Setelah itu hasil, klasemen, dan sertifikat tetap bisa dilihat, hanya tidak bisa diubah.'],
+      ['Bisa naik dari Gratis ke Pass di tengah event?', 'Bisa. Saat tim ke-9 mendaftar atau kamu menambah lapangan kedua, aplikasi menawarkan Pass Event. Semua data yang sudah ada tetap aman.'],
+      ['Bedanya Komunitas dan Pro apa?', 'Komunitas untuk grup yang main rutin dan butuh rating pemain. Pro untuk yang bikin banyak turnamen, termasuk semua fitur Pass Event untuk tiap event.'],
+      ['Tim lebih dari 64?', 'Pakai Pro dan bagi jadi beberapa kategori, atau hubungi kami untuk kebutuhan liga besar.'],
+      ['Cara bayarnya?', 'QRIS, transfer bank lewat virtual account, atau e-wallet. Pass langsung aktif setelah pembayaran terverifikasi.']
+    ];
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      q1: ch([['rutin', 'Main rutin bareng grup'], ['turnamen', 'Bikin turnamen sesekali'], ['bulanan', 'Bikin event tiap bulan']], 'q1'),
+      q2: ch([['8', '≤ 8 tim'], ['16', '9–16 tim'], ['32', '17–32 tim'], ['64', '33–64 tim']], 'q2'),
+      q3: ch([['ya', 'Ya, butuh'], ['tidak', 'Tidak perlu']], 'q3'),
+      showQ2: s.q1 === 'turnamen', showQ3: s.q1 === 'rutin',
+      hasRec: !!r, noRec: !r, rec: r || { title: '', price: '', why: '' }, recK: s.recK,
+      cards: cards,
+      sizes: [16, 32, 64].map((n) => ({ n: n, on: s.size === n, cls: s.size === n ? 'is-on' : '', pick: () => { if (this.state.size !== n) this.setState({ size: n, priceK: this.tg(this.state.priceK) }); } })),
+      heads: [['Gratis', '#7EE2A8'], ['Pass', '#FFB089'], ['Komunitas', '#9DB6FF'], ['Pro', '#D7B0FD']].map((h) => ({ t: h[0], c: h[1] })),
+      rows: rows,
+      cTeams: s.cTeams, cFee: s.cFee, cFeeTxt: s.cFee ? this.rp(s.cFee) : 'Gratis', cWaPer: s.cWaPer,
+      onTeams: (e) => this.recalc({ cTeams: parseInt(e.target.value, 10) || 2 }),
+      onFee: (e) => this.recalc({ cFee: parseInt(e.target.value, 10) || 0 }),
+      onWaPer: (e) => this.recalc({ cWaPer: parseInt(e.target.value, 10) || 1 }),
+      calcSw: [
+        { label: 'Terima pembayaran online', sub: 'QRIS otomatis terverifikasi', on: s.cOnline, track: s.cOnline ? '#FF7A2E' : '#343B4A', kx: s.cOnline ? 18 : 0, toggle: () => this.recalc({ cOnline: !this.state.cOnline }) },
+        { label: 'Pengingat WhatsApp otomatis', sub: 'Dikirim ke manajer tiap tim', on: s.cWa, track: s.cWa ? '#FF7A2E' : '#343B4A', kx: s.cWa ? 18 : 0, toggle: () => this.recalc({ cWa: !this.state.cWa }) }
+      ],
+      cOnline: s.cOnline && s.cFee > 0, cWa: s.cWa,
+      payer: [['pembayar', 'Tim yang mendaftar'], ['penyelenggara', 'Penyelenggara']].map((o) => ({ label: o[1], on: s.cPayer === o[0], cls: s.cPayer === o[0] ? 'is-on' : '', pick: () => this.recalc({ cPayer: o[0] }) })),
+      lines: lines, calcK: s.calcK, cTotal: this.rp(total), cNet: this.rp(s.cTeams * s.cFee - trxOrg),
+      faqs: FAQ.map((f, i) => ({ q: f[0], a: f[1], open: !!s.faq[i], rot: s.faq[i] ? 180 : 0, k: s.faqK[i] || 'a', toggle: () => { const o = Object.assign({}, this.state.faq); const k = Object.assign({}, this.state.faqK); o[i] = !o[i]; k[i] = this.tg(k[i] || 'b'); this.setState({ faq: o, faqK: k }); } }))
+    };
+  }
+}
+</script>
+</body>
+</html>

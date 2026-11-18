@@ -1,0 +1,17 @@
+{
+  "name": "scoreboard",
+  "private": true,
+  "description": "scoreboard.tiusapp.com — workspace npm (web + paket bersama)",
+  "workspaces": [
+    "packages/*",
+    "web"
+  ],
+  "scripts": {
+    "build": "npm run build -w web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

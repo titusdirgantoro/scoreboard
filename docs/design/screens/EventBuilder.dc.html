@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Buat Event — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input,textarea{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.bd-btn{cursor:pointer}
+.bd-btn:disabled{opacity:.45;cursor:not-allowed}
+.bd-chip{cursor:pointer}
+.bd-chip:hover{border-color:#5A6275!important;color:#F2F1EC!important}
+.bd-chip.is-on{background-color:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.bd-in{width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:#0B0D12;color:#F2F1EC;font-size:15px}
+.bd-in::placeholder{color:#7C8394}
+.bd-in:hover{border-color:#4A5263!important}
+.bd-lbl{display:flex;justify-content:space-between;gap:8px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6;text-transform:uppercase}
+.bd-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.bd-file:focus-visible + .bd-filebtn{outline:2px solid #F2F1EC;outline-offset:2px}
+.bd-filebtn{cursor:pointer;transition:transform .5s cubic-bezier(.3,1.7,.4,1),border-color .2s}
+.bd-filebtn:hover{border-color:#F2F1EC!important}
+.bd-filebtn:active{transform:perspective(520px) rotateX(10deg) translateZ(-14px) scale(.97);transition:transform .07s}
+.bd-step{cursor:pointer}
+.bd-pal{cursor:pointer;transition:border-color .2s,transform .5s cubic-bezier(.3,1.7,.4,1)}
+.bd-pal.is-on{border-color:#F2F1EC!important}
+.bd-in-fa{animation:bdFA .7s cubic-bezier(.2,.9,.25,1.1) both}.bd-in-fb{animation:bdFB .7s cubic-bezier(.2,.9,.25,1.1) both}
+.bd-in-ra{animation:bdRA .7s cubic-bezier(.2,.9,.25,1.1) both}.bd-in-rb{animation:bdRB .7s cubic-bezier(.2,.9,.25,1.1) both}
+@keyframes bdFA{from{opacity:0;transform:perspective(1200px) translateX(80px) rotateY(-65deg)}to{opacity:1;transform:none}}
+@keyframes bdFB{from{opacity:0;transform:perspective(1200px) translateX(80px) rotateY(-65deg)}to{opacity:1;transform:none}}
+@keyframes bdRA{from{opacity:0;transform:perspective(1200px) translateX(-80px) rotateY(65deg)}to{opacity:1;transform:none}}
+@keyframes bdRB{from{opacity:0;transform:perspective(1200px) translateX(-80px) rotateY(65deg)}to{opacity:1;transform:none}}
+.bd-stage{perspective:1500px}
+.bd-dev{transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.bd-tk-a{animation:bdTkA .7s cubic-bezier(.3,1.4,.4,1)}.bd-tk-b{animation:bdTkB .7s cubic-bezier(.3,1.4,.4,1)}
+@keyframes bdTkA{0%{transform:rotateX(6deg) rotateY(-16deg)}35%{transform:rotateX(10deg) rotateY(4deg) translateZ(40px) scale(1.03)}100%{transform:rotateX(6deg) rotateY(-16deg)}}
+@keyframes bdTkB{0%{transform:rotateX(6deg) rotateY(-16deg)}35%{transform:rotateX(10deg) rotateY(4deg) translateZ(40px) scale(1.03)}100%{transform:rotateX(6deg) rotateY(-16deg)}}
+.bd-spinner{transform-style:preserve-3d}
+.bd-spin{animation:bdSpin 1.4s cubic-bezier(.5,0,.3,1) infinite}
+@keyframes bdSpin{0%{transform:rotateY(0deg) translateZ(0)}50%{transform:rotateY(180deg) translateZ(-80px) scale(.92)}100%{transform:rotateY(360deg) translateZ(0)}}
+.bd-land-a{animation:bdLandA 1s cubic-bezier(.3,1.4,.4,1)}.bd-land-b{animation:bdLandB 1s cubic-bezier(.3,1.4,.4,1)}
+@keyframes bdLandA{0%{transform:translateY(-40px) rotateX(-20deg) scale(.94)}60%{transform:translateY(8px) rotateX(4deg)}100%{transform:none}}
+@keyframes bdLandB{0%{transform:translateY(-40px) rotateX(-20deg) scale(.94)}60%{transform:translateY(8px) rotateX(4deg)}100%{transform:none}}
+.bd-ticket{transform-origin:50% 0%;animation:bdTicket 1.1s cubic-bezier(.3,1.35,.4,1) both}
+@keyframes bdTicket{from{opacity:0;transform:perspective(900px) rotateX(-95deg) translateY(-20px)}to{opacity:1;transform:none}}
+.bd-genrow{animation:bdGen .5s cubic-bezier(.3,1.3,.4,1) both}
+@keyframes bdGen{from{opacity:0;transform:perspective(500px) rotateX(-80deg)}to{opacity:1;transform:none}}
+.bd-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;animation:bdDot 1s ease-in-out infinite}
+.bd-dots span:nth-child(2){animation-delay:.15s}.bd-dots span:nth-child(3){animation-delay:.3s}
+@keyframes bdDot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
+.bd-logo-in{animation:bdLogo .8s cubic-bezier(.3,1.4,.4,1)}
+@keyframes bdLogo{from{transform:perspective(400px) rotateY(-180deg) scale(.6)}to{transform:none}}
+.bd-live{animation:bdLive 1.6s ease-in-out infinite}
+@keyframes bdLive{50%{opacity:.35}}
+.bd-toast{opacity:0;pointer-events:none}
+.bd-toast-a{animation:bdToastA 2.6s ease both}.bd-toast-b{animation:bdToastB 2.6s ease both}
+@keyframes bdToastA{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes bdToastB{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:900px;pointer-events:none;background:radial-gradient(620px 380px at 78% 20%, {{glowP}}, transparent 70%), radial-gradient(560px 360px at 92% 60%, {{glowA}}, transparent 70%)"></div>
+<header style="position:relative;border-bottom:1px solid #1E222C;background:rgba(13,15,20,.85)">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;color:#C9CDD6">Buat event kompetisi</span>
+</div>
+<span class="sb-mono" style="font-size:12px;color:#A3A9B6">Tersimpan otomatis sebagai draf</span>
+</div>
+</header>
+
+<main style="position:relative;max-width:1360px;margin:0 auto;padding:32px 24px 72px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<p class="sb-mono" style="margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#FFB089">Event kompetisi · langkah {{step}} dari 4</p>
+<h1 class="sb-display" style="margin:0;font-size:clamp(48px,5.6vw,84px);line-height:.88;font-weight:900;text-transform:uppercase">Jadikan turnamenmu punya halaman sendiri</h1>
+</div>
+
+<nav aria-label="Langkah" style="position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<span aria-hidden="true" style="position:absolute;left:12.5%;right:12.5%;top:21px;height:2px;background:#232834"></span>
+<span aria-hidden="true" style="position:absolute;left:12.5%;top:21px;height:2px;width:{{progW}}%;background:#FF7A2E;transition:width .7s cubic-bezier(.2,.8,.2,1)"></span>
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+<button class="bd-btn bd-step" onClick="{{s.go}}" aria-current="{{s.cur}}" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0;border:0;background:transparent;color:{{s.fg}}">
+<span class="sb-display" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{s.bg}};border:2px solid {{s.border}};color:{{s.numFg}};font-size:22px;font-weight:900">{{s.mark}}</span>
+<span style="font-size:14px;font-weight:600">{{s.label}}</span>
+</button>
+</sc-for>
+</nav>
+
+<div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+<section aria-label="Formulir event" style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px">
+
+<sc-if value="{{is1}}" hint-placeholder-val="{{ true }}">
+<div class="bd-in-{{anim}}" style="padding:24px;border-radius:24px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:18px">
+<h2 class="sb-display" style="margin:0;font-size:36px;line-height:1;font-weight:900;text-transform:uppercase">Identitas event</h2>
+<div style="display:flex;flex-direction:column;gap:8px">
+<label class="bd-lbl" for="bd-name"><span>Nama event</span><span>{{nameLen}}/48</span></label>
+<input id="bd-name" class="bd-in" value="{{name}}" onChange="{{onName}}" maxlength="48" placeholder="mis. Piala Kemerdekaan RW 05" style="font-size:18px;font-weight:600">
+<sc-if value="{{nameErr}}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#FF9A7A">Nama event minimal 3 huruf.</span></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<label class="bd-lbl" for="bd-org">Penyelenggara</label>
+<input id="bd-org" class="bd-in" value="{{org}}" onChange="{{onOrg}}" placeholder="Komunitas, sekolah, kantor, atau klub">
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:12px">
+<div style="display:flex;flex-direction:column;gap:8px"><label class="bd-lbl" for="bd-start">Mulai</label><input id="bd-start" type="date" class="bd-in" value="{{start}}" onChange="{{onStart}}" style="color-scheme:dark"></div>
+<div style="display:flex;flex-direction:column;gap:8px"><label class="bd-lbl" for="bd-end">Selesai</label><input id="bd-end" type="date" class="bd-in" value="{{end}}" onChange="{{onEnd}}" style="color-scheme:dark"></div>
+</div>
+<sc-if value="{{dateErr}}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#FF9A7A">Tanggal selesai tidak boleh sebelum tanggal mulai.</span></sc-if>
+<div style="display:flex;flex-direction:column;gap:8px">
+<label class="bd-lbl" for="bd-venue">Lokasi</label>
+<input id="bd-venue" class="bd-in" value="{{venue}}" onChange="{{onVenue}}" placeholder="Nama GOR atau lapangan, kota">
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<label class="bd-lbl" for="bd-desc"><span>Deskripsi singkat</span><span>{{descLen}}/140</span></label>
+<textarea id="bd-desc" class="bd-in" value="{{desc}}" onChange="{{onDesc}}" maxlength="140" rows="3" placeholder="Siapa yang boleh ikut, hadiah, atau aturan singkat" style="padding:12px 14px;line-height:1.5;resize:vertical"></textarea>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{is2}}" hint-placeholder-val="{{ false }}">
+<div class="bd-in-{{anim}}" style="padding:24px;border-radius:24px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:20px">
+<h2 class="sb-display" style="margin:0;font-size:36px;line-height:1;font-weight:900;text-transform:uppercase">Logo &amp; warna tema</h2>
+<div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center">
+<span class="bd-logo-in" style="flex:none;width:96px;height:96px;display:flex;align-items:center;justify-content:center;background:{{primary}};color:{{onPrimary}};clip-path:{{logoClip}};border-radius:{{logoRadius}}">
+<sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="Logo event" style="width:100%;height:100%;object-fit:cover"></sc-if>
+<sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}"><span class="sb-display" style="font-size:42px;font-weight:900">{{initials}}</span></sc-if>
+</span>
+<div style="flex:1 1 260px;display:flex;flex-direction:column;gap:10px">
+<span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<input id="bd-logo" class="bd-file" type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp" onChange="{{onLogo}}">
+<label for="bd-logo" class="bd-filebtn" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:14px;font-weight:600"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>Unggah logo</label>
+<sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><button class="bd-btn" onClick="{{clearLogo}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">Pakai monogram</button></sc-if>
+</span>
+<span style="font-size:13px;line-height:1.5;color:#A3A9B6">PNG, JPG, SVG, atau WebP. Tanpa logo, monogram dibuat dari nama event.</span>
+<div role="group" aria-label="Bentuk logo" style="display:flex;gap:6px">
+<sc-for list="{{shapes}}" as="o" hint-placeholder-count="3">
+<button class="bd-btn bd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 12px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="bd-lbl">Palet tema</span>
+<div role="group" aria-label="Palet tema" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:8px">
+<sc-for list="{{palettes}}" as="p" hint-placeholder-count="6">
+<button class="bd-btn bd-pal {{p.cls}}" onClick="{{p.pick}}" aria-pressed="{{p.on}}" style="display:flex;align-items:center;gap:10px;min-height:52px;padding:0 12px;border-radius:14px;border:2px solid #232834;background:#12151C;color:#F2F1EC;font-size:13px;font-weight:600;text-align:left">
+<span style="flex:none;display:flex"><span style="width:22px;height:22px;border-radius:50%;background:{{p.p}};border:2px solid #12151C"></span><span style="width:22px;height:22px;margin-left:-8px;border-radius:50%;background:{{p.a}};border:2px solid #12151C"></span></span>
+<span>{{p.name}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:12px">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;border:1px solid #2A303D;background:#0B0D12">
+<input id="bd-cp" type="color" value="{{primary}}" onChange="{{setPrimary}}" aria-label="Warna utama" style="width:44px;height:44px;padding:0;border:0;border-radius:10px;background:transparent;cursor:pointer">
+<label for="bd-cp" style="display:flex;flex-direction:column;gap:2px"><span class="bd-lbl">Warna utama</span><span class="sb-mono" style="font-size:13px">{{primaryUp}}</span></label>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;border:1px solid #2A303D;background:#0B0D12">
+<input id="bd-ca" type="color" value="{{accent}}" onChange="{{setAccent}}" aria-label="Warna aksen" style="width:44px;height:44px;padding:0;border:0;border-radius:10px;background:transparent;cursor:pointer">
+<label for="bd-ca" style="display:flex;flex-direction:column;gap:2px"><span class="bd-lbl">Warna aksen</span><span class="sb-mono" style="font-size:13px">{{accentUp}}</span></label>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:16px 28px">
+<div role="group" aria-label="Latar" style="display:flex;align-items:center;gap:8px"><span class="bd-lbl">Latar</span>
+<sc-for list="{{modes}}" as="o" hint-placeholder-count="2"><button class="bd-btn bd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for>
+</div>
+<div role="group" aria-label="Gaya judul" style="display:flex;align-items:center;gap:8px"><span class="bd-lbl">Judul</span>
+<sc-for list="{{titles}}" as="o" hint-placeholder-count="2"><button class="bd-btn bd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;border-radius:14px;background:#12151C;border:1px solid #232834">
+<span class="bd-lbl">Cek keterbacaan otomatis</span>
+<sc-for list="{{checks}}" as="c" hint-placeholder-count="2">
+<span style="display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px"><span>{{c.label}}</span><span style="display:flex;align-items:center;gap:8px"><span class="sb-mono" style="font-size:13px">{{c.ratio}}</span><span class="sb-mono" style="padding:3px 8px;border-radius:6px;background:{{c.bg}};color:{{c.fg}};font-size:11px;font-weight:700">{{c.verdict}}</span></span></span>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{is3}}" hint-placeholder-val="{{ false }}">
+<div class="bd-in-{{anim}}" style="padding:24px;border-radius:24px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:20px">
+<h2 class="sb-display" style="margin:0;font-size:36px;line-height:1;font-weight:900;text-transform:uppercase">Kompetisi</h2>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="bd-lbl"><span>Cabang yang dipertandingkan</span><span>{{sportCount}} dipilih</span></span>
+<div role="group" aria-label="Cabang" style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{sportOpts}}" as="o" hint-placeholder-count="10">
+<button class="bd-btn bd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600">{{o.label}}</button>
+</sc-for>
+</div>
+<sc-if value="{{sportErr}}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#FF9A7A">Pilih minimal satu cabang.</span></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="bd-lbl">Format</span>
+<div role="group" aria-label="Format" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:8px">
+<sc-for list="{{formats}}" as="o" hint-placeholder-count="5">
+<button class="bd-btn bd-pal {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:72px;padding:12px 14px;border-radius:14px;border:2px solid #232834;background:#12151C;color:#F2F1EC;text-align:left">
+<span style="font-size:15px;font-weight:700">{{o.label}}</span>
+<span style="font-size:12px;line-height:1.4;color:#A3A9B6">{{o.hint}}</span>
+</button>
+</sc-for>
+</div>
+<a href="{{fmtHref}}" style="align-self:flex-start;font-size:14px;font-weight:700">{{fmtHrefLabel}}</a>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center">
+<div role="group" aria-label="Jumlah peserta" style="display:flex;align-items:center;gap:8px"><span class="bd-lbl">Peserta</span>
+<sc-for list="{{sizes}}" as="o" hint-placeholder-count="3"><button class="bd-btn bd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:44px;min-width:52px;padding:0 12px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:700">{{o.label}}</button></sc-for>
+</div>
+<div style="display:flex;align-items:center;gap:12px">
+<button class="bd-btn" role="switch" aria-checked="{{reg}}" aria-label="Buka pendaftaran tim online" onClick="{{toggleReg}}" style="width:56px;height:32px;padding:3px;border-radius:999px;border:1px solid #343B4A;background:{{regBg}};display:flex;align-items:center"><span style="display:block;width:24px;height:24px;border-radius:50%;background:#F2F1EC;transform:translateX({{regX}}px);transition:transform .3s cubic-bezier(.3,1.4,.4,1)"></span></button>
+<span style="font-size:14px">Pendaftaran tim online</span>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:12px">
+<div style="display:flex;flex-direction:column;gap:8px"><label class="bd-lbl" for="bd-fee">Biaya per tim</label><input id="bd-fee" class="bd-in" value="{{fee}}" onChange="{{onFee}}" placeholder="mis. Rp250.000 atau Gratis"></div>
+<div style="display:flex;flex-direction:column;gap:8px"><label class="bd-lbl" for="bd-sp">Sponsor (pisahkan dengan koma)</label><input id="bd-sp" class="bd-in" value="{{sponsors}}" onChange="{{onSponsors}}" placeholder="Nama sponsor"></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{is4}}" hint-placeholder-val="{{ false }}">
+<div class="bd-in-{{anim}}" style="padding:24px;border-radius:24px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:20px">
+<h2 class="sb-display" style="margin:0;font-size:36px;line-height:1;font-weight:900;text-transform:uppercase">Tautan &amp; publikasi</h2>
+<div style="display:flex;flex-direction:column;gap:8px">
+<label class="bd-lbl" for="bd-slug"><span>Alamat halaman event</span><span style="color:{{slugColor}}">{{slugStatus}}</span></label>
+<div style="display:flex;align-items:stretch;border:1px solid {{slugBorder}};border-radius:12px;overflow:hidden;background:#0B0D12">
+<span class="sb-mono" style="display:flex;align-items:center;padding:0 10px 0 14px;font-size:13px;color:#A3A9B6;background:#12151C;white-space:nowrap">scoreboard.tiusapp.com/e/</span>
+<input id="bd-slug" class="sb-mono" value="{{slug}}" onChange="{{onSlug}}" maxlength="40" style="flex:1;min-width:0;min-height:48px;padding:0 12px;border:0;background:transparent;color:#F2F1EC;font-size:14px">
+</div>
+<span style="font-size:13px;color:#A3A9B6">Huruf kecil, angka, dan tanda hubung. Dibuat otomatis dari nama event.</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="bd-lbl">Siapa yang bisa melihat</span>
+<div role="group" aria-label="Visibilitas" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:8px">
+<sc-for list="{{visOpts}}" as="o" hint-placeholder-count="3">
+<button class="bd-btn bd-pal {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:68px;padding:12px 14px;border-radius:14px;border:2px solid #232834;background:#12151C;color:#F2F1EC;text-align:left">
+<span style="font-size:15px;font-weight:700">{{o.label}}</span>
+<span style="font-size:12px;line-height:1.4;color:#A3A9B6">{{o.hint}}</span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{isPrivate}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:12px"><label class="bd-lbl" for="bd-pin">PIN 4 angka</label><input id="bd-pin" class="bd-in sb-mono" value="{{pin}}" onChange="{{onPin}}" inputmode="numeric" maxlength="4" placeholder="0000" style="width:120px;letter-spacing:.4em;text-align:center"></div>
+</sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<span class="bd-lbl">Tampil di halaman event</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:8px">
+<sc-for list="{{feats}}" as="f" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:12px;background:#12151C;border:1px solid #232834">
+<span style="font-size:14px">{{f.label}}</span>
+<button class="bd-btn" role="switch" aria-checked="{{f.on}}" aria-label="{{f.label}}" onClick="{{f.toggle}}" style="flex:none;width:52px;height:30px;padding:3px;border-radius:999px;border:1px solid #343B4A;background:{{f.bg}};display:flex;align-items:center"><span style="display:block;width:22px;height:22px;border-radius:50%;background:#F2F1EC;transform:translateX({{f.x}}px);transition:transform .3s cubic-bezier(.3,1.4,.4,1)"></span></button>
+</div>
+</sc-for>
+</div>
+</div>
+
+<sc-if value="{{genIdle}}" hint-placeholder-val="{{ true }}">
+<button class="bd-btn" onClick="{{generate}}" style="min-height:60px;border-radius:16px;border:0;background:{{primary}};color:{{onPrimary}};font-size:18px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 20px 50px -20px {{glowP}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>Buat link event</button>
+<sc-if value="{{hasErrors}}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#FF9A7A">{{errorLine}}</span></sc-if>
+<span style="font-size:13px;line-height:1.5;color:#A3A9B6">Gratis sampai 8 tim di 1 lapangan. Kamu akan diminta <a href="Masuk.dc.html">masuk</a> saat menerbitkan link. Lebih besar? <a href="Harga.dc.html">Lihat Pass Event</a>.</span>
+</sc-if>
+
+<sc-if value="{{genRun}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:16px;background:#12151C;border:1px solid #2A303D">
+<sc-for list="{{genSteps}}" as="g" hint-placeholder-count="3">
+<span class="bd-genrow" style="display:flex;align-items:center;gap:12px;font-size:15px;color:{{g.fg}};animation-delay:{{g.delay}}ms">
+<span style="flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{g.bg}};color:#0B0D12"><sc-if value="{{g.done}}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if></span>
+{{g.label}}
+<sc-if value="{{g.active}}" hint-placeholder-val="{{ false }}"><span class="bd-dots" aria-hidden="true" style="display:inline-flex;gap:4px;color:{{primary}}"><span></span><span></span><span></span></span></sc-if>
+</span>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{genDone}}" hint-placeholder-val="{{ false }}">
+<div class="bd-ticket" role="status" style="position:relative;border-radius:22px;background:#F2F1EC;color:#14161C;overflow:hidden;box-shadow:0 40px 90px -30px {{glowP}}">
+<div style="height:8px;background:{{primary}}"></div>
+<div style="display:flex;flex-wrap:wrap;gap:20px;padding:22px">
+<div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:12px">
+<span class="sb-mono" style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;color:#2F7A4F"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>EVENT TERBIT · {{visLabel}}</span>
+<span class="sb-display" style="font-size:34px;line-height:.95;font-weight:900;text-transform:uppercase">{{nameShown}}</span>
+<span style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#FFFFFF;border:1px solid #D6D3CA;min-width:0">
+<span class="sb-mono" style="flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{fullLink}}</span>
+<button class="bd-btn" onClick="{{copyLink}}" style="flex:none;min-height:36px;padding:0 12px;border-radius:9px;border:0;background:#14161C;color:#F2F1EC;font-size:13px;font-weight:700">Salin</button>
+</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<a class="bd-btn" href="{{waLink}}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;background:#1F7A45;color:#FFFFFF;font-size:14px;font-weight:700;text-decoration:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"></path></svg>Bagikan ke WhatsApp</a>
+<a class="bd-btn" href="EventPage.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #C9C6BC;color:#14161C;font-size:14px;font-weight:700;text-decoration:none">Buka halaman event</a>
+<a class="bd-btn" href="Admin.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;background:#14161C;color:#F2F1EC;font-size:14px;font-weight:700;text-decoration:none">Buka panel penyelenggara</a>
+<button class="bd-btn" onClick="{{poster}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #C9C6BC;background:transparent;color:#14161C;font-size:14px;font-weight:700">Unduh poster</button>
+</div>
+<span style="font-size:13px;line-height:1.5;color:#3A3F4B">Panel penyelenggara: <span class="sb-mono">{{adminLink}}</span>. Perubahan logo, warna, dan jadwal langsung tampil di link yang sama.</span>
+</div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:center;gap:8px">
+<div aria-label="Pratinjau kode QR" role="img" style="padding:8px;border-radius:12px;background:#FFFFFF;border:1px solid #D6D3CA">
+<div style="display:grid;grid-template-columns:repeat(21,6px);grid-auto-rows:6px">
+<sc-for list="{{qr}}" as="q" hint-placeholder-count="21"><span style="background:{{q.c}}"></span></sc-for>
+</div>
+</div>
+<span class="sb-mono" style="max-width:150px;text-align:center;font-size:10px;line-height:1.4;color:#5A5F6B">Pratinjau QR · kode asli dibuat saat terbit</span>
+</div>
+</div>
+<div aria-hidden="true" style="position:absolute;left:-12px;top:50%;width:24px;height:24px;border-radius:50%;background:#0F1218"></div>
+<div aria-hidden="true" style="position:absolute;right:-12px;top:50%;width:24px;height:24px;border-radius:50%;background:#0F1218"></div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<div style="display:flex;justify-content:space-between;gap:12px">
+<button class="bd-btn" onClick="{{back}}" disabled="{{isFirst}}" style="min-height:52px;padding:0 20px;border-radius:14px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:15px;font-weight:600">Kembali</button>
+<sc-if value="{{notLast}}" hint-placeholder-val="{{ true }}">
+<button class="bd-btn" onClick="{{next}}" style="min-height:52px;padding:0 24px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:15px;font-weight:700">Lanjut: {{nextLabel}}</button>
+</sc-if>
+</div>
+</section>
+
+<section aria-label="Pratinjau langsung" style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+<span class="sb-mono" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#A3A9B6">PRATINJAU LANGSUNG</span>
+<div role="group" aria-label="Perangkat" style="display:flex;gap:6px">
+<sc-for list="{{devices}}" as="o" hint-placeholder-count="2"><button class="bd-btn bd-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for>
+</div>
+</div>
+<div class="bd-stage" onMouseMove="{{onTilt}}" onMouseLeave="{{onLeave}}" style="position:relative;height:720px;display:flex;align-items:center;justify-content:center">
+<div aria-hidden="true" style="position:absolute;left:50%;bottom:28px;width:360px;height:60px;margin-left:-180px;border-radius:50%;background:radial-gradient(closest-side, rgba(0,0,0,.65), transparent);filter:blur(6px)"></div>
+<div class="bd-spinner {{spinCls}}" style="position:relative">
+<div class="bd-dev bd-tk-{{themeK}}" style="transform:rotateX({{rx}}deg) rotateY({{ry}}deg)">
+
+<sc-if value="{{isPhone}}" hint-placeholder-val="{{ true }}">
+<div style="position:relative;width:310px;height:640px;padding:12px;border-radius:46px;background:#1A1D24;border:1px solid #343B4A;box-shadow:0 50px 100px -40px rgba(0,0,0,.95), inset 0 0 0 2px #0B0D12">
+<div aria-hidden="true" style="position:absolute;inset:0;border-radius:46px;transform:translateZ(-24px);background:#0B0D12"></div>
+<div style="position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;background:{{bg}};color:{{fg}};display:flex;flex-direction:column">
+<div style="padding:40px 18px 18px;background:{{primary}};color:{{onPrimary}};display:flex;flex-direction:column;gap:12px">
+<span style="display:flex;align-items:center;gap:10px">
+<span style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:{{onPrimary}};color:{{primary}};clip-path:{{logoClip}};border-radius:{{logoRadius}};overflow:hidden">
+<sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if>
+<sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}"><span class="sb-display" style="font-size:20px;font-weight:900">{{initials}}</span></sc-if>
+</span>
+<span style="font-size:11px;font-weight:700;letter-spacing:.08em;opacity:.85">{{orgShown}}</span>
+</span>
+<span style="font-family:{{tFam}};text-transform:{{tCase}};font-weight:{{tW}};font-size:{{tSize}}px;line-height:.95;letter-spacing:{{tLs}}">{{nameShown}}</span>
+<span style="font-size:12px;font-weight:600;opacity:.9">{{dateLine}} · {{venueShown}}</span>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:14px 16px">
+<span style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span style="font-weight:700">{{countdown}}</span><span style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end"><sc-for list="{{sportTags}}" as="t" hint-placeholder-count="2"><span style="padding:3px 7px;border-radius:999px;border:1px solid {{accent}};color:{{fg}};font-size:10px;font-weight:700">{{t.label}}</span></sc-for></span></span>
+<sc-if value="{{showLive}}" hint-placeholder-val="{{ true }}">
+<div style="padding:12px;border-radius:14px;background:{{surface}};border:1px solid {{line}};display:flex;flex-direction:column;gap:8px">
+<span class="sb-mono" style="display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:.12em;color:{{muted}}"><span class="bd-live" style="width:6px;height:6px;border-radius:50%;background:{{primary}}"></span>LIVE · {{firstSport}}</span>
+<span style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px">
+<span style="font-size:13px;font-weight:700">Tim Elang</span>
+<span class="sb-display" style="font-size:34px;line-height:1;font-weight:900"><span style="color:{{primaryText}}">2</span><span style="color:{{muted}}"> : </span><span style="color:{{accentText}}">1</span></span>
+<span style="font-size:13px;font-weight:700;text-align:right">Tim Kancil</span>
+</span>
+</div>
+</sc-if>
+<sc-if value="{{showBracket}}" hint-placeholder-val="{{ true }}">
+<div style="padding:12px;border-radius:14px;background:{{surface}};border:1px solid {{line}};display:flex;flex-direction:column;gap:8px">
+<span class="sb-mono" style="font-size:9px;font-weight:700;letter-spacing:.12em;color:{{muted}}">{{formatShort}} · {{teams}} TIM</span>
+<span style="display:flex;gap:8px;align-items:center">
+<span style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="height:8px;border-radius:3px;background:{{line}}"></span><span style="height:8px;border-radius:3px;background:{{line}}"></span><span style="height:8px;border-radius:3px;background:{{line}}"></span><span style="height:8px;border-radius:3px;background:{{line}}"></span></span>
+<span style="flex:.8;display:flex;flex-direction:column;gap:12px"><span style="height:8px;border-radius:3px;background:{{accent}};opacity:.7"></span><span style="height:8px;border-radius:3px;background:{{accent}};opacity:.7"></span></span>
+<span style="flex:.6;height:8px;border-radius:3px;background:{{primary}}"></span>
+</span>
+</div>
+</sc-if>
+<sc-if value="{{showReg}}" hint-placeholder-val="{{ true }}">
+<span style="display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;background:{{primary}};color:{{onPrimary}};font-size:14px;font-weight:800">Daftar tim · {{feeShown}}</span>
+</sc-if>
+<span style="margin-top:auto;display:flex;flex-wrap:wrap;gap:4px;justify-content:center"><sc-for list="{{sponsorTags}}" as="t" hint-placeholder-count="2"><span style="padding:3px 8px;border-radius:6px;background:{{surface}};border:1px solid {{line}};color:{{muted}};font-size:10px;font-weight:600">{{t.label}}</span></sc-for></span>
+<span style="text-align:center;font-size:9px;color:{{muted}}">scoreboard.tiusapp.com/e/{{slugShown}}</span>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isTv}}" hint-placeholder-val="{{ false }}">
+<div style="position:relative;width:560px;max-width:100%">
+<div style="position:relative;aspect-ratio:16/9;padding:10px;border-radius:18px;background:#1A1D24;border:1px solid #343B4A;box-shadow:0 50px 100px -40px rgba(0,0,0,.95)">
+<div style="width:100%;height:100%;border-radius:10px;overflow:hidden;background:{{bg}};color:{{fg}};display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:{{primary}};color:{{onPrimary}}">
+<span style="flex:none;width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:{{onPrimary}};color:{{primary}};clip-path:{{logoClip}};border-radius:{{logoRadius}};overflow:hidden"><sc-if value="{{hasLogo}}" hint-placeholder-val="{{ false }}"><img src="{{logoUrl}}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if><sc-if value="{{noLogo}}" hint-placeholder-val="{{ true }}"><span class="sb-display" style="font-size:13px;font-weight:900">{{initials}}</span></sc-if></span>
+<span style="flex:1;min-width:0;font-family:{{tFam}};text-transform:{{tCase}};font-weight:{{tW}};font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{nameShown}}</span>
+<span class="sb-mono" style="font-size:10px;font-weight:700">LIVE · {{firstSport}}</span>
+</div>
+<div style="flex:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:0 20px">
+<span style="display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:14px;font-weight:700">Tim Elang</span><span class="sb-display" style="font-size:96px;line-height:.9;font-weight:900;color:{{primaryText}}">2</span></span>
+<span class="sb-mono" style="font-size:20px;font-weight:700;color:{{muted}}">18:42</span>
+<span style="display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:14px;font-weight:700">Tim Kancil</span><span class="sb-display" style="font-size:96px;line-height:.9;font-weight:900;color:{{accentText}}">1</span></span>
+</div>
+<div style="display:flex;gap:16px;align-items:center;padding:8px 14px;border-top:1px solid {{line}};font-size:11px;color:{{muted}};overflow:hidden;white-space:nowrap"><span style="font-weight:700;color:{{fg}}">Didukung oleh</span><sc-for list="{{sponsorTags}}" as="t" hint-placeholder-count="2"><span>{{t.label}}</span></sc-for></div>
+</div>
+</div>
+<div aria-hidden="true" style="width:120px;height:40px;margin:0 auto;background:linear-gradient(#1A1D24,#0B0D12);clip-path:polygon(30% 0,70% 0,100% 100%,0 100%)"></div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</div>
+<p style="margin:0;text-align:center;font-size:13px;color:#A3A9B6">Gerakkan kursor untuk memutar pratinjau. Semua isian langsung tampil di sini.</p>
+</section>
+</div>
+</main>
+<div class="bd-toast bd-toast-{{toastK}}" role="status" style="position:fixed;left:50%;bottom:28px;margin-left:-180px;width:360px;padding:14px 18px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:14px;font-weight:600;text-align:center;box-shadow:0 20px 50px -10px rgba(0,0,0,.6)">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1480}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      step: 1, dir: 'f', stepK: 'a',
+      name: 'Piala Jumat Malam 2026', org: 'Karang Taruna RW 05', start: '2026-12-05', end: '2026-12-06',
+      venue: 'GOR Kecamatan, Jakarta Selatan', desc: 'Turnamen futsal dan bulu tangkis antarwarga. Terbuka untuk semua umur dan level.',
+      logoUrl: '', shape: 'shield',
+      palette: 'arena', primary: '#FF7A2E', accent: '#4D7CFF', mode: 'dark', titleStyle: 'tegas', themeK: 'n',
+      sports: ['futsal', 'badminton'], format: 'group', teams: 16, reg: true, fee: 'Rp250.000', sponsors: 'Warung Bu Siti, Toko Olahraga Jaya',
+      slug: '', slugTouched: false, vis: 'link', pin: '',
+      feat: { live: true, bracket: true, reg: true, tv: true },
+      device: 'phone', rx: 6, ry: -16,
+      gen: 'idle', genStep: 0, genK: 'n', showErr: false, toast: '', toastK: 'n'
+    };
+  }
+  componentWillUnmount() { (this.timers || []).forEach((t) => clearTimeout(t)); }
+  componentDidMount() { this.saveTheme(); }
+  componentDidUpdate(pp, ps) {
+    const keys = ['name', 'org', 'primary', 'accent', 'mode', 'shape', 'logoUrl', 'slug', 'slugTouched', 'start', 'end', 'venue', 'fee'];
+    if (keys.some((k) => ps[k] !== this.state[k])) this.saveTheme();
+  }
+  saveTheme() {
+    const s = this.state;
+    const t = { name: s.name.trim() || 'Nama event', org: s.org, primary: s.primary, accent: s.accent, mode: s.mode, shape: s.shape, logoUrl: s.logoUrl, slug: (s.slugTouched ? s.slug : this.slugify(s.name)) || 'nama-event', dateLine: this.fmtDate(s.start, s.end), venue: s.venue, fee: s.fee };
+    try { window.localStorage.setItem('sbEventTheme', JSON.stringify(t)); } catch (e) { }
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  palettesDef() {
+    return [
+      { id: 'arena', name: 'Arena Malam', p: '#FF7A2E', a: '#4D7CFF' },
+      { id: 'merah', name: 'Merah Putih', p: '#E5333B', a: '#F2F1EC' },
+      { id: 'hijau', name: 'Hijau Lapangan', p: '#22B573', a: '#F2C230' },
+      { id: 'laut', name: 'Laut Biru', p: '#1E9BFF', a: '#16D6B5' },
+      { id: 'neon', name: 'Ungu Neon', p: '#A855F7', a: '#22D3EE' },
+      { id: 'emas', name: 'Emas Juara', p: '#E8B43A', a: '#E5333B' }
+    ];
+  }
+  sportsDef() {
+    return [{ id: 'futsal', label: 'Futsal' }, { id: 'bola', label: 'Sepak Bola' }, { id: 'mini', label: 'Mini Soccer' }, { id: 'badminton', label: 'Bulu Tangkis' }, { id: 'tenis', label: 'Tenis' }, { id: 'padel', label: 'Padel' }, { id: 'tt', label: 'Tenis Meja' }, { id: 'voli', label: 'Bola Voli' }, { id: 'basket', label: 'Basket' }, { id: 'esport', label: 'E-sports' }];
+  }
+  lum(hex) {
+    const h = (hex || '#000000').replace('#', '');
+    const v = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+  }
+  contrast(a, b) {
+    const x = this.lum(a); const y = this.lum(b);
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  }
+  rgba(hex, al) {
+    const h = hex.replace('#', '');
+    return 'rgba(' + parseInt(h.substr(0, 2), 16) + ',' + parseInt(h.substr(2, 2), 16) + ',' + parseInt(h.substr(4, 2), 16) + ',' + al + ')';
+  }
+  mix(hex, toward, t) {
+    const a = hex.replace('#', ''); const b = toward.replace('#', '');
+    const c = [0, 2, 4].map((i) => Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t));
+    return '#' + c.map((x) => x.toString(16).padStart(2, '0')).join('');
+  }
+  readable(col, bg) {
+    let c = col; let i = 0;
+    const toward = this.lum(bg) < 0.2 ? '#FFFFFF' : '#000000';
+    while (this.contrast(c, bg) < 4.5 && i < 10) { c = this.mix(c, toward, 0.15); i++; }
+    return c;
+  }
+  slugify(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+  }
+  initials(n) {
+    const w = n.trim().split(/\s+/).filter((x) => /[A-Za-z]/.test(x));
+    return ((w[0] || 'E')[0] + (w[1] ? w[1][0] : '')).toUpperCase();
+  }
+  parseD(s) { const p = (s || '').split('-').map(Number); return p.length === 3 && p[0] ? new Date(p[0], p[1] - 1, p[2]) : null; }
+  fmtDate(a, b) {
+    const M = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    const x = this.parseD(a); const y = this.parseD(b);
+    if (!x) return 'Tanggal belum diisi';
+    if (!y || y.getTime() === x.getTime()) return x.getDate() + ' ' + M[x.getMonth()] + ' ' + x.getFullYear();
+    if (x.getMonth() === y.getMonth() && x.getFullYear() === y.getFullYear()) return x.getDate() + '–' + y.getDate() + ' ' + M[x.getMonth()] + ' ' + x.getFullYear();
+    return x.getDate() + ' ' + M[x.getMonth()].slice(0, 3) + ' – ' + y.getDate() + ' ' + M[y.getMonth()].slice(0, 3) + ' ' + y.getFullYear();
+  }
+  hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  qrCells(seed) {
+    const N = 21; const out = [];
+    let h = this.hash(seed || 'event');
+    const finder = (r, c) => {
+      const inBox = (r0, c0) => r >= r0 && r < r0 + 7 && c >= c0 && c < c0 + 7;
+      const box = inBox(0, 0) ? [0, 0] : (inBox(0, 14) ? [0, 14] : (inBox(14, 0) ? [14, 0] : null));
+      if (!box) return null;
+      const rr = r - box[0]; const cc = c - box[1];
+      const ring = Math.max(Math.abs(rr - 3), Math.abs(cc - 3));
+      return ring === 3 || ring <= 1;
+    };
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      const f = finder(r, c);
+      let on;
+      if (f !== null) on = f;
+      else if ((r === 7 || c === 7 || r === 13 || c === 13) && (r < 8 || c < 8) && !(r >= 14 && c >= 8)) on = false;
+      else { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; h >>>= 0; on = (h & 7) < 4; }
+      out.push({ c: on ? '#14161C' : '#FFFFFF' });
+    }
+    return out;
+  }
+  goStep(n) {
+    const s = this.state;
+    if (n === s.step || n < 1 || n > 4) return;
+    this.setState({ step: n, dir: n > s.step ? 'f' : 'r', stepK: this.tg(s.stepK) });
+  }
+  setTheme(upd) {
+    this.setState(Object.assign({ themeK: this.tg(this.state.themeK) }, upd));
+  }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  errors() {
+    const s = this.state;
+    const e = [];
+    if (s.name.trim().length < 3) e.push({ step: 1, msg: 'Nama event minimal 3 huruf' });
+    const a = this.parseD(s.start); const b = this.parseD(s.end);
+    if (a && b && b < a) e.push({ step: 1, msg: 'tanggal selesai sebelum tanggal mulai' });
+    if (!s.sports.length) e.push({ step: 3, msg: 'pilih minimal satu cabang' });
+    const slug = s.slugTouched ? s.slug : this.slugify(s.name);
+    if (slug.length < 3 || ['admin', 'cup', 'event', 'test', 'api'].indexOf(slug) >= 0) e.push({ step: 4, msg: 'alamat link belum valid' });
+    if (s.vis === 'private' && !/^\d{4}$/.test(s.pin)) e.push({ step: 4, msg: 'PIN harus 4 angka' });
+    return e;
+  }
+  generate() {
+    const err = this.errors();
+    if (err.length) {
+      this.setState({ showErr: true });
+      if (err[0].step !== this.state.step) this.goStep(err[0].step);
+      return;
+    }
+    (this.timers || []).forEach((t) => clearTimeout(t));
+    this.setState({ gen: 'run', genStep: 0, showErr: false });
+    this.timers = [
+      setTimeout(() => this.setState({ genStep: 1 }), 550),
+      setTimeout(() => this.setState({ genStep: 2 }), 1100),
+      setTimeout(() => { this.setState({ gen: 'done', genStep: 3, genK: this.tg(this.state.genK) }); this.celebrate('a'); }, 1700)
+    ];
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const dark = s.mode === 'dark';
+    const bg = dark ? '#0B0D12' : '#F5F4EF';
+    const fg = dark ? '#F2F1EC' : '#14161C';
+    const surface = dark ? '#151820' : '#FFFFFF';
+    const line = dark ? '#2A303D' : '#DDDAD0';
+    const muted = dark ? '#A3A9B6' : '#5A5F6B';
+    const onPrimary = this.contrast(s.primary, '#0B0D12') >= this.contrast(s.primary, '#FFFFFF') ? '#0B0D12' : '#FFFFFF';
+    const cBtn = this.contrast(s.primary, onPrimary);
+    const cHead = this.contrast(s.primary, bg);
+    const slug = s.slugTouched ? s.slug : this.slugify(s.name);
+    const reserved = ['admin', 'cup', 'event', 'test', 'api'].indexOf(slug) >= 0;
+    const slugOk = slug.length >= 3 && !reserved;
+    const sportsDef = this.sportsDef();
+    const chosen = sportsDef.filter((x) => s.sports.indexOf(x.id) >= 0);
+    const start = this.parseD(s.start);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const days = start ? Math.round((start - today) / 86400000) : null;
+    const countdown = days === null ? 'Tanggal menyusul' : (days > 0 ? 'Mulai ' + days + ' hari lagi' : (days === 0 ? 'Mulai hari ini' : 'Sedang berlangsung'));
+    const errs = this.errors();
+    const stepsDef = ['Identitas', 'Tampilan', 'Kompetisi', 'Tautan'];
+    const fmts = [
+      { id: 'group', label: 'Grup + gugur', short: 'GRUP + GUGUR', hint: 'Klasemen grup, 2 teratas lolos' },
+      { id: 'ko', label: 'Gugur langsung', short: 'GUGUR', hint: 'Kalah sekali langsung pulang' },
+      { id: 'de', label: 'Upper & lower', short: 'UPPER & LOWER', hint: 'Double elimination, cocok e-sports' },
+      { id: 'liga', label: 'Liga', short: 'LIGA', hint: 'Semua bertemu semua' },
+      { id: 'americano', label: 'Americano / Mexicano', short: 'AMERICANO', hint: 'Padel: pasangan berganti tiap ronde' }
+    ];
+    const fm = fmts.find((x) => x.id === s.format) || fmts[0];
+    const visDef = [
+      { id: 'public', label: 'Publik', hint: 'Muncul di pencarian event' },
+      { id: 'link', label: 'Hanya pemilik link', hint: 'Disebar lewat grup chat' },
+      { id: 'private', label: 'Privat + PIN', hint: 'Untuk liga internal kantor' }
+    ];
+    const vis = visDef.find((x) => x.id === s.vis) || visDef[1];
+    const featDef = [{ id: 'live', label: 'Skor live' }, { id: 'bracket', label: 'Klasemen & bracket' }, { id: 'reg', label: 'Formulir pendaftaran tim' }, { id: 'tv', label: 'Mode TV untuk layar venue' }];
+    const nameShown = s.name.trim() || 'Nama event';
+    const fullLink = 'scoreboard.tiusapp.com/e/' + (slug || 'nama-event');
+    const sponsorList = s.sponsors.split(',').map((x) => x.trim()).filter(Boolean).slice(0, 4);
+    const tegas = s.titleStyle === 'tegas';
+    const nameLen = s.name.length;
+    const shapes = { shield: 'polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%)', circle: 'none', hex: 'polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%)', square: 'none' };
+    const chk = (label, r, min) => ({ label: label, ratio: r.toFixed(1) + ':1', verdict: r >= min ? 'LOLOS' : 'PERLU DIGANTI', bg: r >= min ? 'rgba(126,226,168,.16)' : 'rgba(255,154,122,.16)', fg: r >= min ? '#7EE2A8' : '#FF9A7A' });
+    const genLabels = ['Menyiapkan tema & logo', 'Membuat jadwal dan bracket ' + fm.label.toLowerCase(), 'Menerbitkan ' + fullLink];
+    return {
+      step: s.step,
+      anim: s.dir + s.stepK,
+      is1: s.step === 1, is2: s.step === 2, is3: s.step === 3, is4: s.step === 4,
+      isFirst: s.step === 1, notLast: s.step < 4, nextLabel: stepsDef[Math.min(3, s.step)],
+      progW: ((s.step - 1) / 3 * 75).toFixed(2),
+      steps: stepsDef.map((l, i) => {
+        const n = i + 1; const done = n < s.step; const cur = n === s.step;
+        return { label: l, mark: done ? '✓' : String(n), cur: cur ? 'step' : 'false', go: () => this.goStep(n), bg: done ? '#FF7A2E' : (cur ? '#1A1410' : '#12151C'), border: done || cur ? '#FF7A2E' : '#343B4A', numFg: done ? '#140B05' : (cur ? '#FFB089' : '#A3A9B6'), fg: cur ? '#F2F1EC' : '#A3A9B6' };
+      }),
+      back: () => this.goStep(this.state.step - 1),
+      next: () => this.goStep(this.state.step + 1),
+      name: s.name, nameLen: nameLen, nameErr: s.showErr && s.name.trim().length < 3,
+      org: s.org, start: s.start, end: s.end, venue: s.venue, desc: s.desc, descLen: s.desc.length,
+      dateErr: !!(start && this.parseD(s.end) && this.parseD(s.end) < start),
+      onName: (e) => { const v = e.target.value; this.setState({ name: v, gen: this.state.slugTouched ? this.state.gen : (this.state.gen === 'done' ? 'idle' : this.state.gen) }); },
+      onOrg: (e) => this.setState({ org: e.target.value }),
+      onStart: (e) => this.setState({ start: e.target.value }),
+      onEnd: (e) => this.setState({ end: e.target.value }),
+      onVenue: (e) => this.setState({ venue: e.target.value }),
+      onDesc: (e) => this.setState({ desc: e.target.value }),
+      primary: s.primary, accent: s.accent, primaryUp: s.primary.toUpperCase(), accentUp: s.accent.toUpperCase(),
+      onPrimary: onPrimary,
+      primaryText: this.readable(s.primary, surface),
+      accentText: this.readable(s.accent, surface),
+      glowP: this.rgba(s.primary, 0.3), glowA: this.rgba(s.accent, 0.22),
+      hasLogo: !!s.logoUrl, noLogo: !s.logoUrl, logoUrl: s.logoUrl,
+      initials: this.initials(nameShown),
+      logoClip: shapes[s.shape], logoRadius: s.shape === 'circle' ? '50%' : (s.shape === 'square' ? '22%' : '0'),
+      onLogo: (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        if (f.size > 2 * 1024 * 1024) { this.toastMsg('Logo maksimal 2 MB'); return; }
+        try { if (this.state.logoUrl) URL.revokeObjectURL(this.state.logoUrl); } catch (err) { }
+        this.setTheme({ logoUrl: URL.createObjectURL(f) });
+      },
+      clearLogo: () => this.setTheme({ logoUrl: '' }),
+      shapes: [{ id: 'shield', label: 'Perisai' }, { id: 'circle', label: 'Lingkaran' }, { id: 'hex', label: 'Segi enam' }, { id: 'square', label: 'Kotak' }].map((o) => ({ label: o.label, on: s.shape === o.id, cls: s.shape === o.id ? 'is-on' : '', pick: () => this.setTheme({ shape: o.id }) })),
+      palettes: this.palettesDef().map((p) => ({ name: p.name, p: p.p, a: p.a, on: s.palette === p.id, cls: s.palette === p.id ? 'is-on' : '', pick: () => this.setTheme({ palette: p.id, primary: p.p, accent: p.a }) })),
+      setPrimary: (e) => this.setTheme({ primary: e.target.value, palette: 'custom' }),
+      setAccent: (e) => this.setTheme({ accent: e.target.value, palette: 'custom' }),
+      modes: [{ id: 'dark', label: 'Gelap' }, { id: 'light', label: 'Terang' }].map((o) => ({ label: o.label, on: s.mode === o.id, cls: s.mode === o.id ? 'is-on' : '', pick: () => this.setTheme({ mode: o.id }) })),
+      titles: [{ id: 'tegas', label: 'Tegas' }, { id: 'modern', label: 'Modern' }].map((o) => ({ label: o.label, on: s.titleStyle === o.id, cls: s.titleStyle === o.id ? 'is-on' : '', pick: () => this.setTheme({ titleStyle: o.id }) })),
+      checks: [chk('Teks di atas warna utama', cBtn, 4.5), chk('Warna utama di atas latar', cHead, 3)],
+      sportCount: s.sports.length,
+      sportErr: s.showErr && !s.sports.length,
+      sportOpts: sportsDef.map((o) => {
+        const on = s.sports.indexOf(o.id) >= 0;
+        return { label: o.label, on: on, cls: on ? 'is-on' : '', pick: () => { const cur = this.state.sports; this.setTheme({ sports: on ? cur.filter((x) => x !== o.id) : cur.concat([o.id]) }); } };
+      }),
+      fmtHref: { group: 'Cup.dc.html', ko: 'Cup.dc.html', de: 'CupEsports.dc.html', liga: 'Jadwal.dc.html', americano: 'Americano.dc.html' }[fm.id] || 'Cup.dc.html',
+      fmtHrefLabel: { group: 'Lihat contoh bracket grup + gugur →', ko: 'Lihat contoh bagan gugur →', de: 'Lihat contoh upper & lower bracket →', liga: 'Lihat contoh jadwal liga →', americano: 'Lihat contoh Americano padel →' }[fm.id] || 'Lihat contoh →',
+      formats: fmts.map((o) => ({ label: o.label, hint: o.hint, on: s.format === o.id, cls: s.format === o.id ? 'is-on' : '', pick: () => this.setTheme({ format: o.id }) })),
+      sizes: [8, 16, 32].map((v) => ({ label: String(v), on: s.teams === v, cls: s.teams === v ? 'is-on' : '', pick: () => this.setTheme({ teams: v }) })),
+      teams: s.teams,
+      reg: s.reg, regBg: s.reg ? '#FF7A2E' : '#2A303D', regX: s.reg ? 24 : 0,
+      toggleReg: () => this.setTheme({ reg: !this.state.reg }),
+      fee: s.fee, onFee: (e) => this.setState({ fee: e.target.value }),
+      sponsors: s.sponsors, onSponsors: (e) => this.setState({ sponsors: e.target.value }),
+      slug: slug,
+      onSlug: (e) => { const v = this.slugify(e.target.value.replace(/\s/g, '-')) || e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''); this.setState({ slug: v, slugTouched: true, gen: this.state.gen === 'done' ? 'idle' : this.state.gen }); },
+      slugStatus: slugOk ? 'Tersedia' : (reserved ? 'Sudah dipakai sistem' : 'Minimal 3 karakter'),
+      slugColor: slugOk ? '#7EE2A8' : '#FF9A7A',
+      slugBorder: slugOk ? '#343B4A' : 'rgba(255,154,122,.6)',
+      visOpts: visDef.map((o) => ({ label: o.label, hint: o.hint, on: s.vis === o.id, cls: s.vis === o.id ? 'is-on' : '', pick: () => this.setState({ vis: o.id }) })),
+      isPrivate: s.vis === 'private',
+      pin: s.pin, onPin: (e) => this.setState({ pin: e.target.value.replace(/\D/g, '').slice(0, 4) }),
+      feats: featDef.map((f) => { const on = !!s.feat[f.id]; return { label: f.label, on: on, bg: on ? '#FF7A2E' : '#2A303D', x: on ? 22 : 0, toggle: () => { const ft = Object.assign({}, this.state.feat); ft[f.id] = !on; this.setTheme({ feat: ft }); } }; }),
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      genIdle: s.gen === 'idle', genRun: s.gen === 'run', genDone: s.gen === 'done',
+      hasErrors: s.showErr && errs.length > 0,
+      errorLine: errs.length ? 'Belum bisa dibuat: ' + errs.map((x) => x.msg).join(', ') + '.' : '',
+      generate: () => this.generate(),
+      genSteps: genLabels.map((l, i) => ({ label: l, done: s.genStep > i, active: s.genStep === i, fg: s.genStep >= i ? '#F2F1EC' : '#7C8394', bg: s.genStep > i ? '#7EE2A8' : (s.genStep === i ? s.primary : '#2A303D'), delay: i * 120 })),
+      visLabel: vis.label.toUpperCase(),
+      fullLink: fullLink,
+      adminLink: fullLink + '/admin',
+      waLink: 'https://wa.me/?text=' + encodeURIComponent(nameShown + ' — ' + this.fmtDate(s.start, s.end) + ' di ' + (s.venue || 'lokasi menyusul') + '. Lihat jadwal, skor live, dan daftar tim: https://' + fullLink),
+      copyLink: () => {
+        const txt = 'https://' + fullLink;
+        try { navigator.clipboard.writeText(txt).then(() => this.toastMsg('Link event disalin'), () => this.toastMsg('Tidak bisa menyalin di pratinjau ini')); } catch (err) { this.toastMsg('Tidak bisa menyalin di pratinjau ini'); }
+      },
+      poster: () => this.toastMsg('Poster A4 dan story 9:16 disiapkan dengan warna tema'),
+      qr: this.qrCells(fullLink),
+      devices: [{ id: 'phone', label: 'Ponsel' }, { id: 'tv', label: 'Layar TV venue' }].map((o) => ({ label: o.label, on: s.device === o.id, cls: s.device === o.id ? 'is-on' : '', pick: () => this.setTheme({ device: o.id }) })),
+      isPhone: s.device === 'phone', isTv: s.device === 'tv',
+      spinCls: s.gen === 'run' ? 'bd-spin' : (s.gen === 'done' ? 'bd-land-' + s.genK : ''),
+      themeK: s.themeK,
+      rx: s.rx.toFixed(2), ry: s.ry.toFixed(2),
+      onTilt: (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        this.setState({ ry: -16 + px * 34, rx: 6 - py * 20 });
+      },
+      onLeave: () => this.setState({ rx: 6, ry: -16 }),
+      bg: bg, fg: fg, surface: surface, line: line, muted: muted,
+      tFam: tegas ? "'Big Shoulders','Arial Narrow',Impact,sans-serif" : 'Inter,system-ui,sans-serif',
+      tCase: tegas ? 'uppercase' : 'none', tW: tegas ? 900 : 800, tSize: tegas ? 38 : 28, tLs: tegas ? '0' : '-0.02em',
+      nameShown: nameShown,
+      orgShown: (s.org.trim() || 'Penyelenggara').toUpperCase(),
+      dateLine: this.fmtDate(s.start, s.end),
+      venueShown: s.venue.trim() || 'Lokasi menyusul',
+      countdown: countdown,
+      sportTags: chosen.slice(0, 3).map((x) => ({ label: x.label })),
+      firstSport: (chosen[0] ? chosen[0].label : 'Cabang').toUpperCase(),
+      formatShort: fm.short,
+      showLive: !!s.feat.live, showBracket: !!s.feat.bracket, showReg: !!s.feat.reg && s.reg,
+      feeShown: s.fee.trim() || 'biaya menyusul',
+      sponsorTags: sponsorList.length ? sponsorList.map((x) => ({ label: x })) : [{ label: '[SPONSOR]' }],
+      slugShown: slug || 'nama-event',
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>

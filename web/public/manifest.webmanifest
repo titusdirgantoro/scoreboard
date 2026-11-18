@@ -1,0 +1,11 @@
+{
+  "name": "scoreboard.tiusapp.com",
+  "short_name": "scoreboard",
+  "description": "Skor live, turnamen, dan main bareng.",
+  "lang": "id",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0D12",
+  "theme_color": "#0B0D12",
+  "icons": []
+}

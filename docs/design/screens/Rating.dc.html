@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Rating Pemain — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,select{font-family:inherit}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.rt-btn{cursor:pointer}
+.rt-btn:disabled{opacity:.45;cursor:not-allowed}
+.rt-row{position:absolute;left:0;right:0;cursor:pointer;transition:top .8s cubic-bezier(.3,1.25,.4,1),background-color .3s,border-color .3s}
+.rt-row:hover{border-color:#4A5263!important}
+.rt-row.is-sel{border-color:#FF7A2E;background-color:#1A1410}
+.rt-d{opacity:0;pointer-events:none}
+.rt-d-a{animation:rtDA 1.6s cubic-bezier(.2,.8,.2,1) both}.rt-d-b{animation:rtDB 1.6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rtDA{0%{opacity:0;transform:perspective(400px) translateY(10px) translateZ(0) rotateX(-60deg)}20%{opacity:1;transform:perspective(400px) translateY(-6px) translateZ(60px)}80%{opacity:1;transform:perspective(400px) translateY(-14px) translateZ(40px)}100%{opacity:0;transform:perspective(400px) translateY(-26px)}}
+@keyframes rtDB{0%{opacity:0;transform:perspective(400px) translateY(10px) translateZ(0) rotateX(-60deg)}20%{opacity:1;transform:perspective(400px) translateY(-6px) translateZ(60px)}80%{opacity:1;transform:perspective(400px) translateY(-14px) translateZ(40px)}100%{opacity:0;transform:perspective(400px) translateY(-26px)}}
+.rt-n-a{display:inline-block;animation:rtNA .6s cubic-bezier(.2,.9,.25,1.3)}.rt-n-b{display:inline-block;animation:rtNB .6s cubic-bezier(.2,.9,.25,1.3)}
+@keyframes rtNA{from{transform:perspective(300px) rotateX(-100deg);opacity:.1;filter:brightness(2)}to{transform:none;opacity:1;filter:none}}
+@keyframes rtNB{from{transform:perspective(300px) rotateX(-100deg);opacity:.1;filter:brightness(2)}to{transform:none;opacity:1;filter:none}}
+.rt-flip{perspective:1200px}
+.rt-flipIn{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,1.35,.4,1)}
+.rt-flip.is-flipped .rt-flipIn{transform:rotateY(180deg)}
+.rt-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.rt-back{transform:rotateY(180deg)}
+.rt-pick-a{animation:rtPickA .7s cubic-bezier(.3,1.3,.4,1)}.rt-pick-b{animation:rtPickB .7s cubic-bezier(.3,1.3,.4,1)}
+@keyframes rtPickA{from{transform:perspective(1000px) rotateY(-70deg) translateZ(-60px);opacity:.3}to{transform:none;opacity:1}}
+@keyframes rtPickB{from{transform:perspective(1000px) rotateY(-70deg) translateZ(-60px);opacity:.3}to{transform:none;opacity:1}}
+.rt-award{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.rt-award:hover{transform:perspective(800px) translateZ(30px) rotateX(6deg)}
+.rt-toast{opacity:0;pointer-events:none}
+.rt-toast-a{animation:rtToastA 2.6s ease both}.rt-toast-b{animation:rtToastB 2.6s ease both}
+@keyframes rtToastA{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes rtToastB{0%{opacity:0;transform:translateY(14px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC">
+<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg>
+<span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span>
+</a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;color:#C9CDD6">Grup Futsal RW 05 · Rating pemain</span>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><a href="Absen.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;color:#C9CDD6;font-size:14px;font-weight:600;text-decoration:none">Jadwal &amp; absen main</a>
+<a href="BagiTim.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:12px;background:#FF7A2E;color:#140B05;font-size:14px;font-weight:800;text-decoration:none">Pakai di Bagi Tim</a></div>
+</div>
+</header>
+
+<main style="max-width:1360px;margin:0 auto;padding:32px 24px 72px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+<p class="sb-mono" style="margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#FFB089">Rating otomatis · {{games}} laga tercatat</p>
+<h1 class="sb-display" style="margin:0;font-size:clamp(52px,6vw,88px);line-height:.88;font-weight:900;text-transform:uppercase">Rating naik turun dari hasil laga</h1>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#A3A9B6">Semua mulai dari 1.000. Tim yang menang mengambil poin dari tim yang kalah — menang lawan tim yang lebih kuat memberi poin lebih besar. Bintang 1–5 di Bagi Tim dihitung dari angka ini, jadi tidak perlu diisi manual.</p>
+</div>
+<span class="sb-mono" style="padding:12px 14px;border-radius:12px;background:#12151C;border:1px solid #232834;font-size:12px;line-height:1.6;color:#C9CDD6">perubahan = 32 × (hasil − peluang menang)<br>peluang = 1 / (1 + 10^((Rlawan − Rtim) / 400))</span>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px">
+<sc-for list="{{awards}}" as="w" hint-placeholder-count="3">
+<div class="rt-award" style="display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<span style="flex:none;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:{{w.bg}};color:#0B0D12"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{w.icon}}"></path></svg></span>
+<span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span class="sb-mono" style="font-size:10px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">{{w.label}}</span><span class="sb-display" style="font-size:26px;line-height:1;font-weight:900;text-transform:uppercase">{{w.name}}</span><span style="font-size:12px;color:#A3A9B6">{{w.sub}}</span></span>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<section aria-label="Klasemen rating" style="flex:1 1 520px;min-width:0;padding:18px;border-radius:22px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:10px">
+<div class="sb-mono" style="display:grid;grid-template-columns:30px minmax(0,1fr) 90px 70px 64px 48px;gap:8px;padding:0 12px;font-size:10px;letter-spacing:.1em;color:#A3A9B6"><span>#</span><span>PEMAIN</span><span>BINTANG</span><span style="text-align:right">RATING</span><span style="text-align:center">TREN</span><span style="text-align:right">LAGA</span></div>
+<div style="position:relative;height:{{boardH}}px">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+<button class="rt-btn rt-row {{r.cls}}" onClick="{{r.pick}}" aria-pressed="{{r.sel}}" style="top:{{r.top}}px;height:48px;display:grid;grid-template-columns:30px minmax(0,1fr) 90px 70px 64px 48px;gap:8px;align-items:center;padding:0 12px;border-radius:12px;border:1px solid #232834;background:#12151C;color:#F2F1EC;text-align:left">
+<span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{r.rank}}</span>
+<span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.name}}</span><span class="rt-d rt-d-{{r.dk}} sb-mono" style="flex:none;padding:2px 6px;border-radius:6px;background:{{r.dBg}};color:{{r.dFg}};font-size:11px;font-weight:700">{{r.dTxt}}</span></span>
+<span aria-label="{{r.stars}} bintang" style="display:flex;gap:2px"><sc-for list="{{r.starList}}" as="st" hint-placeholder-count="5"><svg width="14" height="14" viewBox="0 0 24 24" fill="{{st.c}}" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2 6.3 20.3l1.2-6.4L2.8 9.5l6.4-.8z"></path></svg></sc-for></span>
+<span class="sb-display" style="text-align:right;font-size:24px;font-weight:900"><span class="rt-n-{{r.dk}}">{{r.rating}}</span></span>
+<svg width="64" height="22" viewBox="0 0 64 22" aria-hidden="true"><polyline points="{{r.spark}}" fill="none" stroke="{{r.sparkCol}}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline></svg>
+<span class="sb-mono" style="text-align:right;font-size:12px;color:#C9CDD6">{{r.games}}</span>
+</button>
+</sc-for>
+</div>
+</section>
+
+<div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:18px">
+<div class="rt-flip rt-pick-{{pickK}} {{flipCls}}" style="height:320px">
+<div class="rt-flipIn">
+<div class="rt-face" style="display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:24px;border:1px solid #2A303D;background:#12151C">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+<span style="display:flex;flex-direction:column;gap:4px"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#FFB089">PROFIL · {{pPos}}</span><span class="sb-display" style="font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">{{pName}}</span></span>
+<button class="rt-btn" onClick="{{flip}}" style="min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">Riwayat</button>
+</div>
+<div style="display:flex;align-items:baseline;gap:12px"><span class="sb-display" style="font-size:72px;line-height:.9;font-weight:900;color:#FF9A5C">{{pRating}}</span><span style="display:flex;gap:3px"><sc-for list="{{pStars}}" as="st" hint-placeholder-count="5"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{st.c}}" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2 6.3 20.3l1.2-6.4L2.8 9.5l6.4-.8z"></path></svg></sc-for></span></div>
+<svg width="100%" height="56" viewBox="0 0 300 56" preserveAspectRatio="none" aria-label="Grafik rating 6 laga terakhir" role="img"><polyline points="{{pSpark}}" fill="none" stroke="#FF7A2E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></polyline></svg>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<sc-for list="{{pStats}}" as="k" hint-placeholder-count="4"><span style="display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:10px;background:#0B0D12"><span class="sb-mono" style="font-size:9px;font-weight:700;letter-spacing:.1em;color:#A3A9B6">{{k.label}}</span><span class="sb-display" style="font-size:24px;line-height:1;font-weight:900">{{k.v}}</span></span></sc-for>
+</div>
+</div>
+<div class="rt-face rt-back" style="display:flex;flex-direction:column;gap:8px;padding:22px;border-radius:24px;background:#F2F1EC;color:#14161C">
+<span style="display:flex;justify-content:space-between;align-items:center"><span class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#5A5F6B">RIWAYAT {{pNameUp}}</span><button class="rt-btn" onClick="{{flip}}" style="min-height:36px;padding:0 10px;border-radius:9px;border:1px solid #C9C6BC;background:transparent;color:#14161C;font-size:12px;font-weight:700">Profil</button></span>
+<sc-for list="{{pHist}}" as="h" hint-placeholder-count="5"><span style="display:grid;grid-template-columns:70px minmax(0,1fr) 56px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #D6D3CA;font-size:14px"><span class="sb-mono" style="font-size:11px;color:#5A5F6B">{{h.date}}</span><span style="font-weight:600">{{h.txt}}</span><span class="sb-mono" style="text-align:right;font-weight:700;color:{{h.col}}">{{h.d}}</span></span></sc-for>
+</div>
+</div>
+</div>
+
+<section aria-labelledby="catat" style="padding:20px;border-radius:22px;border:1px solid #232834;background:#0F1218;display:flex;flex-direction:column;gap:14px">
+<h2 id="catat" class="sb-display" style="margin:0;font-size:32px;line-height:1;font-weight:900;text-transform:uppercase">Catat hasil laga</h2>
+<p style="margin:0;font-size:13px;color:#A3A9B6">Ketuk nama untuk memindah: Bara → Samudra → tidak main.</p>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{picks}}" as="p" hint-placeholder-count="12"><button class="rt-btn" data-fx="{{p.fx}}" onClick="{{p.cycle}}" aria-label="{{p.aria}}" style="min-height:40px;padding:0 12px;border-radius:999px;border:1px solid {{p.border}};background:{{p.bg}};color:{{p.fg}};font-size:13px;font-weight:700">{{p.name}}</button></sc-for>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center">
+<span style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="sb-mono" style="font-size:11px;font-weight:700;color:#FFB089">BARA · Ø {{avgA}}</span><span style="display:flex;align-items:center;gap:6px" data-fx="a"><button class="rt-btn" onClick="{{aDown}}" aria-label="Kurangi skor Bara" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">−</button><span class="sb-display" style="width:44px;text-align:center;font-size:40px;font-weight:900;color:#FF9A5C">{{sa}}</span><button class="rt-btn" onClick="{{aUp}}" aria-label="Tambah skor Bara" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">+</button></span></span>
+<span class="sb-mono" style="font-size:12px;color:#A3A9B6;text-align:center">peluang<br>{{chance}}</span>
+<span style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><span class="sb-mono" style="font-size:11px;font-weight:700;color:#9DB6FF">SAMUDRA · Ø {{avgB}}</span><span style="display:flex;align-items:center;gap:6px" data-fx="b"><button class="rt-btn" onClick="{{bDown}}" aria-label="Kurangi skor Samudra" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">−</button><span class="sb-display" style="width:44px;text-align:center;font-size:40px;font-weight:900;color:#8FB0FF">{{sb}}</span><button class="rt-btn" onClick="{{bUp}}" aria-label="Tambah skor Samudra" style="width:44px;height:44px;border-radius:12px;border:1px solid #343B4A;background:#181C25;color:#F2F1EC;font-size:20px">+</button></span></span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><label for="rt-mvp" class="sb-mono" style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#A3A9B6">MVP LAGA</label><select id="rt-mvp" value="{{mvp}}" onChange="{{onMvp}}" style="flex:1;min-height:44px;padding:0 10px;border-radius:10px;border:1px solid #343B4A;background:#0B0D12;color:#F2F1EC;font-size:14px"><sc-for list="{{mvpOpts}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.label}}</option></sc-for></select></div>
+<span style="font-size:13px;color:#C9CDD6">{{preview}}</span>
+<button class="rt-btn" onClick="{{save}}" disabled="{{cantSave}}" style="min-height:54px;border-radius:14px;border:0;background:#FF7A2E;color:#140B05;font-size:16px;font-weight:800">Simpan hasil &amp; perbarui rating</button>
+</section>
+</div>
+</div>
+</main>
+<div class="rt-toast rt-toast-{{toastK}}" role="status" style="position:fixed;left:50%;bottom:28px;margin-left:-190px;width:380px;padding:14px 18px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:14px;font-weight:600;text-align:center;box-shadow:0 20px 50px -10px rgba(0,0,0,.6)">{{toast}}</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    const base = [
+      ['Rizky', 'PEN', 1186, 24, 16, 3, 31], ['Wahyu', 'GEL', 1162, 22, 14, 4, 12], ['Fajar', 'GEL', 1120, 25, 14, 4, 9], ['Yoga', 'PEN', 1098, 20, 11, 3, 18],
+      ['Ilham', 'BEK', 1084, 23, 12, 5, 3], ['Andi', 'KIP', 1061, 26, 13, 5, 0], ['Budi', 'KIP', 1012, 21, 9, 4, 0], ['Dimas', 'BEK', 996, 19, 8, 3, 2],
+      ['Reza', 'GEL', 968, 18, 7, 2, 6], ['Galih', 'BEK', 951, 22, 7, 5, 1], ['Bagas', 'GEL', 912, 17, 5, 2, 4], ['Tegar', 'PEN', 887, 16, 4, 2, 7]
+    ];
+    const hist = (r) => [r - 34, r - 20, r - 26, r - 8, r - 14, r];
+    this.state = {
+      players: base.map((b) => ({ name: b[0], pos: b[1], rating: b[2], games: b[3], w: b[4], d: b[5], l: b[3] - b[4] - b[5], goals: b[6], mvp: b[0] === 'Rizky' ? 5 : (b[0] === 'Wahyu' ? 4 : 1), hist: hist(b[2]), log: [
+        { date: '7 Nov', txt: 'Menang 4–2', d: '+11' }, { date: '31 Okt', txt: 'Kalah 1–3', d: '−9' }, { date: '24 Okt', txt: 'Menang 3–2', d: '+7' }, { date: '17 Okt', txt: 'Seri 2–2', d: '+1' }
+      ], last: 0 })),
+      team: { Andi: 'a', Rizky: 'a', Dimas: 'a', Bagas: 'a', Reza: 'a', Galih: 'a', Budi: 'b', Fajar: 'b', Yoga: 'b', Ilham: 'b', Tegar: 'b', Wahyu: 'b' },
+      sa: 3, sb: 2, mvp: '', sel: 'Rizky', flipped: false, pickK: 'n', dk: 'n', saved: 0, toast: '', toastK: 'n', gain: {}
+    };
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  stars(r) { return r < 925 ? 1 : (r < 975 ? 2 : (r < 1050 ? 3 : (r < 1125 ? 4 : 5))); }
+  avg(side) {
+    const s = this.state;
+    const l = s.players.filter((p) => s.team[p.name] === side);
+    return l.length ? l.reduce((a, p) => a + p.rating, 0) / l.length : 0;
+  }
+  expected(ra, rb) { return 1 / (1 + Math.pow(10, (rb - ra) / 400)); }
+  spark(hist, w, h) {
+    const mn = Math.min.apply(null, hist) - 4; const mx = Math.max.apply(null, hist) + 4;
+    return hist.map((v, i) => (i * (w / (hist.length - 1))).toFixed(1) + ',' + (h - ((v - mn) / (mx - mn)) * h).toFixed(1)).join(' ');
+  }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  save() {
+    const s = this.state;
+    const ra = this.avg('a'); const rb = this.avg('b');
+    const ea = this.expected(ra, rb);
+    const S = s.sa > s.sb ? 1 : (s.sa === s.sb ? 0.5 : 0);
+    const delta = Math.round(32 * (S - ea));
+    const res = (side) => (s.sa === s.sb ? 'Seri ' + s.sa + '–' + s.sb : ((side === 'a') === (s.sa > s.sb) ? 'Menang ' : 'Kalah ') + (side === 'a' ? s.sa + '–' + s.sb : s.sb + '–' + s.sa));
+    const today = '14 Nov';
+    const gain = {};
+    const players = s.players.map((p) => {
+      const side = s.team[p.name];
+      if (side !== 'a' && side !== 'b') return Object.assign({}, p, { last: 0 });
+      const d = side === 'a' ? delta : -delta;
+      const won = side === 'a' ? S === 1 : S === 0;
+      gain[p.name] = d;
+      return Object.assign({}, p, {
+        rating: p.rating + d, games: p.games + 1, w: p.w + (won ? 1 : 0), d: p.d + (S === 0.5 ? 1 : 0), l: p.l + (!won && S !== 0.5 ? 1 : 0),
+        mvp: p.mvp + (s.mvp === p.name ? 1 : 0), hist: p.hist.slice(1).concat([p.rating + d]),
+        log: [{ date: today, txt: res(side) + (s.mvp === p.name ? ' · MVP' : ''), d: (d >= 0 ? '+' : '−') + Math.abs(d) }].concat(p.log).slice(0, 5), last: d
+      });
+    });
+    this.setState({ players: players, dk: this.tg(s.dk), saved: s.saved + 1, gain: gain });
+    try {
+      const map = {};
+      players.forEach((p) => { map[p.name] = { r: this.stars(p.rating), rating: p.rating }; });
+      window.localStorage.setItem('sbRatings', JSON.stringify(map));
+    } catch (e) { }
+    this.toastMsg('Rating diperbarui ' + (delta >= 0 ? '+' : '−') + Math.abs(delta) + ' · Bagi Tim memakai bintang terbaru');
+    if (Math.abs(delta) >= 20) setTimeout(() => this.celebrate(delta > 0 ? 'a' : 'b'), 200);
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const sorted = s.players.slice().sort((a, b) => b.rating - a.rating);
+    const rank = {}; sorted.forEach((p, i) => { rank[p.name] = i; });
+    const starList = (n) => [1, 2, 3, 4, 5].map((i) => ({ c: i <= n ? '#F2C230' : '#2E3442' }));
+    const sel = s.players.find((p) => p.name === s.sel) || sorted[0];
+    const ra = this.avg('a'); const rb = this.avg('b');
+    const ea = this.expected(ra, rb);
+    const S = s.sa > s.sb ? 1 : (s.sa === s.sb ? 0.5 : 0);
+    const delta = Math.round(32 * (S - ea));
+    const nA = s.players.filter((p) => s.team[p.name] === 'a').length;
+    const nB = s.players.filter((p) => s.team[p.name] === 'b').length;
+    const top = sorted.slice().sort((a, b) => b.goals - a.goals)[0];
+    const mvpTop = sorted.slice().sort((a, b) => b.mvp - a.mvp)[0];
+    const rajin = sorted.slice().sort((a, b) => b.games - a.games)[0];
+    const totalGames = Math.round(s.players.reduce((a, p) => a + p.games, 0) / 12);
+    const playing = s.players.filter((p) => s.team[p.name] === 'a' || s.team[p.name] === 'b');
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      games: totalGames,
+      awards: [
+        { label: 'TOP SKOR', name: top.name, sub: top.goals + ' gol musim ini', bg: '#FF7A2E', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.6l4.2 3-1.6 4.9H9.4l-1.6-4.9z' },
+        { label: 'MVP TERBANYAK', name: mvpTop.name, sub: mvpTop.mvp + ' kali MVP', bg: '#F2C230', icon: 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3' },
+        { label: 'PALING RAJIN', name: rajin.name, sub: rajin.games + ' laga dimainkan', bg: '#7EE2A8', icon: 'M3 5h18v16H3zM16 3v4M8 3v4M3 10h18' }
+      ],
+      boardH: s.players.length * 54,
+      rows: s.players.map((p) => {
+        const d = p.last;
+        return {
+          name: p.name, rank: rank[p.name] + 1, top: rank[p.name] * 54, rating: p.rating.toLocaleString('id-ID'),
+          stars: this.stars(p.rating), starList: starList(this.stars(p.rating)),
+          spark: this.spark(p.hist, 64, 20), sparkCol: p.hist[5] >= p.hist[4] ? '#7EE2A8' : '#FF9A7A',
+          games: p.games, dk: d ? s.dk : 'n', dTxt: (d >= 0 ? '+' : '−') + Math.abs(d), dBg: d >= 0 ? 'rgba(126,226,168,.16)' : 'rgba(255,154,122,.16)', dFg: d >= 0 ? '#7EE2A8' : '#FF9A7A',
+          sel: s.sel === p.name, cls: s.sel === p.name ? 'is-sel' : '',
+          pick: () => { if (this.state.sel !== p.name) this.setState({ sel: p.name, pickK: this.tg(this.state.pickK), flipped: false }); }
+        };
+      }),
+      pickK: s.pickK, flipCls: s.flipped ? 'is-flipped' : '',
+      flip: () => this.setState({ flipped: !this.state.flipped }),
+      pName: sel.name, pNameUp: sel.name.toUpperCase(), pPos: { KIP: 'KIPER', BEK: 'BEK', GEL: 'GELANDANG', PEN: 'PENYERANG' }[sel.pos],
+      pRating: sel.rating.toLocaleString('id-ID'), pStars: starList(this.stars(sel.rating)), pSpark: this.spark(sel.hist, 300, 52),
+      pStats: [{ label: 'M-S-K', v: sel.w + '-' + sel.d + '-' + sel.l }, { label: 'MENANG', v: Math.round(sel.w / sel.games * 100) + '%' }, { label: 'GOL', v: sel.goals }, { label: 'MVP', v: sel.mvp }],
+      pHist: sel.log.map((h) => ({ date: h.date, txt: h.txt, d: h.d, col: h.d.indexOf('+') === 0 ? '#2F7A4F' : '#B3261E' })),
+      picks: s.players.map((p) => {
+        const t = s.team[p.name] || 'x';
+        return { name: p.name, fx: t === 'b' ? 'b' : (t === 'a' ? 'a' : 'w'), aria: p.name + ': ' + (t === 'a' ? 'tim Bara' : (t === 'b' ? 'tim Samudra' : 'tidak main')),
+          bg: t === 'a' ? 'rgba(255,122,46,.16)' : (t === 'b' ? 'rgba(77,124,255,.16)' : 'transparent'), border: t === 'a' ? '#FF7A2E' : (t === 'b' ? '#4D7CFF' : '#343B4A'), fg: t === 'x' ? '#7C8394' : '#F2F1EC',
+          cycle: () => { const tm = Object.assign({}, this.state.team); tm[p.name] = t === 'a' ? 'b' : (t === 'b' ? 'x' : 'a'); this.setState({ team: tm }); } };
+      }),
+      avgA: Math.round(ra), avgB: Math.round(rb), chance: Math.round(ea * 100) + '% : ' + Math.round((1 - ea) * 100) + '%',
+      sa: s.sa, sb: s.sb,
+      aUp: () => this.setState({ sa: Math.min(20, this.state.sa + 1) }), aDown: () => this.setState({ sa: Math.max(0, this.state.sa - 1) }),
+      bUp: () => this.setState({ sb: Math.min(20, this.state.sb + 1) }), bDown: () => this.setState({ sb: Math.max(0, this.state.sb - 1) }),
+      mvp: s.mvp, onMvp: (e) => this.setState({ mvp: e.target.value }),
+      mvpOpts: [{ v: '', label: 'Tanpa MVP' }].concat(playing.map((p) => ({ v: p.name, label: p.name }))),
+      preview: (nA && nB) ? 'Jika disimpan: pemain Bara ' + (delta >= 0 ? '+' : '−') + Math.abs(delta) + ', pemain Samudra ' + (delta >= 0 ? '−' : '+') + Math.abs(delta) + '.' : 'Pilih minimal satu pemain di tiap tim.',
+      cantSave: !(nA && nB),
+      save: () => this.save(),
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>

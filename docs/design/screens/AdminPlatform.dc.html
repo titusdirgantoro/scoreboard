@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Portal Admin Platform — scoreboard.tiusapp.com</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D12;color:#F2F1EC;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#FF9A5C}a:hover{color:#FFC29C}
+button,input,select,textarea{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #F2F1EC;outline-offset:2px}
+.sb-display{font-family:'Big Shoulders','Arial Narrow','Roboto Condensed',Impact,sans-serif}
+.sb-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ap-btn{cursor:pointer}
+.ap-btn:disabled{opacity:.45;cursor:not-allowed}
+.ap-nav{cursor:pointer;transition:transform .45s cubic-bezier(.3,1.5,.4,1),background-color .2s,color .2s}
+.ap-nav:hover{transform:perspective(500px) translateZ(10px);background:#151922!important}
+.ap-nav.is-on{background:#F2F1EC!important;color:#0B0D12!important}
+.ap-chip.is-on{background:#F2F1EC!important;color:#0B0D12!important;border-color:#F2F1EC!important}
+.ap-row{cursor:pointer;transition:background-color .2s,transform .45s cubic-bezier(.3,1.5,.4,1)}
+.ap-row:hover{background:#151922!important;transform:perspective(900px) translateZ(8px)}
+.ap-row.is-on{background:#1A1410!important;box-shadow:inset 3px 0 0 #FF7A2E!important}
+.ap-card{transition:transform .5s cubic-bezier(.3,1.4,.4,1),border-color .25s}
+.ap-card:hover{transform:perspective(800px) translateZ(14px) rotateX(4deg)}
+.ap-in{width:100%;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid #2A303D;background:#0D0F14;color:#F2F1EC;font-size:14px}
+.ap-in:focus{border-color:#FF7A2E!important;outline:none}
+.ap-ta{width:100%;min-height:90px;padding:10px 12px;border-radius:10px;border:1px solid #2A303D;background:#0D0F14;color:#F2F1EC;font-size:14px;line-height:1.5;resize:vertical}
+.ap-stage{perspective:1400px}
+.ap-in-a{animation:apInA .65s cubic-bezier(.25,1.2,.35,1) both}.ap-in-b{animation:apInB .65s cubic-bezier(.25,1.2,.35,1) both}
+@keyframes apInA{from{transform:rotateX(-14deg) translateY(30px) translateZ(-60px);opacity:0}to{transform:none;opacity:1}}
+@keyframes apInB{from{transform:rotateX(-14deg) translateY(30px) translateZ(-60px);opacity:0}to{transform:none;opacity:1}}
+.ap-drawer-a{animation:apDrA .6s cubic-bezier(.25,1.2,.35,1) both}.ap-drawer-b{animation:apDrB .6s cubic-bezier(.25,1.2,.35,1) both}
+@keyframes apDrA{from{transform:perspective(900px) rotateY(-40deg) translateX(60px);opacity:0}to{transform:none;opacity:1}}
+@keyframes apDrB{from{transform:perspective(900px) rotateY(-40deg) translateX(60px);opacity:0}to{transform:none;opacity:1}}
+.ap-modal{animation:apModal .55s cubic-bezier(.25,1.3,.35,1) both}
+@keyframes apModal{from{transform:perspective(900px) rotateX(-30deg) translateY(30px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+.ap-bar{transition:height .7s cubic-bezier(.3,1.3,.4,1),opacity .2s}
+.ap-bar:hover{opacity:.8}
+.ap-knob{transition:transform .45s cubic-bezier(.3,1.6,.4,1)}
+.ap-num-a{display:inline-block;animation:apNumA .6s cubic-bezier(.2,.9,.25,1.3)}.ap-num-b{display:inline-block;animation:apNumB .6s cubic-bezier(.2,.9,.25,1.3)}
+@keyframes apNumA{from{transform:perspective(300px) rotateX(-100deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes apNumB{from{transform:perspective(300px) rotateX(-100deg);opacity:0}to{transform:none;opacity:1}}
+.ap-toast{opacity:0;pointer-events:none}
+.ap-toast-a{animation:apToastA 2.8s ease both}.ap-toast-b{animation:apToastB 2.8s ease both}
+@keyframes apToastA{0%{opacity:0;transform:translateY(16px) rotateX(-40deg)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes apToastB{0%{opacity:0;transform:translateY(16px) rotateX(-40deg)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* === Efek klik 3D (dipakai di semua layar) === */
+.fx-press button:not(:disabled):active,.fx-press a:active,.fx-press [role=switch]:active{transform:perspective(520px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg)) translateZ(-16px) scale(.96);transition:transform .07s ease-out}
+.fx-press button,.fx-press a{transition:transform .55s cubic-bezier(.3,1.7,.4,1),background-color .2s,border-color .2s,color .2s,box-shadow .25s,opacity .25s}
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.fx-b{position:absolute;width:0;height:0;perspective:520px;transform-style:preserve-3d}
+.fx-on-n{display:none}
+.fx-b span{position:absolute;display:block;opacity:0}
+.fx-core{left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:currentColor;filter:blur(3px)}
+.fx-ring{left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:2px solid currentColor}
+.fx-sh{left:-5px;top:-5px;width:10px;height:10px;border-radius:2px;background:currentColor}
+.fx-sh:nth-child(even){background:#F2F1EC}
+.fx-s1{--a:0deg;--d:80px;--z:140px}.fx-s2{--a:36deg;--d:100px;--z:-80px}.fx-s3{--a:72deg;--d:70px;--z:60px}.fx-s4{--a:108deg;--d:110px;--z:160px}.fx-s5{--a:144deg;--d:85px;--z:-120px}
+.fx-s6{--a:180deg;--d:95px;--z:90px}.fx-s7{--a:216deg;--d:75px;--z:-40px}.fx-s8{--a:252deg;--d:105px;--z:130px}.fx-s9{--a:288deg;--d:80px;--z:-100px}.fx-s10{--a:324deg;--d:100px;--z:50px}
+.fx-big{--m:2.4}
+.fx-big .fx-ring{border-width:3px}
+.fx-big .fx-sh{width:14px;height:14px;left:-7px;top:-7px}
+.fx-c-a{color:#FF7A2E}.fx-c-b{color:#5E89FF}.fx-c-c{color:#C084FC}.fx-c-g{color:#7EE2A8}.fx-c-w{color:#F2F1EC}.fx-c-y{color:#F2C230}
+.fx-on-a .fx-core{animation:fxCoreA .5s ease-out}.fx-on-b .fx-core{animation:fxCoreB .5s ease-out}
+.fx-on-a .fx-r1{animation:fxR1A .75s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r1{animation:fxR1B .75s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r2{animation:fxR2A .9s cubic-bezier(.2,.8,.2,1)}.fx-on-b .fx-r2{animation:fxR2B .9s cubic-bezier(.2,.8,.2,1)}
+.fx-on-a .fx-r3{animation:fxR3A .6s ease-out}.fx-on-b .fx-r3{animation:fxR3B .6s ease-out}
+.fx-on-a .fx-sh{animation:fxShA .9s cubic-bezier(.15,.8,.3,1)}.fx-on-b .fx-sh{animation:fxShB .9s cubic-bezier(.15,.8,.3,1)}
+@keyframes fxCoreA{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxCoreB{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(calc(3.4 * var(--m,1)))}}
+@keyframes fxR1A{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR1B{0%{opacity:.95;transform:rotateX(64deg) scale(.1)}100%{opacity:0;transform:rotateX(64deg) rotateZ(140deg) scale(calc(2.6 * var(--m,1)))}}
+@keyframes fxR2A{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR2B{0%{opacity:.85;transform:rotateY(70deg) rotateX(14deg) scale(.1)}100%{opacity:0;transform:rotateY(70deg) rotateX(14deg) rotateZ(-90deg) scale(calc(2 * var(--m,1)))}}
+@keyframes fxR3A{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxR3B{0%{opacity:.6;transform:scale(.2)}100%{opacity:0;transform:scale(calc(1.8 * var(--m,1)))}}
+@keyframes fxShA{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+@keyframes fxShB{0%{opacity:1;transform:rotate(var(--a)) translateX(6px) translateZ(0px) rotateX(0deg) scale(1)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d) * var(--m,1))) translateZ(calc(var(--z) * var(--m,1))) rotateX(540deg) rotateY(320deg) scale(.3)}}
+</style>
+</helmet>
+<div data-fx="a" onPointerDown="{{onFx}}" class="fx-press" style="position:relative;background:#0B0D12;color:#F2F1EC;min-height:1600px">
+<header style="border-bottom:1px solid #1E222C;background:#0D0F14">
+<div style="max-width:1400px;margin:0 auto;padding:12px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
+<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+<a href="Main.dc.html" aria-label="Kembali ke beranda" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#F2F1EC"><svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="5" width="11" height="20" rx="3" fill="#FF7A2E"></rect><rect x="17" y="5" width="11" height="20" rx="3" fill="#4D7CFF"></rect><rect x="13.6" y="10" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect><rect x="13.6" y="17.2" width="2.8" height="2.8" rx="1.4" fill="#F2F1EC"></rect></svg><span class="sb-display" style="font-size:22px;font-weight:800">scoreboard</span></a>
+<span style="width:1px;height:24px;background:#2A303D"></span>
+<span style="font-size:15px;font-weight:700">Portal Admin</span>
+<span class="sb-mono" style="padding:4px 9px;border-radius:999px;background:{{envBg}};color:{{envFg}};font-size:10px;font-weight:700;letter-spacing:.1em">{{envLabel}}</span>
+</div>
+<div style="display:flex;align-items:center;gap:12px">
+<label style="position:relative;display:flex;align-items:center;min-width:240px"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Cari di seluruh portal</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A3A9B6" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:12px"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg><input class="ap-in" type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Cari pengguna, event, invoice" style="padding-left:36px;border-radius:999px"></label>
+<span style="display:flex;align-items:center;gap:8px"><span class="sb-display" style="width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#C084FC;color:#14161C;font-size:15px;font-weight:900">TD</span><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;font-weight:700">Titus Dirgantoro</span><span style="font-size:11px;color:#A3A9B6">Pemilik platform</span></span></span>
+</div>
+</div>
+</header>
+<sc-if value="{{maint}}" hint-placeholder-val="{{ false }}"><div role="status" style="background:#F2C230;color:#14161C;font-size:14px;font-weight:700;text-align:center;padding:10px 16px">Mode perawatan aktif · pengunjung melihat pesan: “{{maintMsg}}”</div></sc-if>
+
+<div style="max-width:1400px;margin:0 auto;padding:22px 24px 80px;display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<aside aria-label="Menu admin" style="flex:1 1 230px;max-width:100%;display:flex;flex-direction:column;gap:12px">
+<nav aria-label="Bagian portal" style="display:flex;flex-direction:column;gap:3px;padding:8px;border-radius:18px;border:1px solid #232834;background:#0F1218">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="10">
+<button class="ap-btn ap-nav {{n.cls}}" onClick="{{n.pick}}" aria-current="{{n.cur}}" style="display:flex;align-items:center;gap:10px;min-height:46px;padding:0 12px;border:0;border-radius:12px;background:transparent;color:#C9CDD6;font-size:14px;font-weight:600;text-align:left">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="{{n.icon}}"></path></svg>
+<span style="flex:1;min-width:0">{{n.label}}</span>
+<sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="min-width:22px;padding:2px 7px;border-radius:999px;background:{{n.badgeBg}};color:#140B05;font-size:11px;font-weight:700;text-align:center">{{n.badge}}</span></sc-if>
+</button>
+</sc-for>
+</nav>
+<div style="padding:14px;border-radius:16px;border:1px dashed #343B4A;font-size:12px;line-height:1.5;color:#A3A9B6">Semua tindakan di portal ini tercatat di <button class="ap-btn" onClick="{{goAudit}}" style="padding:0;border:0;background:transparent;color:#FFB089;font-size:12px;font-weight:700;text-decoration:underline">log audit</button>.</div>
+</aside>
+
+<main class="ap-stage" style="flex:999 1 760px;min-width:0">
+<div class="ap-in-{{tabK}}" style="display:flex;flex-direction:column;gap:20px">
+
+<sc-if value="{{t.home}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px"><p class="sb-mono" style="margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#FFB089">Ringkasan · 1–11 November 2026</p><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Kondisi platform hari ini</h1></div>
+<div role="group" aria-label="Rentang" style="display:flex;gap:6px"><sc-for list="{{ranges}}" as="o" hint-placeholder-count="3"><button class="ap-btn ap-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:12px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="6">
+<div class="ap-card" style="display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:16px;background:#12151C;border:1px solid #232834">
+<span class="sb-mono" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#A3A9B6">{{k.l}}</span>
+<span class="sb-display ap-num-{{numK}}" style="font-size:34px;line-height:1;font-weight:900;color:{{k.c}}">{{k.v}}</span>
+<span style="font-size:12px;color:{{k.dc}}">{{k.d}}</span>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:stretch">
+<section aria-labelledby="ap-rev" style="flex:3 1 460px;min-width:0;display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;background:#12151C;border:1px solid #232834">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px"><h2 id="ap-rev" class="sb-display" style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase">Pendapatan harian</h2><span class="sb-mono" style="font-size:12px;color:#C9CDD6">{{hoverLine}}</span></div>
+<div role="img" aria-label="Grafik pendapatan harian per sumber" style="display:flex;align-items:flex-end;gap:6px;height:180px;padding-top:8px;border-bottom:1px solid #2A303D">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="11">
+<button class="ap-btn" onClick="{{b.pick}}" aria-label="{{b.aria}}" style="flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:1px;padding:0;border:0;background:transparent">
+<span class="ap-bar" style="display:block;height:{{b.h4}}%;background:#C084FC;border-radius:4px 4px 0 0;opacity:{{b.op}}"></span>
+<span class="ap-bar" style="display:block;height:{{b.h3}}%;background:#7EE2A8;opacity:{{b.op}}"></span>
+<span class="ap-bar" style="display:block;height:{{b.h2}}%;background:#4D7CFF;opacity:{{b.op}}"></span>
+<span class="ap-bar" style="display:block;height:{{b.h1}}%;background:#FF7A2E;opacity:{{b.op}}"></span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;justify-content:space-between;gap:4px"><sc-for list="{{bars}}" as="b" hint-placeholder-count="11"><span class="sb-mono" style="flex:1;text-align:center;font-size:10px;color:#A3A9B6">{{b.d}}</span></sc-for></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#C9CDD6"><sc-for list="{{legend}}" as="l" hint-placeholder-count="4"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:{{l.c}}"></span>{{l.t}} · <strong class="sb-mono" style="color:#F2F1EC">{{l.v}}</strong></span></sc-for></div>
+</section>
+<section aria-labelledby="ap-att" style="flex:2 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;background:#12151C;border:1px solid #232834">
+<h2 id="ap-att" class="sb-display" style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase">Perlu perhatian</h2>
+<sc-for list="{{alerts}}" as="a" hint-placeholder-count="4"><button class="ap-btn ap-row" onClick="{{a.go}}" style="display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px;border-radius:12px;border:1px solid #232834;background:#0F1218;color:#F2F1EC;text-align:left"><span class="sb-display" style="flex:none;width:38px;height:38px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:{{a.bg}};color:#14161C;font-size:18px;font-weight:900">{{a.n}}</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{a.t}}</span><span style="font-size:12px;color:#A3A9B6">{{a.s}}</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></sc-for>
+</section>
+</div>
+<section aria-labelledby="ap-live" style="display:flex;flex-direction:column;gap:10px">
+<h2 id="ap-live" class="sb-display" style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase">Sedang berlangsung</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px">
+<sc-for list="{{liveEvents}}" as="e" hint-placeholder-count="3"><div class="ap-card" style="display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;background:#12151C;border:1px solid #232834"><span style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#FF6B6B"></span><span class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#FF9C9C">LIVE · {{e.courts}} LAPANGAN</span></span><span style="font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{e.name}}</span><span style="font-size:12px;color:#A3A9B6">{{e.org}} · {{e.viewers}} penonton</span></div></sc-for>
+</div>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{t.users}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Pengguna</h1><span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{usersNote}}</span></div>
+<div role="group" aria-label="Saring peran" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{roleFilters}}" as="o" hint-placeholder-count="5"><button class="ap-btn ap-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+<div style="flex:3 1 480px;min-width:0;overflow-x:auto;border-radius:16px;border:1px solid #232834;background:#0F1218">
+<div role="table" aria-label="Daftar pengguna" style="min-width:620px">
+<div role="row" style="display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.2fr) minmax(0,1fr) 70px minmax(0,1fr);gap:10px;padding:12px 16px;border-bottom:1px solid #232834"><span role="columnheader" class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">NAMA</span><span role="columnheader" class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">PERAN</span><span role="columnheader" class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">PAKET</span><span role="columnheader" class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">EVENT</span><span role="columnheader" class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">STATUS</span></div>
+<sc-for list="{{users}}" as="u" hint-placeholder-count="8">
+<button class="ap-btn ap-row {{u.cls}}" role="row" onClick="{{u.pick}}" style="width:100%;display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.2fr) minmax(0,1fr) 70px minmax(0,1fr);gap:10px;align-items:center;padding:10px 16px;border:0;border-bottom:1px solid #1A1E27;background:transparent;color:#F2F1EC;text-align:left">
+<span role="cell" style="display:flex;align-items:center;gap:10px;min-width:0"><span class="sb-display" style="flex:none;width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:{{u.col}};color:#14161C;font-size:13px;font-weight:900">{{u.ini}}</span><span style="min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{u.name}}</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{u.email}}</span></span></span>
+<span role="cell" style="font-size:13px;color:#C9CDD6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{u.role}}</span>
+<span role="cell"><span class="sb-mono" style="padding:3px 8px;border-radius:999px;border:1px solid {{u.planBd}};color:{{u.planC}};font-size:10px;font-weight:700;white-space:nowrap">{{u.plan}}</span></span>
+<span role="cell" class="sb-mono" style="font-size:13px">{{u.events}}</span>
+<span role="cell" style="display:flex;align-items:center;gap:6px;font-size:13px;color:{{u.stC}}"><span style="width:7px;height:7px;border-radius:50%;background:{{u.stC}}"></span>{{u.st}}</span>
+</button>
+</sc-for>
+<sc-if value="{{noUsers}}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:20px 16px;color:#A3A9B6;font-size:14px">Tidak ada pengguna yang cocok.</p></sc-if>
+</div>
+</div>
+<sc-if value="{{hasUser}}" hint-placeholder-val="{{ true }}">
+<aside aria-label="Detail pengguna" class="ap-drawer-{{drK}}" style="flex:2 1 300px;min-width:0;display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:18px;background:#12151C;border:1px solid #2A303D">
+<div style="display:flex;align-items:center;gap:12px"><span class="sb-display" style="flex:none;width:52px;height:52px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:{{su.col}};color:#14161C;font-size:20px;font-weight:900">{{su.ini}}</span><span style="min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:17px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{su.name}}</span><span class="sb-mono" style="font-size:12px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{su.email}}</span></span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><sc-for list="{{su.facts}}" as="f" hint-placeholder-count="6"><span style="display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:10px;background:#0D0F14"><span class="sb-mono" style="font-size:9px;letter-spacing:.12em;color:#A3A9B6">{{f.l}}</span><span style="font-size:13px;font-weight:700">{{f.v}}</span></span></sc-for></div>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#A3A9B6">Ubah paket (tanpa tagihan, untuk kompensasi)<select class="ap-in" value="{{su.planId}}" onChange="{{onPlan}}"><sc-for list="{{planOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#A3A9B6">Catatan internal<textarea class="ap-ta" value="{{su.note}}" onChange="{{onNote}}" placeholder="Hanya terlihat oleh tim admin"></textarea></label>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<button class="ap-btn" onClick="{{resendLogin}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:13px;font-weight:700">Kirim link masuk</button>
+<sc-if value="{{su.active}}" hint-placeholder-val="{{ true }}"><button class="ap-btn" onClick="{{askSuspend}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #6B3434;background:transparent;color:#FF9C9C;font-size:13px;font-weight:700">Tangguhkan akun</button></sc-if>
+<sc-if value="{{su.suspended}}" hint-placeholder-val="{{ false }}"><button class="ap-btn" onClick="{{unsuspend}}" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #2F6B4C;background:transparent;color:#7EE2A8;font-size:13px;font-weight:700">Aktifkan lagi</button></sc-if>
+</div>
+</aside>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{t.events}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Semua event</h1>
+<div role="group" aria-label="Saring status" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{evFilters}}" as="o" hint-placeholder-count="5"><button class="ap-btn ap-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{events}}" as="e" hint-placeholder-count="6">
+<div class="ap-card" style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;background:#12151C;border:1px solid {{e.bd}}">
+<span class="sb-display" style="flex:none;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;background:{{e.col}};color:#14161C;clip-path:polygon(50% 0, 100% 14%, 100% 62%, 50% 100%, 0 62%, 0 14%);font-size:16px;font-weight:900">{{e.ini}}</span>
+<span style="flex:3 1 220px;min-width:0;display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{e.name}}</span><span style="font-size:12px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{e.org}} · {{e.sport}} · {{e.teams}} tim</span></span>
+<span class="sb-mono" style="flex:none;padding:4px 9px;border-radius:999px;border:1px solid {{e.planBd}};color:{{e.planC}};font-size:10px;font-weight:700">{{e.plan}}</span>
+<span class="sb-mono" style="flex:none;min-width:120px;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:{{e.stC}}"><span style="width:7px;height:7px;border-radius:50%;background:{{e.stC}}"></span>{{e.st}}</span>
+<sc-if value="{{e.hasReports}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="flex:none;padding:4px 9px;border-radius:999px;background:rgba(255,120,120,.14);color:#FF9C9C;font-size:10px;font-weight:700">{{e.reports}} LAPORAN</span></sc-if>
+<span style="flex:none;display:flex;gap:6px;margin-left:auto">
+<a href="EventPage.dc.html" style="display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;color:#F2F1EC;font-size:13px;font-weight:700;text-decoration:none">Lihat</a>
+<a href="Admin.dc.html" aria-label="Buka panel penyelenggara event ini (mode dukungan)" style="display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;color:#F2F1EC;font-size:13px;font-weight:700;text-decoration:none">Panel</a>
+<button class="ap-btn" onClick="{{e.toggleHide}}" style="min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:{{e.hideC}};font-size:13px;font-weight:700">{{e.hideLabel}}</button>
+<sc-if value="{{e.canExtend}}" hint-placeholder-val="{{ false }}"><button class="ap-btn" onClick="{{e.extend}}" style="min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#F2D37A;font-size:13px;font-weight:700">+7 hari Pass</button></sc-if>
+</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{t.pay}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Pembayaran</h1>
+<div role="tablist" aria-label="Jenis" style="display:flex;gap:6px"><sc-for list="{{payTabs}}" as="o" hint-placeholder-count="2"><button class="ap-btn ap-chip {{o.cls}}" role="tab" aria-selected="{{o.on}}" onClick="{{o.pick}}" style="min-height:42px;padding:0 16px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:14px;font-weight:700">{{o.label}}</button></sc-for></div></div>
+<sc-if value="{{payTrx}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center">
+<div role="group" aria-label="Saring status" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{trxFilters}}" as="o" hint-placeholder-count="5"><button class="ap-btn ap-chip {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #343B4A;background:transparent;color:#C9CDD6;font-size:13px;font-weight:600">{{o.label}}</button></sc-for></div>
+<button class="ap-btn" onClick="{{exportCsv}}" style="min-height:42px;padding:0 14px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:13px;font-weight:700">Ekspor CSV</button>
+</div>
+<div style="overflow-x:auto;border-radius:16px;border:1px solid #232834;background:#0F1218">
+<div role="table" aria-label="Transaksi" style="min-width:760px">
+<div role="row" style="display:grid;grid-template-columns:120px minmax(0,1.6fr) minmax(0,1.6fr) 110px 120px 120px 90px;gap:10px;padding:12px 16px;border-bottom:1px solid #232834"><sc-for list="{{trxHeads}}" as="h" hint-placeholder-count="7"><span role="columnheader" class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">{{h.t}}</span></sc-for></div>
+<sc-for list="{{trx}}" as="x" hint-placeholder-count="8">
+<div role="row" style="display:grid;grid-template-columns:120px minmax(0,1.6fr) minmax(0,1.6fr) 110px 120px 120px 90px;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid #1A1E27">
+<span role="cell" style="display:flex;flex-direction:column;gap:1px"><span class="sb-mono" style="font-size:12px;font-weight:700">{{x.id}}</span><span style="font-size:11px;color:#A3A9B6">{{x.at}}</span></span>
+<span role="cell" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{x.who}}</span>
+<span role="cell" style="display:flex;flex-direction:column;gap:1px;min-width:0"><span style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{x.item}}</span><span style="font-size:11px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{x.sub}}</span></span>
+<span role="cell" style="font-size:12px;color:#C9CDD6">{{x.method}}</span>
+<span role="cell" class="sb-mono" style="font-size:13px;font-weight:700;text-align:right">{{x.amt}}</span>
+<span role="cell"><span class="sb-mono" style="padding:3px 8px;border-radius:999px;border:1px solid {{x.stBd}};color:{{x.stC}};font-size:10px;font-weight:700;white-space:nowrap">{{x.st}}</span></span>
+<span role="cell"><sc-if value="{{x.canRefund}}" hint-placeholder-val="{{ false }}"><button class="ap-btn" onClick="{{x.refund}}" style="min-height:36px;padding:0 10px;border-radius:9px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:12px;font-weight:700">Refund</button></sc-if><sc-if value="{{x.canRetry}}" hint-placeholder-val="{{ false }}"><button class="ap-btn" onClick="{{x.retry}}" style="min-height:36px;padding:0 10px;border-radius:9px;border:1px solid #343B4A;background:transparent;color:#F2D37A;font-size:12px;font-weight:700">Tagih ulang</button></sc-if></span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{payOut}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="margin:0;font-size:14px;line-height:1.6;color:#A3A9B6;max-width:760px">Uang pendaftaran yang dibayar online masuk ke saldo penyelenggara. Pencairan ke rekening diproses setelah disetujui, paling lambat 1×24 jam hari kerja.</p>
+<sc-for list="{{payouts}}" as="o" hint-placeholder-count="4">
+<div class="ap-card" style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;background:#12151C;border:1px solid #232834">
+<span style="flex:2 1 220px;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{o.org}}</span><span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{o.bank}} · diajukan {{o.at}}</span></span>
+<span class="sb-display" style="flex:none;font-size:26px;font-weight:900">{{o.amt}}</span>
+<span class="sb-mono" style="flex:none;padding:4px 9px;border-radius:999px;border:1px solid {{o.stBd}};color:{{o.stC}};font-size:10px;font-weight:700">{{o.st}}</span>
+<span style="flex:none;display:flex;gap:6px;margin-left:auto"><sc-if value="{{o.pending}}" hint-placeholder-val="{{ true }}"><button class="ap-btn" data-fx="g" onClick="{{o.approve}}" style="min-height:40px;padding:0 14px;border-radius:10px;border:0;background:#7EE2A8;color:#0B2A18;font-size:13px;font-weight:800">Setujui</button><button class="ap-btn" onClick="{{o.hold}}" style="min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:13px;font-weight:700">Tahan</button></sc-if></span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{t.plans}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:6px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Paket &amp; harga</h1><p style="margin:0;font-size:14px;line-height:1.6;color:#A3A9B6">Perubahan berlaku untuk pembelian baru. Pass dan langganan yang sudah aktif tetap memakai harga lama.</p></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:12px">
+<sc-for list="{{prices}}" as="p" hint-placeholder-count="8">
+<label class="ap-card" style="display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;background:#12151C;border:1px solid {{p.bd}};font-size:12px;color:#A3A9B6"><span style="display:flex;justify-content:space-between;gap:6px"><span style="font-size:14px;font-weight:700;color:#F2F1EC">{{p.label}}</span><sc-if value="{{p.changed}}" hint-placeholder-val="{{ false }}"><span class="sb-mono" style="font-size:10px;color:#F2D37A">DIUBAH</span></sc-if></span>{{p.unit}}<span style="display:flex;align-items:center;gap:8px"><span class="sb-mono" style="font-size:13px;color:#C9CDD6">{{p.pre}}</span><input class="ap-in sb-mono" type="number" min="0" step="{{p.step}}" value="{{p.v}}" onChange="{{p.set}}" style="font-size:16px;font-weight:700"></span></label>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="ap-btn" data-fx="y" onClick="{{askSavePrices}}" disabled="{{noPriceChange}}" style="min-height:48px;padding:0 20px;border-radius:12px;border:0;background:#FF7A2E;color:#140B05;font-size:15px;font-weight:800">Simpan perubahan ({{priceChangeN}})</button><button class="ap-btn" onClick="{{resetPrices}}" disabled="{{noPriceChange}}" style="min-height:48px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Batalkan</button><a href="Harga.dc.html" style="font-size:14px;font-weight:700">Lihat halaman Harga publik</a><a href="Upgrade.dc.html" style="font-size:14px;font-weight:700">Lihat layar upgrade</a></div>
+<section aria-labelledby="ap-promo" style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;background:#0F1218;border:1px solid #232834">
+<h2 id="ap-promo" class="sb-display" style="margin:0;font-size:26px;font-weight:800;text-transform:uppercase">Kode promo</h2>
+<div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:end">
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Kode<input class="ap-in sb-mono" value="{{pCode}}" onChange="{{onPCode}}" maxlength="16" placeholder="mis. KARTAR17"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Diskon (%)<input class="ap-in" type="number" min="5" max="100" value="{{pPct}}" onChange="{{onPPct}}"></label>
+<label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:#A3A9B6">Kuota pemakaian<input class="ap-in" type="number" min="1" value="{{pQuota}}" onChange="{{onPQuota}}"></label>
+<button class="ap-btn" onClick="{{addPromo}}" disabled="{{badPromo}}" style="min-height:44px;padding:0 16px;border-radius:10px;border:0;background:#F2F1EC;color:#0B0D12;font-size:14px;font-weight:800">Buat</button>
+</div>
+<sc-for list="{{promos}}" as="c" hint-placeholder-count="3"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#12151C;border:1px solid #232834"><span class="sb-mono" style="font-size:15px;font-weight:700;letter-spacing:.06em">{{c.code}}</span><span style="font-size:13px;color:#C9CDD6">−{{c.pct}}% · {{c.used}}/{{c.quota}} dipakai · {{c.scope}}</span><span style="flex:1;min-width:80px;height:6px;border-radius:3px;background:#232834;overflow:hidden"><span style="display:block;height:100%;width:{{c.usePct}}%;background:#7EE2A8"></span></span><button class="ap-btn" role="switch" aria-checked="{{c.on}}" aria-label="Aktifkan kode {{c.code}}" onClick="{{c.toggle}}" style="flex:none;width:44px;height:26px;border-radius:13px;border:0;background:{{c.track}};padding:3px"><span class="ap-knob" style="display:block;width:20px;height:20px;border-radius:50%;background:#F2F1EC;transform:translateX({{c.kx}}px)"></span></button></div></sc-for>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{t.mod}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Laporan konten</h1><span class="sb-mono" style="font-size:12px;color:#A3A9B6">{{modNote}}</span></div>
+<sc-for list="{{reports}}" as="r" hint-placeholder-count="4">
+<div class="ap-card" style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:16px;background:#12151C;border:1px solid #2A303D">
+<span class="sb-mono" style="flex:none;padding:4px 9px;border-radius:8px;background:{{r.tagBg}};color:#14161C;font-size:10px;font-weight:700">{{r.type}}</span>
+<span style="flex:3 1 260px;min-width:0;display:flex;flex-direction:column;gap:4px"><span style="font-size:15px;font-weight:800">{{r.title}}</span><span style="font-size:13px;line-height:1.5;color:#C9CDD6">{{r.detail}}</span><span class="sb-mono" style="font-size:11px;color:#A3A9B6">{{r.count}} pelapor · {{r.at}} · {{r.where}}</span></span>
+<span style="flex:1 1 220px;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end">
+<sc-for list="{{r.acts}}" as="a" hint-placeholder-count="3"><button class="ap-btn" onClick="{{a.go}}" style="min-height:40px;padding:0 12px;border-radius:10px;border:1px solid {{a.bd}};background:transparent;color:{{a.c}};font-size:13px;font-weight:700">{{a.t}}</button></sc-for>
+</span>
+</div>
+</sc-for>
+<sc-if value="{{noReports}}" hint-placeholder-val="{{ false }}"><div style="padding:24px;border-radius:16px;border:1px dashed #343B4A;color:#A3A9B6;font-size:15px">Antrean kosong. Semua laporan sudah ditangani.</div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{t.help}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Dukungan</h1>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+<div style="flex:2 1 280px;min-width:0;display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{tickets}}" as="k" hint-placeholder-count="5"><button class="ap-btn ap-row {{k.cls}}" onClick="{{k.pick}}" style="display:flex;flex-direction:column;gap:4px;width:100%;padding:12px 14px;border-radius:12px;border:1px solid #232834;background:#12151C;color:#F2F1EC;text-align:left"><span style="display:flex;justify-content:space-between;gap:8px;width:100%"><span style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{k.subject}}</span><span class="sb-mono" style="flex:none;font-size:10px;font-weight:700;color:{{k.stC}}">{{k.st}}</span></span><span style="font-size:12px;color:#A3A9B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%">{{k.from}} · {{k.at}}</span></button></sc-for>
+</div>
+<section aria-label="Percakapan" class="ap-drawer-{{tkK}}" style="flex:3 1 380px;min-width:0;display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;background:#12151C;border:1px solid #2A303D">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:17px;font-weight:800">{{tk.subject}}</span><span style="font-size:12px;color:#A3A9B6">{{tk.from}} · {{tk.plan}}</span></span><span class="sb-mono" style="flex:none;padding:4px 9px;border-radius:999px;border:1px solid {{tk.stC}};color:{{tk.stC}};font-size:10px;font-weight:700">{{tk.st}}</span></div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{tk.msgs}}" as="m" hint-placeholder-count="2"><div style="align-self:{{m.align}};max-width:86%;padding:10px 12px;border-radius:14px;background:{{m.bg}};color:{{m.fg}};font-size:14px;line-height:1.5">{{m.t}}<span class="sb-mono" style="display:block;margin-top:4px;font-size:10px;opacity:.7">{{m.who}} · {{m.at}}</span></div></sc-for>
+</div>
+<div role="group" aria-label="Balasan cepat" style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{quick}}" as="qq" hint-placeholder-count="3"><button class="ap-btn" onClick="{{qq.use}}" style="min-height:36px;padding:0 10px;border-radius:9px;border:1px solid #2A303D;background:#151922;color:#C9CDD6;font-size:12px;font-weight:600">{{qq.t}}</button></sc-for></div>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#A3A9B6">Balasan<textarea class="ap-ta" value="{{reply}}" onChange="{{onReply}}" placeholder="Tulis balasan…"></textarea></label>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="ap-btn" data-fx="b" onClick="{{sendReply}}" disabled="{{noReply}}" style="min-height:44px;padding:0 18px;border-radius:12px;border:0;background:#4D7CFF;color:#0B0D12;font-size:14px;font-weight:800">Kirim balasan</button><button class="ap-btn" onClick="{{closeTicket}}" style="min-height:44px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Tandai selesai</button></div>
+</section>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{t.wa}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:6px"><h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">WhatsApp &amp; notifikasi</h1><p style="margin:0;font-size:14px;line-height:1.6;color:#A3A9B6">Pesan otomatis dibayar per pesan ke Meta. Pantau pemakaian supaya kuota yang dijual penyelenggara menutup biayanya.</p></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:12px"><sc-for list="{{waStats}}" as="k" hint-placeholder-count="3"><div class="ap-card" style="display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:16px;background:#12151C;border:1px solid #232834"><span class="sb-mono" style="font-size:10px;letter-spacing:.12em;color:#A3A9B6">{{k.l}}</span><span class="sb-display" style="font-size:32px;line-height:1;font-weight:900;color:{{k.c}}">{{k.v}}</span><span style="font-size:12px;color:#A3A9B6">{{k.d}}</span></div></sc-for></div>
+<section aria-labelledby="ap-tpl" style="display:flex;flex-direction:column;gap:10px">
+<h2 id="ap-tpl" class="sb-display" style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase">Template pesan</h2>
+<sc-for list="{{templates}}" as="m" hint-placeholder-count="4"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:#12151C;border:1px solid #232834"><span class="sb-mono" style="flex:none;font-size:13px;font-weight:700">{{m.name}}</span><span style="flex:1 1 240px;min-width:0;font-size:13px;color:#C9CDD6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{m.body}}</span><span class="sb-mono" style="flex:none;font-size:10px;color:#A3A9B6">{{m.cat}}</span><span class="sb-mono" style="flex:none;padding:3px 8px;border-radius:999px;border:1px solid {{m.stC}};color:{{m.stC}};font-size:10px;font-weight:700">{{m.st}}</span></div></sc-for>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{t.team}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Tim admin &amp; log audit</h1>
+<div style="overflow-x:auto;border-radius:16px;border:1px solid #232834;background:#0F1218">
+<div role="table" aria-label="Hak akses tim admin" style="min-width:640px">
+<div role="row" style="display:grid;grid-template-columns:minmax(0,1.6fr) repeat(6,minmax(0,1fr));gap:6px;padding:12px 16px;border-bottom:1px solid #232834"><span role="columnheader" class="sb-mono" style="font-size:10px;color:#A3A9B6">ADMIN</span><sc-for list="{{permHeads}}" as="h" hint-placeholder-count="6"><span role="columnheader" class="sb-mono" style="font-size:10px;color:#A3A9B6;text-align:center">{{h.t}}</span></sc-for></div>
+<sc-for list="{{admins}}" as="a" hint-placeholder-count="4"><div role="row" style="display:grid;grid-template-columns:minmax(0,1.6fr) repeat(6,minmax(0,1fr));gap:6px;align-items:center;padding:10px 16px;border-bottom:1px solid #1A1E27"><span role="rowheader" style="display:flex;flex-direction:column;gap:1px;min-width:0"><span style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{a.name}}</span><span style="font-size:11px;color:#A3A9B6">{{a.role}}</span></span><sc-for list="{{a.perms}}" as="pm" hint-placeholder-count="6"><span role="cell" style="display:flex;justify-content:center"><button class="ap-btn" role="switch" aria-checked="{{pm.on}}" aria-label="{{pm.aria}}" onClick="{{pm.toggle}}" disabled="{{pm.lock}}" style="width:30px;height:30px;border-radius:8px;border:1px solid {{pm.bd}};background:{{pm.bg}};color:#0B0D12;display:inline-flex;align-items:center;justify-content:center"><sc-if value="{{pm.on}}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if></button></span></sc-for></div></sc-for>
+</div>
+</div>
+<section aria-labelledby="ap-audit" style="display:flex;flex-direction:column;gap:8px">
+<h2 id="ap-audit" class="sb-display" style="margin:0;font-size:24px;font-weight:800;text-transform:uppercase">Log audit</h2>
+<ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px"><sc-for list="{{audit}}" as="l" hint-placeholder-count="6"><li style="display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:10px 14px;border-radius:12px;background:#12151C;border:1px solid #232834;font-size:13px"><span class="sb-mono" style="color:#A3A9B6">{{l.at}}</span><span style="min-width:0"><strong>{{l.who}}</strong> · {{l.what}}</span></li></sc-for></ol>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{t.settings}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<h1 class="sb-display" style="margin:0;font-size:52px;line-height:.9;font-weight:900;text-transform:uppercase">Pengaturan platform</h1>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+<section aria-labelledby="ap-sport" style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:#12151C;border:1px solid #232834">
+<h2 id="ap-sport" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Cabang olahraga aktif</h2>
+<sc-for list="{{sports}}" as="o" hint-placeholder-count="10"><button class="ap-btn" role="switch" aria-checked="{{o.on}}" onClick="{{o.toggle}}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid #232834;background:#0F1218;color:#F2F1EC;font-size:14px;font-weight:600;text-align:left">{{o.label}}<span aria-hidden="true" style="flex:none;width:40px;height:24px;border-radius:12px;background:{{o.track}};padding:3px"><span class="ap-knob" style="display:block;width:18px;height:18px;border-radius:50%;background:#F2F1EC;transform:translateX({{o.kx}}px)"></span></span></button></sc-for>
+</section>
+<section aria-labelledby="ap-flag" style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:#12151C;border:1px solid #232834">
+<h2 id="ap-flag" class="sb-display" style="margin:0;font-size:22px;font-weight:800;text-transform:uppercase">Fitur &amp; keamanan</h2>
+<sc-for list="{{flags}}" as="o" hint-placeholder-count="6"><button class="ap-btn" role="switch" aria-checked="{{o.on}}" onClick="{{o.toggle}}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:6px 12px;border-radius:10px;border:1px solid #232834;background:#0F1218;color:#F2F1EC;text-align:left"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">{{o.label}}</span><span style="font-size:12px;color:#A3A9B6">{{o.sub}}</span></span><span aria-hidden="true" style="flex:none;width:40px;height:24px;border-radius:12px;background:{{o.track}};padding:3px"><span class="ap-knob" style="display:block;width:18px;height:18px;border-radius:50%;background:#F2F1EC;transform:translateX({{o.kx}}px)"></span></span></button></sc-for>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#A3A9B6">Pesan mode perawatan<input class="ap-in" value="{{maintMsg}}" onChange="{{onMaintMsg}}" maxlength="80"></label>
+</section>
+</div>
+</div>
+</sc-if>
+
+</div>
+</main>
+</div>
+
+<sc-if value="{{hasModal}}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;background:rgba(5,6,9,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:80">
+<section role="alertdialog" aria-modal="true" aria-labelledby="ap-mt" class="ap-modal" style="width:100%;max-width:480px;display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:20px;background:#12151C;border:1px solid #343B4A;box-shadow:0 40px 90px rgba(0,0,0,.6)">
+<h2 id="ap-mt" class="sb-display" style="margin:0;font-size:30px;line-height:.95;font-weight:900;text-transform:uppercase">{{modal.title}}</h2>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#C9CDD6">{{modal.body}}</p>
+<sc-if value="{{modal.needReason}}" hint-placeholder-val="{{ false }}"><label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#A3A9B6">Alasan (wajib, tercatat di log audit)<input class="ap-in" value="{{modalReason}}" onChange="{{onModalReason}}" maxlength="80"></label></sc-if>
+<div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="ap-btn" onClick="{{closeModal}}" style="min-height:46px;padding:0 16px;border-radius:12px;border:1px solid #343B4A;background:transparent;color:#F2F1EC;font-size:14px;font-weight:700">Batal</button><button class="ap-btn" data-fx="y" onClick="{{confirmModal}}" disabled="{{modalBlocked}}" style="min-height:46px;padding:0 18px;border-radius:12px;border:0;background:{{modal.btnBg}};color:{{modal.btnFg}};font-size:14px;font-weight:800">{{modal.cta}}</button></div>
+</section>
+</div>
+</sc-if>
+<div style="position:fixed;left:0;right:0;bottom:28px;display:flex;justify-content:center;pointer-events:none;perspective:600px;z-index:90">
+<div role="status" aria-live="polite" class="ap-toast ap-toast-{{toastK}}" style="max-width:min(560px,92vw);padding:14px 20px;border-radius:14px;background:#F2F1EC;color:#14161C;font-size:15px;font-weight:700;box-shadow:0 20px 50px rgba(0,0,0,.5)">{{toast}}</div>
+</div>
+<div class="fx-layer" aria-hidden="true">
+<sc-for list="{{fx}}" as="f" hint-placeholder-count="1">
+<div class="fx-b fx-c-{{f.c}} fx-on-{{f.k}} {{f.big}}" style="left:{{f.x}}px;top:{{f.y}}px"><span class="fx-core"></span><span class="fx-ring fx-r1"></span><span class="fx-ring fx-r2"></span><span class="fx-ring fx-r3"></span><span class="fx-sh fx-s1"></span><span class="fx-sh fx-s2"></span><span class="fx-sh fx-s3"></span><span class="fx-sh fx-s4"></span><span class="fx-sh fx-s5"></span><span class="fx-sh fx-s6"></span><span class="fx-sh fx-s7"></span><span class="fx-sh fx-s8"></span><span class="fx-sh fx-s9"></span><span class="fx-sh fx-s10"></span></div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      tab: 'home', tabK: 'a', numK: 'a', range: '11h', hover: -1, q: '',
+      roleF: 'all', selUser: 'u1', drK: 'a', notes: {},
+      users: [
+        { id: 'u1', name: 'Karang Taruna RW 05', email: 'kartar.rw05@contoh.id', role: 'Penyelenggara', plan: 'pass', events: 3, joined: '2 Nov 2026', city: 'Jakarta Selatan', spent: 147000, st: 'aktif' },
+        { id: 'u2', name: 'GOR Senayan Mini', email: 'admin@gorsenayanmini.contoh.id', role: 'Penyelenggara', plan: 'pro', events: 14, joined: '18 Jul 2026', city: 'Jakarta Pusat', spent: 1495000, st: 'aktif' },
+        { id: 'u3', name: 'Futsal Jumat Malam', email: 'rizky.futsal@contoh.id', role: 'Pengurus grup', plan: 'kom', events: 0, joined: '3 Sep 2026', city: 'Depok', spent: 117000, st: 'aktif' },
+        { id: 'u4', name: 'SMA Harapan Bangsa', email: 'osis@smaharapan.contoh.id', role: 'Penyelenggara', plan: 'pass', events: 1, joined: '29 Okt 2026', city: 'Bekasi', spent: 99000, st: 'aktif' },
+        { id: 'u5', name: 'Padel Akhir Pekan', email: 'ayu.padel@contoh.id', role: 'Pengurus grup', plan: 'kom', events: 2, joined: '12 Agu 2026', city: 'Tangerang Selatan', spent: 117000, st: 'aktif' },
+        { id: 'u6', name: 'Liga Kantor Antar Divisi', email: 'hr@majujaya.contoh.id', role: 'Penyelenggara', plan: 'pro', events: 6, joined: '1 Jun 2026', city: 'Jakarta Barat', spent: 1794000, st: 'aktif' },
+        { id: 'u7', name: 'Kilat Esports', email: 'ops@kilatesports.contoh.id', role: 'Penyelenggara', plan: 'pass', events: 2, joined: '20 Sep 2026', city: 'Bandung', spent: 98000, st: 'aktif' },
+        { id: 'u8', name: 'Hasan Basri', email: 'hasan.basri@contoh.id', role: 'Manajer tim', plan: 'free', events: 0, joined: '4 Nov 2026', city: 'Jakarta Selatan', spent: 0, st: 'aktif' },
+        { id: 'u9', name: 'Rizky Pratama', email: 'rizkyp@contoh.id', role: 'Pemain', plan: 'free', events: 0, joined: '5 Nov 2026', city: 'Depok', spent: 0, st: 'aktif' },
+        { id: 'u10', name: 'promo-turnamen-murah', email: 'cuan.cepat@contoh.id', role: 'Penyelenggara', plan: 'free', events: 1, joined: '10 Nov 2026', city: '—', spent: 0, st: 'ditangguhkan' }
+      ],
+      evF: 'all',
+      events: [
+        { id: 'e1', name: 'Piala Jumat Malam 2026', org: 'Karang Taruna RW 05', sport: 'Futsal + Bulu Tangkis', teams: 14, plan: 'Pass ≤16', st: 'live', reports: 0, col: '#FF7A2E', courts: 4, viewers: 312, hidden: false, pass: true },
+        { id: 'e2', name: 'GOR Senayan Mini Open Badminton', org: 'GOR Senayan Mini', sport: 'Bulu Tangkis', teams: 48, plan: 'Pro', st: 'live', reports: 0, col: '#4D7CFF', courts: 6, viewers: 518, hidden: false, pass: false },
+        { id: 'e3', name: 'Kilat Cup MLBB Season 2', org: 'Kilat Esports', sport: 'Mobile Legends', teams: 16, plan: 'Pass ≤16', st: 'live', reports: 0, col: '#C084FC', courts: 2, viewers: 1240, hidden: false, pass: true },
+        { id: 'e4', name: 'Liga Kantor Antar Divisi', org: 'Liga Kantor Antar Divisi', sport: 'Futsal', teams: 12, plan: 'Pro', st: 'soon', reports: 0, col: '#2FBF8F', courts: 2, viewers: 0, hidden: false, pass: false },
+        { id: 'e5', name: 'Class Meeting SMA Harapan', org: 'SMA Harapan Bangsa', sport: 'Futsal + Voli', teams: 24, plan: 'Pass ≤32', st: 'soon', reports: 0, col: '#F2C230', courts: 3, viewers: 0, hidden: false, pass: true },
+        { id: 'e6', name: 'Padel Akhir Pekan · Americano', org: 'Padel Akhir Pekan', sport: 'Padel', teams: 8, plan: 'Gratis', st: 'done', reports: 0, col: '#3CC6E8', courts: 2, viewers: 0, hidden: false, pass: false },
+        { id: 'e7', name: 'Turnamen Hadiah 10 Juta Daftar Sekarang', org: 'promo-turnamen-murah', sport: 'Futsal', teams: 0, plan: 'Gratis', st: 'soon', reports: 7, col: '#E5333B', courts: 1, viewers: 0, hidden: true, pass: false },
+        { id: 'e8', name: 'Voli Antar RT Kelurahan', org: 'Karang Taruna RW 05', sport: 'Bola Voli', teams: 6, plan: 'Gratis', st: 'done', reports: 0, col: '#B8C24A', courts: 1, viewers: 0, hidden: false, pass: false }
+      ],
+      payTab: 'trx', trxF: 'all',
+      trx: [
+        { id: 'INV-2611-0042', at: '11 Nov 15.42', who: 'Karang Taruna RW 05', item: 'Pass Event ≤16 tim', sub: 'Piala Jumat Malam 2026', method: 'QRIS', amt: 49000, st: 'ok', src: 'pass' },
+        { id: 'INV-2611-0041', at: '11 Nov 14.10', who: 'GOR Senayan Mini', item: 'Pro · 1 bulan', sub: 'perpanjangan otomatis', method: 'VA BCA', amt: 299000, st: 'ok', src: 'sub' },
+        { id: 'INV-2611-0040', at: '11 Nov 13.55', who: 'Tim Naga', item: 'Biaya transaksi pendaftaran', sub: 'dari Rp250.000 · Piala Jumat Malam', method: 'QRIS', amt: 2000, st: 'ok', src: 'trx' },
+        { id: 'INV-2611-0039', at: '11 Nov 12.31', who: 'Futsal Jumat Malam', item: 'Komunitas · 1 bulan', sub: 'perpanjangan otomatis', method: 'GoPay', amt: 39000, st: 'fail', src: 'sub' },
+        { id: 'INV-2611-0038', at: '11 Nov 11.02', who: 'SMA Harapan Bangsa', item: 'Pass Event ≤32 tim', sub: 'Class Meeting SMA Harapan', method: 'VA Mandiri', amt: 99000, st: 'wait', src: 'pass' },
+        { id: 'INV-2611-0037', at: '11 Nov 09.48', who: 'Kilat Esports', item: 'Kuota WhatsApp 100 pesan', sub: 'Kilat Cup MLBB Season 2', method: 'QRIS', amt: 50000, st: 'ok', src: 'wa' },
+        { id: 'INV-2611-0036', at: '10 Nov 21.14', who: 'Padel Akhir Pekan', item: 'Pass Event ≤16 tim', sub: 'dibeli dobel', method: 'DANA', amt: 49000, st: 'refund', src: 'pass' },
+        { id: 'INV-2611-0035', at: '10 Nov 19.20', who: 'Liga Kantor Antar Divisi', item: 'Pro · 1 bulan', sub: 'perpanjangan otomatis', method: 'Kartu kredit', amt: 299000, st: 'ok', src: 'sub' },
+        { id: 'INV-2611-0034', at: '10 Nov 18.05', who: 'Tim Garuda', item: 'Biaya transaksi pendaftaran', sub: 'dari Rp250.000 · Piala Jumat Malam', method: 'QRIS', amt: 2000, st: 'fail', src: 'trx' }
+      ],
+      payouts: [
+        { id: 'p1', org: 'Karang Taruna RW 05', bank: 'BCA ••••4471', at: '11 Nov', amt: 2750000, st: 'wait' },
+        { id: 'p2', org: 'SMA Harapan Bangsa', bank: 'BNI ••••3320', at: '11 Nov', amt: 2400000, st: 'wait' },
+        { id: 'p3', org: 'GOR Senayan Mini', bank: 'Mandiri ••••0912', at: '10 Nov', amt: 12480000, st: 'proc' },
+        { id: 'p4', org: 'Kilat Esports', bank: 'BRI ••••7781', at: '8 Nov', amt: 1600000, st: 'done' }
+      ],
+      price0: { p16: 49000, p32: 99000, p64: 199000, kom: 39000, pro: 299000, fee: 2000, wa: 50000, freeTeams: 8 },
+      price: { p16: 49000, p32: 99000, p64: 199000, kom: 39000, pro: 299000, fee: 2000, wa: 50000, freeTeams: 8 },
+      pCode: '', pPct: 20, pQuota: 50,
+      promos: [{ code: 'KARTAR17', pct: 30, used: 41, quota: 100, scope: 'Pass Event', on: true }, { code: 'SEKOLAH25', pct: 25, used: 12, quota: 40, scope: 'Pass Event', on: true }, { code: 'PROBARU', pct: 50, used: 9, quota: 20, scope: 'Pro bulan pertama', on: false }],
+      reports: [
+        { id: 'r1', type: 'EVENT', title: 'Turnamen Hadiah 10 Juta Daftar Sekarang', detail: 'Meminta biaya pendaftaran Rp500.000 ke rekening pribadi di deskripsi, bukan lewat pembayaran resmi. Penyelenggara baru dibuat kemarin.', count: 7, at: '11 Nov 10.12', where: 'Halaman event', tag: '#FF9C9C' },
+        { id: 'r2', type: 'FOTO', title: 'Foto pemain tidak pantas', detail: 'Foto profil pemain #23 di Liga Kantor Antar Divisi bukan foto wajah dan berisi gambar kasar.', count: 2, at: '11 Nov 08.40', where: 'Kartu pemain', tag: '#F2C230' },
+        { id: 'r3', type: 'NAMA TIM', title: 'Nama tim menghina', detail: 'Nama tim yang didaftarkan ke Voli Antar RT mengandung kata ejekan untuk tim lain.', count: 3, at: '10 Nov 20.05', where: 'Pendaftaran tim', tag: '#C084FC' },
+        { id: 'r4', type: 'SKOR', title: 'Skor diduga diubah', detail: 'Manajer Tim Garuda menyebut skor akhir di papan TV berbeda dengan yang dicatat wasit.', count: 1, at: '10 Nov 18.30', where: 'Piala Jumat Malam 2026', tag: '#7EE2A8' }
+      ],
+      selTicket: 't1', tkK: 'a', reply: '',
+      tickets: [
+        { id: 't1', subject: 'Pass sudah dibayar tapi belum aktif', from: 'SMA Harapan Bangsa', plan: 'Pass ≤32', at: '11 Nov 11.20', st: 'new', msgs: [{ me: false, who: 'OSIS SMA Harapan', at: '11.20', t: 'Kami sudah transfer lewat VA Mandiri Rp99.000 jam 11.02, tapi status Pass masih menunggu. Pendaftaran tim mau dibuka sore ini.' }] },
+        { id: 't2', subject: 'Cara memindah wasit antar lapangan', from: 'Karang Taruna RW 05', plan: 'Pass ≤16', at: '11 Nov 09.05', st: 'replied', msgs: [{ me: false, who: 'Darto', at: '09.05', t: 'Wasit Lapangan 2 sakit, bisa diganti tanpa membuat PIN baru?' }, { me: true, who: 'Dukungan', at: '09.12', t: 'Bisa. Di Panel Penyelenggara → Wasit & lapangan, pilih nama wasit baru. PIN lapangan tetap sama.' }] },
+        { id: 't3', subject: 'Minta faktur pajak langganan Pro', from: 'Liga Kantor Antar Divisi', plan: 'Pro', at: '10 Nov 16.40', st: 'new', msgs: [{ me: false, who: 'HR PT Maju Jaya', at: '16.40', t: 'Mohon faktur untuk tagihan Oktober dan November atas nama perusahaan.' }] },
+        { id: 't4', subject: 'Story tidak bisa diunduh di iPhone', from: 'Kilat Esports', plan: 'Pass ≤16', at: '9 Nov 22.10', st: 'done', msgs: [{ me: false, who: 'Ops Kilat', at: '22.10', t: 'Tombol unduh tidak bereaksi di Safari.' }, { me: true, who: 'Dukungan', at: '22.30', t: 'Sudah kami perbaiki di versi hari ini. Silakan muat ulang halaman.' }] }
+      ],
+      perms: {
+        titus: { name: 'Titus Dirgantoro', role: 'Pemilik', p: [1, 1, 1, 1, 1, 1], lock: true },
+        keu: { name: 'Admin Keuangan', role: 'Keuangan', p: [1, 0, 1, 1, 0, 0] },
+        cs: { name: 'Admin Dukungan', role: 'Dukungan', p: [1, 1, 0, 0, 0, 1] },
+        mod: { name: 'Moderator Konten', role: 'Moderator', p: [0, 1, 0, 0, 1, 0] }
+      },
+      audit: [
+        { at: '11 Nov 15.44', who: 'Sistem', what: 'Pass Event ≤16 aktif untuk Piala Jumat Malam 2026 (INV-2611-0042)' },
+        { at: '11 Nov 10.30', who: 'Moderator Konten', what: 'Menyembunyikan event “Turnamen Hadiah 10 Juta Daftar Sekarang” · alasan: diduga penipuan' },
+        { at: '11 Nov 10.28', who: 'Moderator Konten', what: 'Menangguhkan akun promo-turnamen-murah' },
+        { at: '10 Nov 21.20', who: 'Admin Keuangan', what: 'Refund INV-2611-0036 Rp49.000 · alasan: pembelian dobel' }
+      ],
+      sports: { sepakbola: true, futsal: true, mini: true, voli: true, basket: true, badminton: true, tenis: true, padel: true, tt: true, esports: true },
+      flags: { cutout: true, autoStory: true, waLogin: true, waOtpOnly: false, twofa: true, maint: false },
+      maintMsg: 'Kami sedang memperbarui sistem. Skor live tetap berjalan.',
+      modal: null, modalReason: '', toast: '', toastK: 'n'
+    };
+  }
+  tg(v) { return v === 'a' ? 'b' : 'a'; }
+  rp(n) { return 'Rp' + Math.round(n).toLocaleString('id-ID'); }
+  rpShort(n) { return n >= 1e6 ? 'Rp' + (n / 1e6).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' jt' : (n >= 1e3 ? 'Rp' + Math.round(n / 1e3) + ' rb' : 'Rp' + n); }
+  toastMsg(m) { this.setState({ toast: m, toastK: this.tg(this.state.toastK) }); }
+  log(what) { this.setState({ audit: [{ at: 'baru saja', who: 'Titus Dirgantoro', what: what }].concat(this.state.audit) }); }
+  go(tab) { if (tab !== this.state.tab) this.setState({ tab: tab, tabK: this.tg(this.state.tabK) }); }
+  ask(m) { this.setState({ modal: m, modalReason: '' }); }
+  confirm() {
+    const m = this.state.modal; if (!m) return;
+    if (m.needReason && this.state.modalReason.trim().length < 4) return;
+    const reason = this.state.modalReason.trim();
+    this.setState({ modal: null });
+    m.run(reason);
+  }
+  setUser(id, o) { this.setState({ users: this.state.users.map((u) => (u.id === id ? Object.assign({}, u, o) : u)) }); }
+  setEvent(id, o) { this.setState({ events: this.state.events.map((e) => (e.id === id ? Object.assign({}, e, o) : e)) }); }
+  setTrx(id, o) { this.setState({ trx: this.state.trx.map((x) => (x.id === id ? Object.assign({}, x, o) : x)) }); }
+  setPayout(id, o) { this.setState({ payouts: this.state.payouts.map((x) => (x.id === id ? Object.assign({}, x, o) : x)) }); }
+  series() {
+    const d = [];
+    for (let i = 1; i <= 11; i++) {
+      const pass = [3, 4, 2, 5, 9, 12, 6, 4, 7, 11, 14][i - 1];
+      const sub = [2, 1, 3, 1, 2, 4, 1, 2, 3, 2, 3][i - 1];
+      const fee = [80, 95, 60, 120, 260, 340, 150, 110, 180, 310, 420][i - 1];
+      const wa = [1, 0, 2, 1, 3, 4, 1, 1, 2, 3, 5][i - 1];
+      d.push({ day: i, pass: pass * 79000, sub: sub * 129000, fee: fee * 2000, wa: wa * 50000 });
+    }
+    return d;
+  }
+  fxSlots() {
+    if (!this._fx) this._fx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => ({ x: 0, y: 0, c: 'a', k: 'n', big: '' }));
+    return this._fx;
+  }
+  burstMany(list) {
+    const slots = this.fxSlots().slice();
+    list.forEach((b) => {
+      this._fxN = ((this._fxN || 0) + 1) % slots.length;
+      const old = slots[this._fxN];
+      slots[this._fxN] = { x: Math.round(b.x), y: Math.round(b.y), c: b.c || 'a', k: old.k === 'a' ? 'b' : 'a', big: b.big ? 'fx-big' : '' };
+    });
+    this._fx = slots;
+    this.setState({ fxTick: (this.state.fxTick || 0) + 1 });
+  }
+  burst(x, y, c, big) {
+    this.burstMany([{ x: x, y: y, c: c, big: big }]);
+  }
+  celebrate(c) {
+    const p = this.lastXY || { x: 200, y: 200 };
+    const seq = [
+      { x: p.x, y: p.y, c: c || 'a', big: true },
+      { x: p.x - 140, y: p.y - 90, c: 'b' },
+      { x: p.x + 150, y: p.y - 70, c: 'y' },
+      { x: p.x - 90, y: p.y + 110, c: 'w' },
+      { x: p.x + 110, y: p.y + 100, c: 'g' }
+    ];
+    seq.forEach((b, i) => setTimeout(() => this.burstMany([b]), i * 110));
+  }
+  onFx(e) {
+    const t = e.target;
+    this.lastXY = { x: e.clientX, y: e.clientY };
+    const el = t && t.closest ? t.closest('button,a,[role="switch"]') : null;
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) {
+      const k = Math.max(0.25, Math.min(1, 220 / Math.max(r.width, r.height)));
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--fx-rx', (-py * 20 * k).toFixed(1) + 'deg');
+      el.style.setProperty('--fx-ry', (px * 24 * k).toFixed(1) + 'deg');
+    }
+    const tag = el.closest('[data-fx]');
+    this.burst(e.clientX, e.clientY, tag ? tag.getAttribute('data-fx') : 'a');
+  }
+  renderVals() {
+    const s = this.state;
+    const q = s.q.trim().toLowerCase();
+    const PLAN = { free: ['Gratis', '#A3A9B6', '#343B4A'], pass: ['Pass Event', '#FFB089', 'rgba(255,122,46,.5)'], kom: ['Komunitas', '#9DB6FF', 'rgba(77,124,255,.5)'], pro: ['Pro', '#D7B0FD', 'rgba(192,132,252,.5)'] };
+    const COLS = ['#FF7A2E', '#4D7CFF', '#F2C230', '#C084FC', '#2FBF8F', '#3CC6E8', '#FF6B8B', '#B8C24A'];
+    const ini = (n) => { const w = n.replace(/[^A-Za-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean); return ((w[0] || '?')[0] + (w[1] ? w[1][0] : '')).toUpperCase(); };
+    const ser = this.series();
+    const days = s.range === '7h' ? ser.slice(-7) : (s.range === '3h' ? ser.slice(-3) : ser);
+    const tot = days.reduce((a, d) => ({ pass: a.pass + d.pass, sub: a.sub + d.sub, fee: a.fee + d.fee, wa: a.wa + d.wa }), { pass: 0, sub: 0, fee: 0, wa: 0 });
+    const sum = tot.pass + tot.sub + tot.fee + tot.wa;
+    const mx = Math.max.apply(null, days.map((d) => d.pass + d.sub + d.fee + d.wa));
+    const hv = s.hover >= 0 && s.hover < days.length ? days[s.hover] : null;
+    const pendPay = s.payouts.filter((p) => p.st === 'wait').length;
+    const failTrx = s.trx.filter((x) => x.st === 'fail').length;
+    const newTk = s.tickets.filter((t) => t.st === 'new').length;
+    const NAV = [
+      ['home', 'Ringkasan', 'M3 12l9-8 9 8M5 10v10h14V10'], ['users', 'Pengguna', 'M16 19c0-2.2-1.8-4-4-4H7c-2.2 0-4 1.8-4 4M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM21 19c0-1.9-1.2-3.4-3-3.9M16 4.2a3.5 3.5 0 0 1 0 6.6'],
+      ['events', 'Event', 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z'], ['pay', 'Pembayaran', 'M3 6h18v12H3zM3 10h18M7 15h4', pendPay + failTrx, '#F2C230'],
+      ['plans', 'Paket & harga', 'M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4'], ['mod', 'Laporan konten', 'M12 3l9 16H3zM12 10v4M12 17h.01', s.reports.length, '#FF9C9C'],
+      ['help', 'Dukungan', 'M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z', newTk, '#9DB6FF'], ['wa', 'WhatsApp', 'M4 6h16v10H8l-4 4z'],
+      ['team', 'Tim admin & audit', 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z'], ['settings', 'Pengaturan', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z']
+    ];
+    const t = {}; NAV.forEach((n) => { t[n[0]] = s.tab === n[0]; });
+    // pengguna
+    const RF = [['all', 'Semua'], ['Penyelenggara', 'Penyelenggara'], ['Pengurus grup', 'Pengurus grup'], ['Manajer tim', 'Manajer tim'], ['Pemain', 'Pemain']];
+    const users = s.users.filter((u) => (s.roleF === 'all' || u.role === s.roleF) && (!q || (u.name + ' ' + u.email).toLowerCase().indexOf(q) >= 0));
+    const su0 = s.users.find((u) => u.id === s.selUser);
+    const su = su0 ? {
+      name: su0.name, email: su0.email, ini: ini(su0.name), col: COLS[s.users.indexOf(su0) % COLS.length], planId: su0.plan, note: s.notes[su0.id] || '',
+      active: su0.st === 'aktif', suspended: su0.st !== 'aktif',
+      facts: [{ l: 'PERAN', v: su0.role }, { l: 'PAKET', v: PLAN[su0.plan][0] }, { l: 'EVENT', v: su0.events }, { l: 'TOTAL BAYAR', v: this.rp(su0.spent) }, { l: 'BERGABUNG', v: su0.joined }, { l: 'KOTA', v: su0.city }]
+    } : { name: '', email: '', ini: '', col: '#343B4A', planId: 'free', note: '', active: false, suspended: false, facts: [] };
+    // event
+    const EST = { live: ['BERLANGSUNG', '#FF9C9C'], soon: ['TERJADWAL', '#9DB6FF'], done: ['SELESAI', '#A3A9B6'] };
+    const EF = [['all', 'Semua'], ['live', 'Berlangsung'], ['soon', 'Terjadwal'], ['done', 'Selesai'], ['rep', 'Dilaporkan']];
+    const events = s.events.filter((e) => (s.evF === 'all' || (s.evF === 'rep' ? e.reports > 0 : e.st === s.evF)) && (!q || (e.name + ' ' + e.org).toLowerCase().indexOf(q) >= 0));
+    // pembayaran
+    const TST = { ok: ['BERHASIL', '#7EE2A8', 'rgba(126,226,168,.45)'], wait: ['MENUNGGU', '#F2D37A', 'rgba(242,194,48,.5)'], fail: ['GAGAL', '#FF9C9C', 'rgba(255,140,140,.5)'], refund: ['DIKEMBALIKAN', '#C9CDD6', '#4A5263'] };
+    const TF = [['all', 'Semua'], ['ok', 'Berhasil'], ['wait', 'Menunggu'], ['fail', 'Gagal'], ['refund', 'Dikembalikan']];
+    const trx = s.trx.filter((x) => (s.trxF === 'all' || x.st === s.trxF) && (!q || (x.id + ' ' + x.who + ' ' + x.item).toLowerCase().indexOf(q) >= 0));
+    const PST = { wait: ['MENUNGGU', '#F2D37A', 'rgba(242,194,48,.5)'], proc: ['DIPROSES', '#9DB6FF', 'rgba(77,124,255,.5)'], done: ['SELESAI', '#7EE2A8', 'rgba(126,226,168,.45)'], hold: ['DITAHAN', '#FF9C9C', 'rgba(255,140,140,.5)'] };
+    // harga
+    const PR = [['p16', 'Pass Event ≤16 tim', 'per event', 'Rp', 1000], ['p32', 'Pass Event ≤32 tim', 'per event', 'Rp', 1000], ['p64', 'Pass Event ≤64 tim', 'per event', 'Rp', 1000], ['kom', 'Komunitas', 'per bulan', 'Rp', 1000], ['pro', 'Pro', 'per bulan', 'Rp', 1000], ['fee', 'Biaya pembayaran online', 'per pembayaran', 'Rp', 500], ['wa', 'Kuota WhatsApp', 'per 100 pesan', 'Rp', 5000], ['freeTeams', 'Batas tim paket Gratis', 'tim per event', '', 1]];
+    const changed = PR.filter((p) => s.price[p[0]] !== s.price0[p[0]]);
+    const waSent = 3812; const waSold = 4100; const waCost = Math.round(waSent * 356.65 * 1.11);
+    const RP = [['Laporan', 'LAP'], ['Pengguna', 'PGN'], ['Keuangan', 'KEU'], ['Refund', 'REF'], ['Moderasi', 'MOD'], ['Dukungan', 'DUK']];
+    const tk0 = s.tickets.find((x) => x.id === s.selTicket) || s.tickets[0];
+    const TKS = { new: ['BARU', '#FFB089'], replied: ['DIBALAS', '#9DB6FF'], done: ['SELESAI', '#7EE2A8'] };
+    const SP = [['sepakbola', 'Sepak Bola'], ['futsal', 'Futsal'], ['mini', 'Mini Soccer'], ['voli', 'Bola Voli'], ['basket', 'Basket'], ['badminton', 'Bulu Tangkis'], ['tenis', 'Tenis'], ['padel', 'Padel'], ['tt', 'Tenis Meja'], ['esports', 'E-sports']];
+    const FL = [['cutout', 'Potong latar foto (AI)', 'Dipakai gaya story Potong latar'], ['autoStory', 'Story otomatis setelah laga', 'Dibuat begitu wasit menutup laga'], ['waLogin', 'Masuk dengan WhatsApp', 'Cadangan untuk yang tidak pakai email'], ['twofa', 'Wajib verifikasi 2 langkah untuk admin', 'Berlaku untuk semua akun di tim admin'], ['maint', 'Mode perawatan', 'Tampilkan pesan di semua halaman publik']];
+    const sw = (on) => ({ track: on ? '#FF7A2E' : '#343B4A', kx: on ? 16 : 0 });
+    const m = s.modal;
+    return {
+      fx: this.fxSlots(),
+      onFx: (e) => this.onFx(e),
+      envLabel: s.flags.maint ? 'PERAWATAN' : 'PRODUKSI', envBg: s.flags.maint ? '#F2C230' : 'rgba(126,226,168,.16)', envFg: s.flags.maint ? '#14161C' : '#7EE2A8',
+      maint: s.flags.maint, maintMsg: s.maintMsg, onMaintMsg: (e) => this.setState({ maintMsg: e.target.value }),
+      q: s.q, onQ: (e) => { const v = e.target.value; this.setState({ q: v }); },
+      nav: NAV.map((n) => ({ label: n[1], icon: n[2], hasBadge: !!n[3], badge: n[3] || 0, badgeBg: n[4] || '#FF7A2E', cls: s.tab === n[0] ? 'is-on' : '', cur: s.tab === n[0] ? 'page' : 'false', pick: () => this.go(n[0]) })),
+      goAudit: () => this.go('team'), t: t, tabK: s.tabK, numK: s.numK,
+      ranges: [['3h', '3 hari'], ['7h', '7 hari'], ['11h', 'Bulan ini']].map((o) => ({ label: o[1], on: s.range === o[0], cls: s.range === o[0] ? 'is-on' : '', pick: () => this.setState({ range: o[0], numK: this.tg(this.state.numK), hover: -1 }) })),
+      kpis: [
+        { l: 'Pendapatan', v: this.rpShort(sum), d: '+18% dari periode sebelumnya', c: '#F2F1EC', dc: '#7EE2A8' },
+        { l: 'Pass Event terjual', v: Math.round(tot.pass / 79000), d: 'rata-rata Rp79 rb per Pass', c: '#FFB089', dc: '#A3A9B6' },
+        { l: 'Langganan aktif', v: '235', d: '212 Komunitas · 23 Pro', c: '#9DB6FF', dc: '#A3A9B6' },
+        { l: 'Event berlangsung', v: s.events.filter((e) => e.st === 'live').length, d: s.events.filter((e) => e.st === 'live').reduce((a, e) => a + e.courts, 0) + ' lapangan live', c: '#FF9C9C', dc: '#A3A9B6' },
+        { l: 'Pembayaran online', v: Math.round(tot.fee / 2000).toLocaleString('id-ID'), d: 'biaya ' + this.rpShort(tot.fee), c: '#7EE2A8', dc: '#A3A9B6' },
+        { l: 'Gratis → berbayar', v: '6,4%', d: 'penyelenggara yang upgrade', c: '#D7B0FD', dc: '#A3A9B6' }
+      ],
+      bars: days.map((d, i) => { const all = d.pass + d.sub + d.fee + d.wa; const k = all / mx * 100; return { d: d.day, h1: (d.pass / all * k).toFixed(1), h2: (d.sub / all * k).toFixed(1), h3: (d.fee / all * k).toFixed(1), h4: (d.wa / all * k).toFixed(1), op: s.hover < 0 || s.hover === i ? 1 : 0.35, aria: d.day + ' November: ' + this.rp(all), pick: () => this.setState({ hover: this.state.hover === i ? -1 : i }) }; }),
+      hoverLine: hv ? hv.day + ' Nov · ' + this.rp(hv.pass + hv.sub + hv.fee + hv.wa) : 'Klik batang untuk rincian',
+      legend: [['Pass Event', '#FF7A2E', tot.pass], ['Langganan', '#4D7CFF', tot.sub], ['Biaya transaksi', '#7EE2A8', tot.fee], ['Kuota WhatsApp', '#C084FC', tot.wa]].map((l) => ({ t: l[0], c: l[1], v: this.rpShort(hv ? { 'Pass Event': hv.pass, 'Langganan': hv.sub, 'Biaya transaksi': hv.fee, 'Kuota WhatsApp': hv.wa }[l[0]] : l[2]) })),
+      alerts: [
+        { n: pendPay, t: 'Pencairan menunggu persetujuan', s: 'Uang pendaftaran ke rekening penyelenggara', bg: '#F2C230', go: () => { this.setState({ payTab: 'out' }); this.go('pay'); } },
+        { n: failTrx, t: 'Pembayaran gagal', s: 'Perpanjangan langganan & pendaftaran', bg: '#FF9C9C', go: () => { this.setState({ payTab: 'trx', trxF: 'fail' }); this.go('pay'); } },
+        { n: s.reports.length, t: 'Laporan konten baru', s: 'Event, foto pemain, nama tim', bg: '#C084FC', go: () => this.go('mod') },
+        { n: newTk, t: 'Tiket dukungan baru', s: 'Belum dibalas', bg: '#9DB6FF', go: () => this.go('help') }
+      ],
+      liveEvents: s.events.filter((e) => e.st === 'live' && !e.hidden).map((e) => ({ name: e.name, org: e.org, courts: e.courts, viewers: e.viewers.toLocaleString('id-ID') })),
+      usersNote: users.length + ' dari ' + s.users.length + ' akun' + (q ? ' · cocok dengan "' + s.q.trim() + '"' : ''),
+      roleFilters: RF.map((o) => ({ label: o[1], on: s.roleF === o[0], cls: s.roleF === o[0] ? 'is-on' : '', pick: () => this.setState({ roleF: o[0] }) })),
+      users: users.map((u) => ({ name: u.name, email: u.email, role: u.role, plan: PLAN[u.plan][0], planC: PLAN[u.plan][1], planBd: PLAN[u.plan][2], events: u.events, st: u.st === 'aktif' ? 'Aktif' : 'Ditangguhkan', stC: u.st === 'aktif' ? '#7EE2A8' : '#FF9C9C', ini: ini(u.name), col: COLS[s.users.indexOf(u) % COLS.length], cls: u.id === s.selUser ? 'is-on' : '', pick: () => { if (this.state.selUser !== u.id) this.setState({ selUser: u.id, drK: this.tg(this.state.drK) }); } })),
+      noUsers: users.length === 0, hasUser: !!su0, su: su, drK: s.drK,
+      planOpts: [['free', 'Gratis'], ['pass', 'Pass Event'], ['kom', 'Komunitas'], ['pro', 'Pro']].map((o) => ({ v: o[0], l: o[1] })),
+      onPlan: (e) => { const v = e.target.value; const u = this.state.users.find((x) => x.id === this.state.selUser); this.setUser(u.id, { plan: v }); this.log('Mengubah paket ' + u.name + ' menjadi ' + PLAN[v][0] + ' (kompensasi)'); this.toastMsg('Paket ' + u.name + ' sekarang ' + PLAN[v][0]); },
+      onNote: (e) => { const n = Object.assign({}, this.state.notes); n[this.state.selUser] = e.target.value; this.setState({ notes: n }); },
+      resendLogin: () => this.toastMsg('Link masuk baru dikirim ke ' + (su0 ? su0.email : '')),
+      askSuspend: () => this.ask({ title: 'Tangguhkan ' + su0.name + '?', body: 'Akun tidak bisa masuk dan semua event miliknya disembunyikan dari publik sampai diaktifkan lagi.', cta: 'Tangguhkan', btnBg: '#FF6B6B', btnFg: '#14161C', needReason: true, run: (r) => { this.setUser(su0.id, { st: 'ditangguhkan' }); this.log('Menangguhkan akun ' + su0.name + ' · alasan: ' + r); this.toastMsg(su0.name + ' ditangguhkan'); } }),
+      unsuspend: () => { this.setUser(su0.id, { st: 'aktif' }); this.log('Mengaktifkan lagi akun ' + su0.name); this.toastMsg(su0.name + ' aktif lagi'); },
+      evFilters: EF.map((o) => ({ label: o[1], on: s.evF === o[0], cls: s.evF === o[0] ? 'is-on' : '', pick: () => this.setState({ evF: o[0] }) })),
+      events: events.map((e, i) => ({
+        name: e.name, org: e.org, sport: e.sport, teams: e.teams, plan: e.plan, ini: ini(e.name), col: e.col,
+        planC: e.plan === 'Pro' ? '#D7B0FD' : (e.plan === 'Gratis' ? '#A3A9B6' : '#FFB089'), planBd: e.plan === 'Pro' ? 'rgba(192,132,252,.5)' : (e.plan === 'Gratis' ? '#343B4A' : 'rgba(255,122,46,.5)'),
+        st: e.hidden ? 'DISEMBUNYIKAN' : EST[e.st][0], stC: e.hidden ? '#F2D37A' : EST[e.st][1], bd: e.reports ? 'rgba(255,140,140,.4)' : '#232834',
+        hasReports: e.reports > 0, reports: e.reports, hideLabel: e.hidden ? 'Tampilkan' : 'Sembunyikan', hideC: e.hidden ? '#7EE2A8' : '#FF9C9C', canExtend: e.pass && e.st !== 'done',
+        toggleHide: () => { if (e.hidden) { this.setEvent(e.id, { hidden: false }); this.log('Menampilkan lagi event ' + e.name); this.toastMsg(e.name + ' tampil lagi'); } else this.ask({ title: 'Sembunyikan event?', body: '“' + e.name + '” tidak akan muncul di halaman publik dan link-nya menampilkan pesan peninjauan.', cta: 'Sembunyikan', btnBg: '#FF6B6B', btnFg: '#14161C', needReason: true, run: (r) => { this.setEvent(e.id, { hidden: true }); this.log('Menyembunyikan event ' + e.name + ' · alasan: ' + r); this.toastMsg(e.name + ' disembunyikan'); } }); },
+        extend: () => { this.log('Memperpanjang Pass ' + e.name + ' +7 hari'); this.toastMsg('Pass ' + e.name + ' diperpanjang 7 hari'); }
+      })),
+      payTabs: [['trx', 'Transaksi'], ['out', 'Pencairan (' + pendPay + ')']].map((o) => ({ label: o[1], on: s.payTab === o[0], cls: s.payTab === o[0] ? 'is-on' : '', pick: () => this.setState({ payTab: o[0] }) })),
+      payTrx: s.payTab === 'trx', payOut: s.payTab === 'out',
+      trxFilters: TF.map((o) => ({ label: o[1] + ' (' + (o[0] === 'all' ? s.trx.length : s.trx.filter((x) => x.st === o[0]).length) + ')', on: s.trxF === o[0], cls: s.trxF === o[0] ? 'is-on' : '', pick: () => this.setState({ trxF: o[0] }) })),
+      trxHeads: ['INVOICE', 'PEMBAYAR', 'ITEM', 'METODE', 'JUMLAH', 'STATUS', ''].map((h) => ({ t: h })),
+      trx: trx.map((x) => ({ id: x.id, at: x.at, who: x.who, item: x.item, sub: x.sub, method: x.method, amt: this.rp(x.amt), st: TST[x.st][0], stC: TST[x.st][1], stBd: TST[x.st][2], canRefund: x.st === 'ok' && x.src !== 'trx', canRetry: x.st === 'fail',
+        refund: () => this.ask({ title: 'Refund ' + this.rp(x.amt) + '?', body: x.item + ' untuk ' + x.who + ' (' + x.id + '). Dana kembali lewat ' + x.method + ' dalam 1–3 hari kerja dan fitur berbayarnya dinonaktifkan.', cta: 'Refund', btnBg: '#F2C230', btnFg: '#14161C', needReason: true, run: (r) => { this.setTrx(x.id, { st: 'refund' }); this.log('Refund ' + x.id + ' ' + this.rp(x.amt) + ' · alasan: ' + r); this.toastMsg('Refund ' + x.id + ' diproses'); } }),
+        retry: () => { this.setTrx(x.id, { st: 'wait' }); this.toastMsg('Tagihan baru dikirim ke ' + x.who); } })),
+      exportCsv: () => this.toastMsg('Tersimpan: transaksi-november-2026.csv (' + trx.length + ' baris)'),
+      payouts: s.payouts.map((o) => ({ org: o.org, bank: o.bank, at: o.at, amt: this.rp(o.amt), st: PST[o.st][0], stC: PST[o.st][1], stBd: PST[o.st][2], pending: o.st === 'wait',
+        approve: () => this.ask({ title: 'Cairkan ' + this.rp(o.amt) + '?', body: 'Dana dikirim ke ' + o.bank + ' atas nama ' + o.org + '. Pastikan tidak ada sengketa pendaftaran yang terbuka.', cta: 'Setujui pencairan', btnBg: '#7EE2A8', btnFg: '#0B2A18', needReason: false, run: () => { this.setPayout(o.id, { st: 'proc' }); this.log('Menyetujui pencairan ' + this.rp(o.amt) + ' ke ' + o.org); this.toastMsg('Pencairan ke ' + o.org + ' diproses'); this.celebrate('g'); } }),
+        hold: () => this.ask({ title: 'Tahan pencairan?', body: 'Penyelenggara akan diberi tahu bahwa pencairan sedang ditinjau.', cta: 'Tahan', btnBg: '#FF6B6B', btnFg: '#14161C', needReason: true, run: (r) => { this.setPayout(o.id, { st: 'hold' }); this.log('Menahan pencairan ' + o.org + ' · alasan: ' + r); this.toastMsg('Pencairan ' + o.org + ' ditahan'); } }) })),
+      prices: PR.map((p) => ({ label: p[1], unit: p[2], pre: p[3], step: p[4], v: s.price[p[0]], changed: s.price[p[0]] !== s.price0[p[0]], bd: s.price[p[0]] !== s.price0[p[0]] ? 'rgba(242,194,48,.55)' : '#232834', set: (e) => { const pr = Object.assign({}, this.state.price); pr[p[0]] = Math.max(0, parseInt(e.target.value, 10) || 0); this.setState({ price: pr }); } })),
+      priceChangeN: changed.length, noPriceChange: changed.length === 0,
+      askSavePrices: () => this.ask({ title: 'Simpan ' + changed.length + ' perubahan harga?', body: changed.map((p) => p[1] + ': ' + (p[3] ? this.rp(s.price0[p[0]]) : s.price0[p[0]]) + ' → ' + (p[3] ? this.rp(s.price[p[0]]) : s.price[p[0]])).join(' · ') + '. Halaman Harga langsung ikut berubah untuk pembelian baru.', cta: 'Simpan', btnBg: '#FF7A2E', btnFg: '#140B05', needReason: false, run: () => { this.setState({ price0: Object.assign({}, this.state.price) }); this.log('Mengubah harga: ' + changed.map((p) => p[1]).join(', ')); this.toastMsg('Harga baru tersimpan'); } }),
+      resetPrices: () => this.setState({ price: Object.assign({}, this.state.price0) }),
+      pCode: s.pCode, pPct: s.pPct, pQuota: s.pQuota,
+      onPCode: (e) => this.setState({ pCode: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '') }), onPPct: (e) => this.setState({ pPct: Math.max(5, Math.min(100, parseInt(e.target.value, 10) || 5)) }), onPQuota: (e) => this.setState({ pQuota: Math.max(1, parseInt(e.target.value, 10) || 1) }),
+      badPromo: s.pCode.length < 4 || s.promos.some((c) => c.code === s.pCode),
+      addPromo: () => { const c = { code: this.state.pCode, pct: this.state.pPct, used: 0, quota: this.state.pQuota, scope: 'Pass Event', on: true }; this.setState({ promos: [c].concat(this.state.promos), pCode: '' }); this.log('Membuat kode promo ' + c.code + ' (−' + c.pct + '%)'); this.toastMsg('Kode ' + c.code + ' aktif'); },
+      promos: s.promos.map((c, i) => Object.assign({ usePct: Math.round(c.used / c.quota * 100) }, c, sw(c.on), { toggle: () => { const p = this.state.promos.slice(); p[i] = Object.assign({}, p[i], { on: !p[i].on }); this.setState({ promos: p }); } })),
+      modNote: s.reports.length + ' laporan menunggu',
+      reports: s.reports.map((r) => {
+        const done = (msg) => { this.setState({ reports: this.state.reports.filter((x) => x.id !== r.id) }); this.log(msg); this.toastMsg(msg); };
+        const acts = [];
+        if (r.type === 'EVENT') acts.push({ t: 'Sembunyikan event', c: '#FF9C9C', bd: '#6B3434', go: () => { const ev = this.state.events.find((e) => e.name === r.title); if (ev) this.setEvent(ev.id, { hidden: true }); done('Laporan ditangani: event “' + r.title + '” disembunyikan'); } });
+        if (r.type === 'FOTO') acts.push({ t: 'Hapus foto', c: '#FF9C9C', bd: '#6B3434', go: () => done('Foto dihapus dan manajer tim diberi tahu') });
+        if (r.type === 'NAMA TIM') acts.push({ t: 'Minta ganti nama', c: '#F2D37A', bd: '#6B5A20', go: () => done('Penyelenggara diminta mengganti nama tim') });
+        if (r.type === 'SKOR') acts.push({ t: 'Buka riwayat skor', c: '#9DB6FF', bd: '#2C3F6B', go: () => done('Riwayat skor dikirim ke penyelenggara untuk dicek') });
+        acts.push({ t: 'Beri peringatan', c: '#F2F1EC', bd: '#343B4A', go: () => done('Peringatan dikirim ke pemilik konten') });
+        acts.push({ t: 'Abaikan', c: '#A3A9B6', bd: '#343B4A', go: () => done('Laporan diabaikan: ' + r.title) });
+        return { type: r.type, title: r.title, detail: r.detail, count: r.count, at: r.at, where: r.where, tagBg: r.tag, acts: acts };
+      }),
+      noReports: s.reports.length === 0,
+      tickets: s.tickets.map((k) => ({ subject: k.subject, from: k.from, at: k.at, st: TKS[k.st][0], stC: TKS[k.st][1], cls: k.id === tk0.id ? 'is-on' : '', pick: () => { if (this.state.selTicket !== k.id) this.setState({ selTicket: k.id, tkK: this.tg(this.state.tkK), reply: '' }); } })),
+      tkK: s.tkK, tk: { subject: tk0.subject, from: tk0.from, plan: tk0.plan, st: TKS[tk0.st][0], stC: TKS[tk0.st][1], msgs: tk0.msgs.map((mm) => ({ t: mm.t, who: mm.who, at: mm.at, align: mm.me ? 'flex-end' : 'flex-start', bg: mm.me ? '#4D7CFF' : '#0D0F14', fg: mm.me ? '#0B0D12' : '#F2F1EC' })) },
+      quick: ['Sudah kami cek, Pass aktif sekarang.', 'Mohon kirim bukti transfer.', 'Faktur kami kirim ke email terdaftar.'].map((x) => ({ t: x, use: () => this.setState({ reply: x }) })),
+      reply: s.reply, onReply: (e) => this.setState({ reply: e.target.value }), noReply: !s.reply.trim(),
+      sendReply: () => { const r = this.state.reply.trim(); if (!r) return; this.setState({ tickets: this.state.tickets.map((k) => (k.id === tk0.id ? Object.assign({}, k, { st: 'replied', msgs: k.msgs.concat([{ me: true, who: 'Dukungan', at: 'baru saja', t: r }]) }) : k)), reply: '' }); this.toastMsg('Balasan terkirim ke ' + tk0.from); },
+      closeTicket: () => { this.setState({ tickets: this.state.tickets.map((k) => (k.id === tk0.id ? Object.assign({}, k, { st: 'done' }) : k)) }); this.toastMsg('Tiket ditandai selesai'); },
+      waStats: [
+        { l: 'PESAN TERKIRIM BULAN INI', v: waSent.toLocaleString('id-ID'), d: 'dari ' + waSold.toLocaleString('id-ID') + ' pesan kuota terjual', c: '#F2F1EC' },
+        { l: 'BIAYA KE META', v: this.rpShort(waCost), d: 'Rp356,65 per pesan + PPN 11%', c: '#FFB089' },
+        { l: 'PENDAPATAN KUOTA', v: this.rpShort(waSold / 100 * s.price0.wa), d: 'margin ' + Math.round((1 - waCost / (waSold / 100 * s.price0.wa)) * 100) + '%', c: '#7EE2A8' }
+      ],
+      templates: [
+        { name: 'pengingat_jadwal', body: 'Halo {1}, tim {2} main di {3} pukul {4}. Datang 15 menit lebih awal.', cat: 'UTILITY', st: 'DISETUJUI', stC: '#7EE2A8' },
+        { name: 'hasil_laga', body: 'Hasil akhir: {1} {2}–{3} {4}. Lihat klasemen di {5}', cat: 'UTILITY', st: 'DISETUJUI', stC: '#7EE2A8' },
+        { name: 'sertifikat_juara', body: 'Selamat! Sertifikat {1} untuk {2} sudah terbit: {3}', cat: 'UTILITY', st: 'MENUNGGU', stC: '#F2D37A' },
+        { name: 'kode_masuk', body: 'Kode masuk scoreboard kamu: {1}. Jangan bagikan ke siapa pun.', cat: 'AUTHENTICATION', st: 'DISETUJUI', stC: '#7EE2A8' },
+        { name: 'promo_pass', body: 'Diskon {1}% Pass Event pakai kode {2} sampai {3}.', cat: 'MARKETING', st: 'DITOLAK', stC: '#FF9C9C' }
+      ],
+      permHeads: RP.map((r) => ({ t: r[1] })),
+      admins: Object.keys(s.perms).map((k) => { const a = s.perms[k]; return { name: a.name, role: a.role, perms: a.p.map((v, i) => ({ on: !!v, lock: !!a.lock, aria: a.name + ': akses ' + RP[i][0], bg: v ? '#7EE2A8' : 'transparent', bd: v ? '#7EE2A8' : '#343B4A', toggle: () => { const p = Object.assign({}, this.state.perms); const n = Object.assign({}, p[k]); n.p = n.p.slice(); n.p[i] = n.p[i] ? 0 : 1; p[k] = n; this.setState({ perms: p }); this.log((n.p[i] ? 'Memberi' : 'Mencabut') + ' akses ' + RP[i][0] + ' untuk ' + n.name); } })) }; }),
+      audit: s.audit.slice(0, 10),
+      sports: SP.map((o) => Object.assign({ label: o[1], on: s.sports[o[0]] }, sw(s.sports[o[0]]), { toggle: () => { const sp = Object.assign({}, this.state.sports); sp[o[0]] = !sp[o[0]]; this.setState({ sports: sp }); this.log((sp[o[0]] ? 'Mengaktifkan' : 'Menonaktifkan') + ' cabang ' + o[1]); } })),
+      flags: FL.map((o) => Object.assign({ label: o[1], sub: o[2], on: s.flags[o[0]] }, sw(s.flags[o[0]]), { toggle: () => {
+        const run = () => { const f = Object.assign({}, this.state.flags); f[o[0]] = !f[o[0]]; this.setState({ flags: f }); this.log((f[o[0]] ? 'Menyalakan' : 'Mematikan') + ' ' + o[1]); };
+        if (o[0] === 'maint' && !this.state.flags.maint) this.ask({ title: 'Nyalakan mode perawatan?', body: 'Semua halaman publik menampilkan pesan perawatan. Skor live dan remote wasit tetap berjalan.', cta: 'Nyalakan', btnBg: '#F2C230', btnFg: '#14161C', needReason: false, run: run });
+        else run();
+      } })),
+      hasModal: !!m, modal: m ? { title: m.title, body: m.body, cta: m.cta, btnBg: m.btnBg, btnFg: m.btnFg, needReason: !!m.needReason } : { title: '', body: '', cta: '', btnBg: '#F2F1EC', btnFg: '#0B0D12', needReason: false },
+      modalReason: s.modalReason, onModalReason: (e) => this.setState({ modalReason: e.target.value }), modalBlocked: !!(m && m.needReason && s.modalReason.trim().length < 4),
+      closeModal: () => this.setState({ modal: null }), confirmModal: () => this.confirm(),
+      toast: s.toast, toastK: s.toastK
+    };
+  }
+}
+</script>
+</body>
+</html>
